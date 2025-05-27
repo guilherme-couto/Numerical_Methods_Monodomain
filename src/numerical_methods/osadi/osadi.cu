@@ -68,12 +68,12 @@ static __global__ void parallelThomas_x(const int numSys, const int sysSize, rea
         for (int i = 1; i < sysSize; i++)
         {
             coeff = phi_x * d_elements[offset + i].D_xx;
-            lalc = -coeff;
+
+            lalc = (i < sysSize - 1) ? -coeff : -2.0f * coeff; // Last element has a different coefficient
             lb = 1.0f + 2.0f * coeff;
             denom = 1.0f / (lb - c_prime[i - 1] * lalc);
-            (i < sysSize - 1)
-                ? c_prime[i] = lalc * denom 
-                : lalc = -2.0f * coeff; // Last element has a different coefficient
+
+            c_prime[i] = lalc * denom;
             d_prime[i] = (d_rhs[offset + i] - d_prime[i - 1] * lalc) * denom;
         }
 
@@ -106,12 +106,12 @@ static __global__ void parallelThomas_y(const int numSys, const int sysSize, rea
         for (int i = 1; i < sysSize; i++)
         {
             coeff = phi_y * d_elements[sysIdx + numSys * i].D_yy;
-            lalc = -coeff;
+
+            lalc = (i < sysSize - 1) ? -coeff : -2.0f * coeff; // Last element has a different coefficient
             lb = 1.0f + 2.0f * coeff;
             denom = 1.0f / (lb - c_prime[i - 1] * lalc);
-            (i < sysSize - 1)
-                ? c_prime[i] = lalc * denom 
-                : lalc = -2.0f * coeff; // Last element has a different coefficient
+
+            c_prime[i] = lalc * denom;
             d_prime[i] = (d_rhs[sysIdx + numSys * i] - d_prime[i - 1] * lalc) * denom;
         }
 
@@ -123,7 +123,7 @@ static __global__ void parallelThomas_y(const int numSys, const int sysSize, rea
 }
 
 void runOSADI_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array,
-                   const CellModelSolver *cell_model_solver, real *Vm, real *sV, ElementProperties *elements)
+                   const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
 {
     // Unpack configuration parameters
     const int M = config->M;

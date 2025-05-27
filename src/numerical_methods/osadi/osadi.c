@@ -5,7 +5,7 @@
 #include "../numerical_methods.h"
 #include "../numerical_methods_helpers.h"
 
-void runOSADI(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, ElementProperties *elements)
+void runOSADI(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
 {
     // Unpack configuration parameters
     const int M = config->M;

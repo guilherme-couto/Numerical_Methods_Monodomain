@@ -40,7 +40,7 @@ extern "C" {
 
 #if defined(__CUDACC__)
 #define FORCE_INLINE __forceinline__
-#define STATIC_MODIFIER static __device__
+#define STATIC_MODIFIER static __host__ __device__
 #else
 #define FORCE_INLINE inline
 #define STATIC_MODIFIER static

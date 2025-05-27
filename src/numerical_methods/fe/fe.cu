@@ -42,7 +42,7 @@ static __global__ void solveAndUpdateSV(const int Nx, const int Ny, const real d
 }
 
 void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array,
-                const CellModelSolver *cell_model_solver, real *Vm, real *sV, ElementProperties *elements)
+                const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
 {
     // Unpack configuration parameters
     const int M = config->M;

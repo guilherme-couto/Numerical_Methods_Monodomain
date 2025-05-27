@@ -5,8 +5,8 @@
 #include "../numerical_methods.h"
 #include "../numerical_methods_helpers.h"
 
-void runFE(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, ElementProperties *elements)
-{
+void runFE(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
+{ 
     // Unpack configuration parameters
     const int M = config->M;
     const int Nx = config->Nx;
@@ -39,16 +39,16 @@ void runFE(const SimulationConfig *config, Measurement *measurement, const real 
     const int idx_x1 = round(x1 / delta_x) + 1;
     bool aux_stim_velocity_flag = false;
     bool stim_velocity_measured = false;
-
+    
     // Auxiliary variables for the loops
     int timeStepCounter = 0;
     real actualTime = 0.0f;
-    int i, j, num_active_stimuli, diff_coeff_x, diff_coeff_y;
+    int i, j, num_active_stimuli;
     int idx, idx_left, idx_right, idx_top, idx_bottom;
 
     // Auxiliary variables for the operations
     Stimulus *active_stimuli = (Stimulus *)malloc(numberOfStimuli * sizeof(Stimulus));
-    real diff_term, stim, actualVm;
+    real diff_term, stim, actualVm, diff_coeff_x, diff_coeff_y;
     real *actualsV = (real *)malloc(cell_model_solver->n_state_vars * sizeof(real));
     real *RHS = (real *)malloc(Nx * Ny * sizeof(real));
 
@@ -66,13 +66,13 @@ void runFE(const SimulationConfig *config, Measurement *measurement, const real 
     real elapsedMeasureVelocityTime = 0.0f;
 
     SIMPLEMSG("");
-    INFOMSG("Starting simulation with FE (SERIAL)...\n");
+    INFOMSG("Starting simulation with FE (SERIAL)...\n");  
 
     // Main time loop
     startExecutionTime = omp_get_wtime();
 
     while (timeStepCounter < M)
-    {
+    {  
         // Get time step
         actualTime = time_array[timeStepCounter];
 

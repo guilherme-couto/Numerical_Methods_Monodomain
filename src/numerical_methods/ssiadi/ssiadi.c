@@ -5,7 +5,7 @@
 #include "../numerical_methods.h"
 #include "../numerical_methods_helpers.h"
 
-void runSSIADI(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, ElementProperties *elements)
+void runSSIADI(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
 {
     // Unpack configuration parameters
     const int M = config->M;
@@ -44,12 +44,12 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
     // Auxiliary variables for the loops
     int timeStepCounter = 0;
     real actualTime = 0.0f;
-    int i, j, num_active_stimuli, diff_coeff_x, diff_coeff_y;
+    int i, j, num_active_stimuli;
     int idx, idx_left, idx_right, idx_top, idx_bottom;
 
     // Auxiliary variables for the operations
     Stimulus *active_stimuli = (Stimulus *)malloc(numberOfStimuli * sizeof(Stimulus));
-    real diff_term, stim, actualVm;
+    real diff_term, stim, actualVm, diff_coeff_x, diff_coeff_y;
     real Vmtilde;
     real *actualsV = (real *)malloc(cell_model_solver->n_state_vars * sizeof(real));
     real *sVtilde = (real *)malloc(cell_model_solver->n_state_vars * sizeof(real));

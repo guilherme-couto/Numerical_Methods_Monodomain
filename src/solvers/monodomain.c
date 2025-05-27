@@ -27,6 +27,14 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 
     // Allocate and initialize elements properties arrays
     ElementProperties *elements_properties = (ElementProperties *)malloc(total_points * sizeof(ElementProperties));
+    if (elements_properties == NULL)
+    {
+        ERRORMSG("Failed to allocate memory for elements properties.");
+        free(time_array);
+        free(Vm);
+        free(sV);
+        return -1;
+    }
     initializeElementsProperties(config, cell_model_solver->chiCm, elements_properties);
 
     // Run the simulation based on the selected method
@@ -40,7 +48,7 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
         free(elements_properties);
         return -2;
     }
-
+    
     // Run the selected method
     run_method(config, &measurement, time_array, cell_model_solver, Vm, sV, elements_properties);
 

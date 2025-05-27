@@ -297,7 +297,10 @@ void tridiagonalSystemSolver_x(const int Nx, real *rhs, real *result, real *c_pr
         if (i < Nx - 1)
             c_prime[i] = lalc * denom;
         else
+        {
             lalc = -2.0f * coeff; // Last element has a different coefficient
+            denom = 1.0f / (lb - c_prime[i - 1] * lalc);
+        }
         d_prime[i] = (rhs[i] - d_prime[i - 1] * lalc) * denom;
     }
 
@@ -327,7 +330,11 @@ void tridiagonalSystemSolver_y(const int Ny, real *rhs, real *result, real *c_pr
         if (i < Ny - 1)
             c_prime[i] = lalc * denom;
         else
+        {
             lalc = -2.0f * coeff; // Last element has a different coefficient
+            denom = 1.0f / (lb - c_prime[i - 1] * lalc);
+        }
+            
         d_prime[i] = (rhs[i] - d_prime[i - 1] * lalc) * denom;
     }
 
@@ -452,7 +459,7 @@ void initializeElementsProperties(const SimulationConfig *config, const real chi
     const real sigma_t = config->sigma_t;
     const real fiber_orientation_rad = config->fiber_orientation * _PI / 180.0f;
 
-    
+    printf("Endereço de elements_properties: %p\n", (void*)elements_properties);
     for (int idx = 0; idx < Nx * Ny; idx++)
     {
         // Initialize the cell phenotype
