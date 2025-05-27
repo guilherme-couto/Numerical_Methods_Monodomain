@@ -472,9 +472,9 @@ void runSimulationOpenMP(const SimulationConfig *config)
 #pragma omp single
         startTime = omp_get_wtime();
 
-// ================================================!
-//  Calculate Approxs. and Update ODEs             !
-// ================================================!
+// =================================================
+//  Calculate Approxs. and Update ODEs           
+// =================================================
 #pragma omp for collapse(2) schedule(static)
         for (i = 0; i < Ny; i++)
         {
@@ -752,10 +752,10 @@ void runSimulationOpenMP(const SimulationConfig *config)
         real *LS_b_y = (real *)malloc(Ny * sizeof(real));
         real *result_y = (real *)malloc(Ny * sizeof(real));
 
-// ================================================!
-//  Calculate Vm at n+1/2 -> Result goes to RHS    !
-//  diffusion implicit in y and explicit in x      !
-// ================================================!
+// =================================================
+//  Calculate Vm at n+1/2 -> Result goes to RHS  
+//  diffusion implicit in y and explicit in x    
+// =================================================
 #pragma omp barrier
 #pragma omp for schedule(static)
         for (j = 0; j < Nx; j++)
@@ -786,10 +786,10 @@ void runSimulationOpenMP(const SimulationConfig *config)
         real *LS_b_x = (real *)malloc(Nx * sizeof(real));
         real *result_x = (real *)malloc(Nx * sizeof(real));
 
-// ================================================!
-//  Calculate Vm at n+1 -> Result goes to Vm       !
-//  diffusion implicit in x and explicit in y      !
-// ================================================!
+// =================================================
+//  Calculate Vm at n+1 -> Result goes to Vm     
+//  diffusion implicit in x and explicit in y    
+// =================================================
 #pragma omp barrier
 #pragma omp for schedule(static)
         for (i = 0; i < Ny; i++)
@@ -824,9 +824,9 @@ void runSimulationOpenMP(const SimulationConfig *config)
         real *LS_b_y = (real *)malloc(Ny * sizeof(real));
         real *result_y = (real *)malloc(Ny * sizeof(real));
 
-// ================================================!
-//  Calculate Vm at n+1/2 -> Result goes to Vm      !
-// ================================================!
+// =================================================
+//  Calculate Vm at n+1/2 -> Result goes to Vm    
+// =================================================
 #pragma omp barrier
 #pragma omp for schedule(static)
         for (j = 0; j < Nx; j++)
@@ -853,9 +853,9 @@ void runSimulationOpenMP(const SimulationConfig *config)
         real *LS_b_x = (real *)malloc(Nx * sizeof(real));
         real *result_x = (real *)malloc(Nx * sizeof(real));
 
-// ================================================!
-//  Calculate Vm at n+1 -> Result goes to Vm       !
-// ================================================!
+// =================================================
+//  Calculate Vm at n+1 -> Result goes to Vm     
+// =================================================
 #pragma omp barrier
 #pragma omp for schedule(static)
         for (i = 0; i < Ny; i++)
@@ -881,9 +881,9 @@ void runSimulationOpenMP(const SimulationConfig *config)
 
 #ifdef FE
 
-// ==================!
-//  Update Vm        !
-// ==================!
+// ===================
+//  Update Vm      
+// ===================
 #pragma omp barrier
 #pragma omp for collapse(2) schedule(static)
         for (i = 0; i < Ny; i++)

@@ -1,8 +1,8 @@
 #include "../include/config_parser.h"
 #include "../include/core_definitions.h"
 #include "../include/auxfuncs.h"
-#include "../include/monodomain.h"
-#include "../include/logger.h"
+#include "../src/solvers/monodomain.h"
+#include "../src/logger/logger.h"
 #include <signal.h>
 
 SimulationConfig config;

@@ -1,7 +1,11 @@
+// ==============================================
+//             Operator-Splitting ADI
+// ==============================================
+
 #include "../numerical_methods.h"
 #include "../numerical_methods_helpers.h"
 
-void runOSADI(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV)
+void runOSADI(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, ElementProperties *elements)
 {
     // Unpack configuration parameters
     const int M = config->M;
@@ -10,7 +14,6 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
     const real delta_t = config->dt;
     const real delta_x = config->dx;
     const real delta_y = config->dy;
-    const real sigma = config->sigma;
     const int numberOfStimuli = config->stimulus_count;
     const Stimulus *stimuli = config->stimuli;
 
@@ -25,7 +28,6 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
     // Get the solver functions
     const real activation_threshold = cell_model_solver->activation_thershold;
     const get_actual_sV_t get_actual_sV = cell_model_solver->get_actual_sV;
-    const compute_diffusion_coefficient_t compute_diffusion_coefficient = cell_model_solver->compute_diffusion_coefficient;
     const compute_dVmdt_t compute_dVmdt = cell_model_solver->compute_dVmdt;
     const update_sV_t update_sV = cell_model_solver->update_sV;
 
@@ -46,33 +48,30 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
 
     // Auxiliary variables for the operations
     Stimulus *active_stimuli = (Stimulus *)malloc(numberOfStimuli * sizeof(Stimulus));
-    real diff_term, stim, actualVm;
+    real stim, actualVm;
     real *actualsV = (real *)malloc(cell_model_solver->n_state_vars * sizeof(real));
     real *partRHS = (real *)malloc(Nx * Ny * sizeof(real));
 
-    // Calculate coefficients for the ADI method
+    // Calculate coefficients
     const real phi_x = delta_t / (delta_x * delta_x);
     const real phi_y = delta_t / (delta_y * delta_y);
-    const real diff_coeff = compute_diffusion_coefficient(sigma);
 
     // Auxiliary arrays for Thomas algorithm
-    real *la_x = (real *)malloc(Nx * sizeof(real)); // subdiagonal
-    real *lb_x = (real *)malloc(Nx * sizeof(real)); // diagonal
-    real *lc_x = (real *)malloc(Nx * sizeof(real)); // superdiagonal
-    real *c_prime_x = (real *)malloc(Nx * sizeof(real));
-    real *d_prime_x = (real *)malloc(Nx * sizeof(real));
-    real *LS_b_x = (real *)malloc(Nx * sizeof(real));
-    real *result_x = (real *)malloc(Nx * sizeof(real));
-    real *la_y = (real *)malloc(Ny * sizeof(real)); // subdiagonal
-    real *lb_y = (real *)malloc(Ny * sizeof(real)); // diagonal
-    real *lc_y = (real *)malloc(Ny * sizeof(real)); // superdiagonal
-    real *c_prime_y = (real *)malloc(Ny * sizeof(real));
-    real *d_prime_y = (real *)malloc(Ny * sizeof(real));
-    real *LS_b_y = (real *)malloc(Ny * sizeof(real));
-    real *result_y = (real *)malloc(Ny * sizeof(real));
-
-    populateDiagonalThomasAlgorithm(la_x, lb_x, lc_x, Nx, phi_x * diff_coeff);
-    populateDiagonalThomasAlgorithm(la_y, lb_y, lc_y, Ny, phi_y * diff_coeff);
+    real *c_prime, *d_prime, *ls_rhs, *result;
+    if (Nx > Ny)
+    {
+        c_prime = (real *)malloc(Nx * sizeof(real));
+        d_prime = (real *)malloc(Nx * sizeof(real));
+        ls_rhs = (real *)malloc(Nx * sizeof(real));
+        result = (real *)malloc(Nx * sizeof(real));
+    }
+    else
+    {
+        c_prime = (real *)malloc(Ny * sizeof(real));
+        d_prime = (real *)malloc(Ny * sizeof(real));
+        ls_rhs = (real *)malloc(Ny * sizeof(real));
+        result = (real *)malloc(Ny * sizeof(real));
+    }
 
     // Variables for time measurement
     real startTime = 0.0f;
@@ -100,12 +99,11 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
         // Update the active stimuli
         num_active_stimuli = update_and_get_num_active_stimuli(actualTime, stimuli, numberOfStimuli, active_stimuli);
 
-        // ================================================!
-        //  Calculate Approxs. and Update ODEs             !
-        // ================================================!
+        // =================================================
+        //  Compute Reaction and Update ODEs
+        // =================================================
         startTime = omp_get_wtime();
 
-        diff_term = 0.0f;
         for (i = 0; i < Ny; i++)
         {
             for (j = 0; j < Nx; j++)
@@ -131,9 +129,9 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
 
         elapsedTime1stPart += omp_get_wtime() - startTime;
 
-        // ================================================!
-        //  Calculate Vm at n+1/2 -> Result goes to Vm     !
-        // ================================================!
+        // =================================================
+        //  Calculate Vm at n+1/2 -> Result goes to Vm
+        // =================================================
         startTime = omp_get_wtime();
 
         for (j = 0; j < Nx; j++)
@@ -142,46 +140,46 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
             for (i = 0; i < Ny; i++)
             {
                 idx = i * Nx + j;
-                LS_b_y[i] = Vm[idx] + 0.5f * partRHS[idx];
+                ls_rhs[i] = Vm[idx] + 0.5f * partRHS[idx];
             }
 
             // Solve the linear system
             startLSTime = omp_get_wtime();
 
-            tridiagonalSystemSolver(la_y, lb_y, lc_y, c_prime_y, d_prime_y, Ny, LS_b_y, result_y);
+            tridiagonalSystemSolver_y(Ny, ls_rhs, result, c_prime, d_prime, phi_y, elements, j, Nx);
 
             // Update with the result
             for (i = 0; i < Ny; i++)
             {
                 idx = i * Nx + j;
-                Vm[idx] = result_y[i];
+                Vm[idx] = result[i];
             }
 
             elapsedTime1stLS += omp_get_wtime() - startLSTime;
         }
 
-        // ================================================!
-        //  Calculate Vm at n+1 -> Result goes to Vm       !
-        // ================================================!
+        // =================================================
+        //  Calculate Vm at n+1 -> Result goes to Vm
+        // =================================================
         for (i = 0; i < Ny; i++)
         {
             // Calculate the RHS of the linear system
             for (j = 0; j < Nx; j++)
             {
                 idx = i * Nx + j;
-                LS_b_x[j] = Vm[idx] + 0.5f * partRHS[idx];
+                ls_rhs[j] = Vm[idx] + 0.5f * partRHS[idx];
             }
 
             // Solve the linear system
             startLSTime = omp_get_wtime();
 
-            tridiagonalSystemSolver(la_x, lb_x, lc_x, c_prime_x, d_prime_x, Nx, LS_b_x, result_x);
+            tridiagonalSystemSolver_x(Nx, ls_rhs, result, c_prime, d_prime, phi_x, elements, i);
 
             // Update with the result
             for (j = 0; j < Nx; j++)
             {
                 idx = i * Nx + j;
-                Vm[idx] = result_x[j];
+                Vm[idx] = result[j];
             }
 
             elapsedTime2ndLS += omp_get_wtime() - startLSTime;
@@ -228,18 +226,8 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
     free(active_stimuli);
     free(actualsV);
     free(partRHS);
-    free(la_x);
-    free(lb_x);
-    free(lc_x);
-    free(c_prime_x);
-    free(d_prime_x);
-    free(LS_b_x);
-    free(result_x);
-    free(la_y);
-    free(lb_y);
-    free(lc_y);
-    free(c_prime_y);
-    free(d_prime_y);
-    free(LS_b_y);
-    free(result_y);
+    free(c_prime);
+    free(d_prime);
+    free(ls_rhs);
+    free(result);
 }

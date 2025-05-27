@@ -1,10 +1,14 @@
+// ==============================================
+//                 Forward Euler
+// ==============================================
+
 #include "../numerical_methods.h"
 #include "../numerical_methods_helpers.h"
 #include "../../cell_models/cell_models.h"
 
 static __global__ void solveAndUpdateSV(const int Nx, const int Ny, const real delta_t, const real phi_x, const real phi_y,
-                                        const real diff_coeff, const real actualTime, const int num_active_stimuli,
-                                        const Stimulus *d_active_stimuli, const real *d_Vm, real *d_sV, real *d_RHS, const CellModel cell_model)
+                                        const real actualTime, const int num_active_stimuli, const Stimulus *d_active_stimuli,
+                                        const real *d_Vm, real *d_sV, real *d_RHS, const ElementProperties *d_elements, const CellModel cell_model)
 {
     // Obtain the thread index
     const int i = blockIdx.y * blockDim.y + threadIdx.y;
@@ -19,12 +23,16 @@ static __global__ void solveAndUpdateSV(const int Nx, const int Ny, const real d
         // Calculate the explicit part of the RHS, including the diffusion term in both directions
         real actualVm = d_Vm[idx];
         select_get_actual_sV(cell_model, d_actualsV, d_sV, idx);
-        
+
+        // Get the diffusion coefficients for the current element
+        const real diff_coeff_x = d_elements[idx].D_xx;
+        const real diff_coeff_y = d_elements[idx].D_yy;
+
         // Stimulation
         real stim = get_stimulus_value(actualTime, i, j, d_active_stimuli, num_active_stimuli);
 
         // Update variables explicitly
-        real diff_term = compute_diffusion_term(d_Vm, i, j, Nx, Ny, diff_coeff, phi_x, phi_y);
+        real diff_term = compute_diffusion_term(d_Vm, i, j, Nx, Ny, diff_coeff_x, diff_coeff_y, phi_x, phi_y);
 
         d_RHS[idx] = actualVm + diff_term + delta_t * (stim - select_compute_dVmdt(cell_model, actualVm, d_actualsV));
 
@@ -34,7 +42,7 @@ static __global__ void solveAndUpdateSV(const int Nx, const int Ny, const real d
 }
 
 void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array,
-                const CellModelSolver *cell_model_solver, real *Vm, real *sV)
+                const CellModelSolver *cell_model_solver, real *Vm, real *sV, ElementProperties *elements)
 {
     // Unpack configuration parameters
     const int M = config->M;
@@ -43,7 +51,6 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
     const real delta_t = config->dt;
     const real delta_x = config->dx;
     const real delta_y = config->dy;
-    const real sigma = config->sigma;
     const int numberOfStimuli = config->stimulus_count;
     const Stimulus *stimuli = config->stimuli;
 
@@ -54,11 +61,10 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
     const char *file_extension = config->file_extension;
     const save_function_t save_function = config->save_function;
     const bool measureVelocity = config->measure_velocity;
-    
+
     // Get the solver functions
     const real activation_threshold = cell_model_solver->activation_thershold;
-    const compute_diffusion_coefficient_t compute_diffusion_coefficient = cell_model_solver->compute_diffusion_coefficient;
-    
+
     // Measure velocity variables
     real stim_velocity, t0, t1;
     const real x0 = config->Lx / 3.0f;
@@ -71,29 +77,31 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
     // Auxiliary variables for the loops
     int timeStepCounter = 0;
     real actualTime = 0.0f;
-    
+
     // Create device variables, allocate memory on device, and copy data
     real *d_Vm, *d_sV;
     Stimulus *d_stimuli;
+    ElementProperties *d_elements;
     const int total_points = Nx * Ny;
 
     CUDA_CALL(cudaMalloc(&d_Vm, total_points * sizeof(real)));
     CUDA_CALL(cudaMalloc(&d_sV, total_points * cell_model_solver->n_state_vars * sizeof(real)));
     CUDA_CALL(cudaMalloc(&d_stimuli, numberOfStimuli * sizeof(Stimulus)));
+    CUDA_CALL(cudaMalloc(&d_elements, total_points * sizeof(ElementProperties)));
 
     CUDA_CALL(cudaMemcpy(d_Vm, Vm, total_points * sizeof(real), cudaMemcpyHostToDevice));
     CUDA_CALL(cudaMemcpy(d_sV, sV, total_points * cell_model_solver->n_state_vars * sizeof(real), cudaMemcpyHostToDevice));
     CUDA_CALL(cudaMemcpy(d_stimuli, stimuli, numberOfStimuli * sizeof(Stimulus), cudaMemcpyHostToDevice));
-    
+    CUDA_CALL(cudaMemcpy(d_elements, elements, total_points * sizeof(ElementProperties), cudaMemcpyHostToDevice));
+
     // Auxiliary variables for the operations
     real *d_RHS;
     CUDA_CALL(cudaMalloc(&d_RHS, total_points * sizeof(real)));
-    
-    // Calculate coefficients for the ADI method
+
+    // Calculate coefficients
     const real phi_x = delta_t / (delta_x * delta_x);
     const real phi_y = delta_t / (delta_y * delta_y);
-    const real diff_coeff = compute_diffusion_coefficient(sigma);
-    
+
     // CUDA grid and block allocation
     // Device properties
     cudaDeviceProp prop;
@@ -114,7 +122,7 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
     // Adjust the number of blocks
     if (fullDomainGridSize.x * fullDomainGridSize.y < minBlocks)
         fullDomainGridSize.x = (minBlocks + fullDomainGridSize.y - 1) / fullDomainGridSize.y;
-    
+
     // Print information
     SIMPLEMSG("");
     INFOMSG("For full domain kernels:\n");
@@ -141,21 +149,21 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
         // Get time step
         actualTime = time_array[timeStepCounter];
 
-        // ================================================!
-        //  Calculate Approxs. and Update ODEs             !
-        // ================================================!
+        // =================================================
+        //  Calculate Approxs. and Update ODEs
+        // =================================================
         startTime = omp_get_wtime();
 
         // Launch kernel to compute the reaction term and update state variables
-        solveAndUpdateSV<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, delta_t, phi_x, phi_y, diff_coeff, actualTime,
-                                                                      numberOfStimuli, d_stimuli, d_Vm, d_sV, d_RHS, cell_model);
+        solveAndUpdateSV<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, delta_t, phi_x, phi_y, actualTime, numberOfStimuli, d_stimuli,
+                                                                      d_Vm, d_sV, d_RHS, d_elements, cell_model);
         CUDA_CALL(cudaDeviceSynchronize());
 
         elapsedTime1stPart += omp_get_wtime() - startTime;
 
-        // ==================!
-        //  Update Vm        !
-        // ==================!
+        // ===================
+        //  Update Vm
+        // ===================
         startTime = omp_get_wtime();
         CUDA_CALL(cudaMemcpy(d_Vm, d_RHS, total_points * sizeof(real), cudaMemcpyDeviceToDevice));
         elapsedTime2ndPart += omp_get_wtime() - startTime;
@@ -179,10 +187,10 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
             CUDA_CALL(cudaMemcpy(&Vmidx_x0, &d_Vm[idx_x0], sizeof(real), cudaMemcpyDeviceToHost));
             CUDA_CALL(cudaMemcpy(&Vmidx_x1, &d_Vm[idx_x1], sizeof(real), cudaMemcpyDeviceToHost));
             handle_velocity_measurement(Vmidx_x0, Vmidx_x1, &t0, &t1, activation_threshold, &aux_stim_velocity_flag, &stim_velocity_measured, actualTime, x0, x1, &stim_velocity);
-            
+
             elapsedMeasureVelocityTime += omp_get_wtime() - startTime;
         }
-        
+
         // Update time step counter
         timeStepCounter++;
     }
@@ -208,5 +216,6 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
     CUDA_CALL(cudaFree(d_Vm));
     CUDA_CALL(cudaFree(d_sV));
     CUDA_CALL(cudaFree(d_stimuli));
+    CUDA_CALL(cudaFree(d_elements));
     CUDA_CALL(cudaFree(d_RHS));
 }

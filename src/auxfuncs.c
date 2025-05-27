@@ -5,14 +5,14 @@
 // lb -> Diagonal
 // lc -> Superdiagonal
 // N -> Number of elements
-// phi -> Coefficient for the diagonals
-void populateDiagonalThomasAlgorithm(real *la, real *lb, real *lc, int N, real phi)
+// coeff -> Coefficient for the diagonals
+void populateDiagonalThomasAlgorithm(real *la, real *lb, real *lc, int N, real coeff)
 {
     for (int i = 0; i < N; i++)
     {
-        la[i] = -phi;
-        lb[i] = 1.0f + 2.0f * phi;
-        lc[i] = -phi;
+        la[i] = -coeff;
+        lb[i] = 1.0f + 2.0f * coeff;
+        lc[i] = -coeff;
     }
 
     // Set the first and last elements of the diagonals, boundary conditions
@@ -279,22 +279,61 @@ void saveCopyOfSimulationConfig(const char *ini_file_path, const char *output_di
 }
 
 // Basic Thomas algorithm for solving tridiagonal systems
-inline void tridiagonalSystemSolver(real *la, real *lb, real *lc, real *c_prime, real *d_prime, int N, real *d, real *result)
+void tridiagonalSystemSolver_x(const int Nx, real *rhs, real *result, real *c_prime, real *d_prime, const real phi_x, const ElementProperties *elements, const int sys_idx)
 {
-    c_prime[0] = lc[0] / lb[0];
-    for (int i = 1; i < N - 1; i++)
+    real lalc, denom;
+    real coeff = phi_x * elements[sys_idx].D_xx;
+    real lb = 1.0f + 2.0f * coeff;
+
+    c_prime[0] = -2.0f * coeff / lb;
+    d_prime[0] = rhs[0] / lb;
+
+    for (int i = 1; i < Nx; i++)
     {
-        c_prime[i] = lc[i] / (lb[i] - c_prime[i - 1] * la[i]);
+        coeff = phi_x * elements[sys_idx + i].D_xx;
+        lalc = -coeff;
+        lb = 1.0f + 2.0f * coeff;
+        denom = 1.0f / (lb - c_prime[i - 1] * lalc);
+        if (i < Nx - 1)
+            c_prime[i] = lalc * denom;
+        else
+            lalc = -2.0f * coeff; // Last element has a different coefficient
+        d_prime[i] = (rhs[i] - d_prime[i - 1] * lalc) * denom;
     }
 
-    d_prime[0] = d[0] / lb[0];
-    for (int i = 1; i < N; i++)
+    result[Nx - 1] = d_prime[Nx - 1];
+
+    for (int i = Nx - 2; i >= 0; i--)
     {
-        d_prime[i] = (d[i] - d_prime[i - 1] * la[i]) / (lb[i] - c_prime[i - 1] * la[i]);
+        result[i] = d_prime[i] - c_prime[i] * result[i + 1];
+    }
+}
+
+void tridiagonalSystemSolver_y(const int Ny, real *rhs, real *result, real *c_prime, real *d_prime, const real phi_y, const ElementProperties *elements, const int sys_idx, const int Nx)
+{
+    real lalc, denom;
+    real coeff = phi_y * elements[sys_idx].D_yy;
+    real lb = 1.0f + 2.0f * coeff;
+
+    c_prime[0] = -2.0f * coeff / lb;
+    d_prime[0] = rhs[0] / lb;
+
+    for (int i = 1; i < Ny; i++)
+    {
+        coeff = phi_y * elements[sys_idx + Nx * i].D_yy;
+        lalc = -coeff;
+        lb = 1.0f + 2.0f * coeff;
+        denom = 1.0f / (lb - c_prime[i - 1] * lalc);
+        if (i < Ny - 1)
+            c_prime[i] = lalc * denom;
+        else
+            lalc = -2.0f * coeff; // Last element has a different coefficient
+        d_prime[i] = (rhs[i] - d_prime[i - 1] * lalc) * denom;
     }
 
-    result[N - 1] = d_prime[N - 1];
-    for (int i = N - 2; i >= 0; i--)
+    result[Ny - 1] = d_prime[Ny - 1];
+
+    for (int i = Ny - 2; i >= 0; i--)
     {
         result[i] = d_prime[i] - c_prime[i] * result[i + 1];
     }
@@ -329,7 +368,9 @@ int saveSimulationInfos(const SimulationConfig *config, const Measurement *measu
     fprintf(fpInfos, "delta_x = %.5g cm (%d um) (%d space steps in x)\n", config->dx, CM_TO_UM(config->dx), config->Nx);
     fprintf(fpInfos, "delta_y = %.5g cm (%d um) (%d space steps in y)\n", config->dy, CM_TO_UM(config->dy), config->Ny);
     fprintf(fpInfos, "TOTAL POINTS IN DOMAIN = %d\n", config->Nx * config->Ny);
-    fprintf(fpInfos, "SIGMA = %.8g\n", config->sigma);
+    fprintf(fpInfos, "SIGMA LONGITUDINAL = %.8g\n", config->sigma_l);
+    fprintf(fpInfos, "SIGMA TRANSVERSAL = %.8g\n", config->sigma_t);
+    fprintf(fpInfos, "FIBER ORIENTATION = %.2f degrees\n", config->fiber_orientation);
     fprintf(fpInfos, "NUMBER OF STIMULI = %d\n", config->stimulus_count);
     for (int i = 0; i < config->stimulus_count; i++)
     {
@@ -400,6 +441,31 @@ real calculateNorm2Error(real *Vm, real *exact, int Nx, int Ny, real totalTime, 
         }
     }
     return sqrt(sum / (Nx * Ny));
+}
+
+void initializeElementsProperties(const SimulationConfig *config, const real chiCm, ElementProperties *elements_properties)
+{
+    // Unpack parameters from the config
+    const int Nx = config->Nx;
+    const int Ny = config->Ny;
+    const real sigma_l = config->sigma_l;
+    const real sigma_t = config->sigma_t;
+    const real fiber_orientation_rad = config->fiber_orientation * _PI / 180.0f;
+
+    
+    for (int idx = 0; idx < Nx * Ny; idx++)
+    {
+        // Initialize the cell phenotype
+        elements_properties[idx].cell_phenotype = CELL_PHENOTYPE_ENDO; // Default value, can be changed later
+
+        // Calculate the diffusion coefficients based on the fiber orientation
+        // D_xx = (sigma_l - sigma_t) * cos^2(theta) + sigma_t
+        // D_yy = (sigma_l - sigma_t) * sin^2(theta) + sigma_t
+        // D_xy = (sigma_l - sigma_t) * sin(theta) * cos(theta)
+        elements_properties[idx].D_xx = ((sigma_l - sigma_t) * cos(fiber_orientation_rad) * cos(fiber_orientation_rad) + sigma_t) / chiCm;
+        elements_properties[idx].D_yy = ((sigma_l - sigma_t) * sin(fiber_orientation_rad) * sin(fiber_orientation_rad) + sigma_t) / chiCm;
+        elements_properties[idx].D_xy = ((sigma_l - sigma_t) * sin(fiber_orientation_rad) * cos(fiber_orientation_rad)) / chiCm;
+    }
 }
 
 void initializeVariableWithExactSolution(real *Var, int Nx, int Ny, real delta_x, real delta_y, real Lx, real Ly)

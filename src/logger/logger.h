@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
-#include "config_parser.h"
-#include "core_definitions.h"
+#include "../../include/config_parser.h"
+#include "../../include/core_definitions.h"
 
 extern FILE *log_file;
 

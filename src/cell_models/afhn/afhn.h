@@ -5,10 +5,9 @@
 #include "../cell_models.h"
 
 // Constants for the AFHN model
-#define AFHN_CHI 1.0e3f // cm^-1
+#define AFHN_chi 1.0e3f // cm^-1
 #define AFHN_Cm 1.0e-3f // mF * cm^-2
 
-// Functions of the AFHN solver struct (State Variables not considering Vm)
 #define AFHN_NSV 1
 #define AFHN_ACTIVATION_THRESHOLD 10.0f
 
@@ -33,17 +32,12 @@ extern "C"
         }
     }
 
-    static real compute_diffusion_coefficient_AFHN(const real sigma)
-    {
-        return sigma / (AFHN_Cm * AFHN_CHI);
-    }
-
-    #if defined(__CUDACC__)
+#if defined(__CUDACC__)
     __device__ void d_get_actual_sV_AFHN(real *actualsV, const real *sV, const int idx);
     __device__ real d_compute_dVmdt_AFHN(const real Vm, const real *sV);
     __device__ void d_update_sVtilde_AFHN(real *sVtilde, const real Vm, const real *rhs_sV, const real delta_t);
     __device__ void d_update_sV_AFHN(real *sV, const real *rhs_sV, const real dSdt_Vm, const real *dSdt_sV, const real delta_t, const int idx);
-    #endif 
+#endif
 
     // Model parameters - Based on Gerardo_Giorda 2007
     // #define sigma 1.2e-3f // omega^-1 * cm^-1

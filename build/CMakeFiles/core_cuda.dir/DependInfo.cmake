@@ -12,11 +12,12 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models/cell_models.cu" "CMakeFiles/core_cuda.dir/src/cell_models/cell_models.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/cell_models/cell_models.cu.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models/minimal_ventricular/mv.cu" "CMakeFiles/core_cuda.dir/src/cell_models/minimal_ventricular/mv.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/cell_models/minimal_ventricular/mv.cu.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models/tt2/tt2.cu" "CMakeFiles/core_cuda.dir/src/cell_models/tt2/tt2.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/cell_models/tt2/tt2.cu.o.d"
-  "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger.cu" "CMakeFiles/core_cuda.dir/src/logger.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/logger.cu.o.d"
-  "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/monodomain.cu" "CMakeFiles/core_cuda.dir/src/monodomain.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/monodomain.cu.o.d"
+  "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger/logger.cu" "CMakeFiles/core_cuda.dir/src/logger/logger.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/logger/logger.cu.o.d"
+  "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/dg/dg.cu" "CMakeFiles/core_cuda.dir/src/numerical_methods/dg/dg.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/numerical_methods/dg/dg.cu.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/fe/fe.cu" "CMakeFiles/core_cuda.dir/src/numerical_methods/fe/fe.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/numerical_methods/fe/fe.cu.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/osadi/osadi.cu" "CMakeFiles/core_cuda.dir/src/numerical_methods/osadi/osadi.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/numerical_methods/osadi/osadi.cu.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/ssiadi/ssiadi.cu" "CMakeFiles/core_cuda.dir/src/numerical_methods/ssiadi/ssiadi.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/numerical_methods/ssiadi/ssiadi.cu.o.d"
+  "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/solvers/monodomain.cu" "CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

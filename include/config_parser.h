@@ -51,14 +51,13 @@ typedef struct
     NumericalMethod method;
 
     // Numeric parameters
-    real theta;
     real dt;
     real dx;
     real dy;
-    real sigma;   // Diffusion coefficient (isotropic context)
+
     real sigma_l; // Longitudinal diffusion coefficient
     real sigma_t; // Transversal diffusion coefficient
-    real sigma_i; // Interleaved diffusion coefficient (anisotropic context)
+    real fiber_orientation; // Fiber angle with respect to the x-axis (in degrees)
 
     // Simulation parameters
     real total_time;

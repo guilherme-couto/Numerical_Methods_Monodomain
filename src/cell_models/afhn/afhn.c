@@ -34,10 +34,10 @@ static void update_sV_AFHN(real *sV, const real *rhs_sV, const real dSdt_Vm, con
 // Instantiate the AFHN model
 const CellModelSolver AFHN_SOLVER = {
     .n_state_vars = AFHN_NSV,
+    .chiCm = AFHN_chi * AFHN_Cm,
     .activation_thershold = AFHN_ACTIVATION_THRESHOLD,
     .initialize = initialize_AFHN,
     .get_actual_sV = get_actual_sV_AFHN,
-    .compute_diffusion_coefficient = compute_diffusion_coefficient_AFHN,
     .compute_dVmdt = compute_dVmdt_AFHN,
     .update_sVtilde = update_sVtilde_AFHN,
     .update_sV = update_sV_AFHN,
@@ -46,8 +46,8 @@ const CellModelSolver AFHN_SOLVER = {
 // real forcingTerm(real x, real y, real t, real W, real Lx, real Ly, real sigma)
 // {
 //     // Calculate coefficients for the ADI method
-//     const real diff_coeff = sigma / (AFHN_Cm * AFHN_CHI);
+//     const real diff_coeff = sigma / (AFHN_Cm * AFHN_chi);
 //     real exactVm = (exp(-t)) * cos(_PI * x / Lx) * cos(_PI * y / Ly);
 //     real reaction = dVmdt(exactVm, W);
-//     return (exactVm * (-(AFHN_CHI * AFHN_Cm) + 2.0f * (sigma / (AFHN_CHI * AFHN_Cm)) * _PI * _PI / (Lx * Ly))) + (AFHN_CHI * reaction);
+//     return (exactVm * (-(AFHN_chi * AFHN_Cm) + 2.0f * (sigma / (AFHN_chi * AFHN_Cm)) * _PI * _PI / (Lx * Ly))) + (AFHN_chi * reaction);
 // }

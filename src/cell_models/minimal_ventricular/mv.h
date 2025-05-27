@@ -4,13 +4,17 @@
 #include "../../../include/core_definitions.h"
 #include "../cell_models.h"
 
+// Constants for the MV model
+#define MV_chi 1.0f
+#define MV_Cm 1.0f
+
+#define MV_NSV 3                     // Number of state variables in the MV model
+#define MV_ACTIVATION_THRESHOLD 0.8f // Activation threshold for the MV model
+
 // Options: ENDO, M, EPI, PB, TNNP -> default is ENDO
 #if !defined(MCELL) && !defined(EPI) && !defined(ENDO) && !defined(PB) && !defined(TNNP)
 #define ENDO
 #endif
-
-#define MV_NSV 3                     // Number of state variables in the MV model
-#define MV_ACTIVATION_THRESHOLD 0.8f // Activation threshold for the MV model
 
 #ifdef __cplusplus
 extern "C"
@@ -35,11 +39,6 @@ extern "C"
             sV[idx_sv + 1] = w_init;
             sV[idx_sv + 2] = s_init;
         }
-    }
-
-    static real compute_diffusion_coefficient_MV(const real sigma)
-    {
-        return sigma;
     }
 
     // Rescale Vm -> from Minimal Ventricular paper

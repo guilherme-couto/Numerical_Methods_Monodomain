@@ -443,53 +443,53 @@ src/config_parser.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/config_parser.c.s
 .PHONY : src/config_parser.c.s
 
-src/logger.o: src/logger.c.o
-.PHONY : src/logger.o
+src/logger/logger.o: src/logger/logger.c.o
+.PHONY : src/logger/logger.o
 
 # target to build an object file
-src/logger.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/logger.c.o
-.PHONY : src/logger.c.o
+src/logger/logger.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/logger/logger.c.o
+.PHONY : src/logger/logger.c.o
 
-src/logger.i: src/logger.c.i
-.PHONY : src/logger.i
+src/logger/logger.i: src/logger/logger.c.i
+.PHONY : src/logger/logger.i
 
 # target to preprocess a source file
-src/logger.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/logger.c.i
-.PHONY : src/logger.c.i
+src/logger/logger.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/logger/logger.c.i
+.PHONY : src/logger/logger.c.i
 
-src/logger.s: src/logger.c.s
-.PHONY : src/logger.s
+src/logger/logger.s: src/logger/logger.c.s
+.PHONY : src/logger/logger.s
 
 # target to generate assembly for a file
-src/logger.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/logger.c.s
-.PHONY : src/logger.c.s
+src/logger/logger.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/logger/logger.c.s
+.PHONY : src/logger/logger.c.s
 
-src/logger.o: src/logger.cu.o
-.PHONY : src/logger.o
+src/logger/logger.o: src/logger/logger.cu.o
+.PHONY : src/logger/logger.o
 
 # target to build an object file
-src/logger.cu.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/logger.cu.o
-.PHONY : src/logger.cu.o
+src/logger/logger.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/logger/logger.cu.o
+.PHONY : src/logger/logger.cu.o
 
-src/logger.i: src/logger.cu.i
-.PHONY : src/logger.i
+src/logger/logger.i: src/logger/logger.cu.i
+.PHONY : src/logger/logger.i
 
 # target to preprocess a source file
-src/logger.cu.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/logger.cu.i
-.PHONY : src/logger.cu.i
+src/logger/logger.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/logger/logger.cu.i
+.PHONY : src/logger/logger.cu.i
 
-src/logger.s: src/logger.cu.s
-.PHONY : src/logger.s
+src/logger/logger.s: src/logger/logger.cu.s
+.PHONY : src/logger/logger.s
 
 # target to generate assembly for a file
-src/logger.cu.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/logger.cu.s
-.PHONY : src/logger.cu.s
+src/logger/logger.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/logger/logger.cu.s
+.PHONY : src/logger/logger.cu.s
 
 src/main.o: src/main.c.o
 .PHONY : src/main.o
@@ -518,53 +518,29 @@ src/main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/monodomain_simulation.dir/build.make CMakeFiles/monodomain_simulation.dir/src/main.c.s
 .PHONY : src/main.c.s
 
-src/monodomain.o: src/monodomain.c.o
-.PHONY : src/monodomain.o
+src/numerical_methods/dg/dg.o: src/numerical_methods/dg/dg.cu.o
+.PHONY : src/numerical_methods/dg/dg.o
 
 # target to build an object file
-src/monodomain.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/monodomain.c.o
-.PHONY : src/monodomain.c.o
+src/numerical_methods/dg/dg.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/dg/dg.cu.o
+.PHONY : src/numerical_methods/dg/dg.cu.o
 
-src/monodomain.i: src/monodomain.c.i
-.PHONY : src/monodomain.i
-
-# target to preprocess a source file
-src/monodomain.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/monodomain.c.i
-.PHONY : src/monodomain.c.i
-
-src/monodomain.s: src/monodomain.c.s
-.PHONY : src/monodomain.s
-
-# target to generate assembly for a file
-src/monodomain.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/monodomain.c.s
-.PHONY : src/monodomain.c.s
-
-src/monodomain.o: src/monodomain.cu.o
-.PHONY : src/monodomain.o
-
-# target to build an object file
-src/monodomain.cu.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/monodomain.cu.o
-.PHONY : src/monodomain.cu.o
-
-src/monodomain.i: src/monodomain.cu.i
-.PHONY : src/monodomain.i
+src/numerical_methods/dg/dg.i: src/numerical_methods/dg/dg.cu.i
+.PHONY : src/numerical_methods/dg/dg.i
 
 # target to preprocess a source file
-src/monodomain.cu.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/monodomain.cu.i
-.PHONY : src/monodomain.cu.i
+src/numerical_methods/dg/dg.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/dg/dg.cu.i
+.PHONY : src/numerical_methods/dg/dg.cu.i
 
-src/monodomain.s: src/monodomain.cu.s
-.PHONY : src/monodomain.s
+src/numerical_methods/dg/dg.s: src/numerical_methods/dg/dg.cu.s
+.PHONY : src/numerical_methods/dg/dg.s
 
 # target to generate assembly for a file
-src/monodomain.cu.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/monodomain.cu.s
-.PHONY : src/monodomain.cu.s
+src/numerical_methods/dg/dg.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/dg/dg.cu.s
+.PHONY : src/numerical_methods/dg/dg.cu.s
 
 src/numerical_methods/fe/fe.o: src/numerical_methods/fe/fe.c.o
 .PHONY : src/numerical_methods/fe/fe.o
@@ -758,6 +734,54 @@ src/save_functions.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/save_functions.c.s
 .PHONY : src/save_functions.c.s
 
+src/solvers/monodomain.o: src/solvers/monodomain.c.o
+.PHONY : src/solvers/monodomain.o
+
+# target to build an object file
+src/solvers/monodomain.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/solvers/monodomain.c.o
+.PHONY : src/solvers/monodomain.c.o
+
+src/solvers/monodomain.i: src/solvers/monodomain.c.i
+.PHONY : src/solvers/monodomain.i
+
+# target to preprocess a source file
+src/solvers/monodomain.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/solvers/monodomain.c.i
+.PHONY : src/solvers/monodomain.c.i
+
+src/solvers/monodomain.s: src/solvers/monodomain.c.s
+.PHONY : src/solvers/monodomain.s
+
+# target to generate assembly for a file
+src/solvers/monodomain.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/solvers/monodomain.c.s
+.PHONY : src/solvers/monodomain.c.s
+
+src/solvers/monodomain.o: src/solvers/monodomain.cu.o
+.PHONY : src/solvers/monodomain.o
+
+# target to build an object file
+src/solvers/monodomain.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.o
+.PHONY : src/solvers/monodomain.cu.o
+
+src/solvers/monodomain.i: src/solvers/monodomain.cu.i
+.PHONY : src/solvers/monodomain.i
+
+# target to preprocess a source file
+src/solvers/monodomain.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.i
+.PHONY : src/solvers/monodomain.cu.i
+
+src/solvers/monodomain.s: src/solvers/monodomain.cu.s
+.PHONY : src/solvers/monodomain.s
+
+# target to generate assembly for a file
+src/solvers/monodomain.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.s
+.PHONY : src/solvers/monodomain.cu.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -805,21 +829,18 @@ help:
 	@echo "... src/config_parser.o"
 	@echo "... src/config_parser.i"
 	@echo "... src/config_parser.s"
-	@echo "... src/logger.o"
-	@echo "... src/logger.i"
-	@echo "... src/logger.s"
-	@echo "... src/logger.o"
-	@echo "... src/logger.i"
-	@echo "... src/logger.s"
+	@echo "... src/logger/logger.o"
+	@echo "... src/logger/logger.i"
+	@echo "... src/logger/logger.s"
+	@echo "... src/logger/logger.o"
+	@echo "... src/logger/logger.i"
+	@echo "... src/logger/logger.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... src/monodomain.o"
-	@echo "... src/monodomain.i"
-	@echo "... src/monodomain.s"
-	@echo "... src/monodomain.o"
-	@echo "... src/monodomain.i"
-	@echo "... src/monodomain.s"
+	@echo "... src/numerical_methods/dg/dg.o"
+	@echo "... src/numerical_methods/dg/dg.i"
+	@echo "... src/numerical_methods/dg/dg.s"
 	@echo "... src/numerical_methods/fe/fe.o"
 	@echo "... src/numerical_methods/fe/fe.i"
 	@echo "... src/numerical_methods/fe/fe.s"
@@ -844,6 +865,12 @@ help:
 	@echo "... src/save_functions.o"
 	@echo "... src/save_functions.i"
 	@echo "... src/save_functions.s"
+	@echo "... src/solvers/monodomain.o"
+	@echo "... src/solvers/monodomain.i"
+	@echo "... src/solvers/monodomain.s"
+	@echo "... src/solvers/monodomain.o"
+	@echo "... src/solvers/monodomain.i"
+	@echo "... src/solvers/monodomain.s"
 .PHONY : help
 
 

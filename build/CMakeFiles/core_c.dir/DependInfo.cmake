@@ -16,14 +16,14 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models/minimal_ventricular/mv.c" "CMakeFiles/core_c.dir/src/cell_models/minimal_ventricular/mv.c.o" "gcc" "CMakeFiles/core_c.dir/src/cell_models/minimal_ventricular/mv.c.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models/tt2/tt2.c" "CMakeFiles/core_c.dir/src/cell_models/tt2/tt2.c.o" "gcc" "CMakeFiles/core_c.dir/src/cell_models/tt2/tt2.c.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/config_parser.c" "CMakeFiles/core_c.dir/src/config_parser.c.o" "gcc" "CMakeFiles/core_c.dir/src/config_parser.c.o.d"
-  "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger.c" "CMakeFiles/core_c.dir/src/logger.c.o" "gcc" "CMakeFiles/core_c.dir/src/logger.c.o.d"
+  "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger/logger.c" "CMakeFiles/core_c.dir/src/logger/logger.c.o" "gcc" "CMakeFiles/core_c.dir/src/logger/logger.c.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/main.c" "CMakeFiles/core_c.dir/src/main.c.o" "gcc" "CMakeFiles/core_c.dir/src/main.c.o.d"
-  "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/monodomain.c" "CMakeFiles/core_c.dir/src/monodomain.c.o" "gcc" "CMakeFiles/core_c.dir/src/monodomain.c.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/fe/fe.c" "CMakeFiles/core_c.dir/src/numerical_methods/fe/fe.c.o" "gcc" "CMakeFiles/core_c.dir/src/numerical_methods/fe/fe.c.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/numerical_methods.c" "CMakeFiles/core_c.dir/src/numerical_methods/numerical_methods.c.o" "gcc" "CMakeFiles/core_c.dir/src/numerical_methods/numerical_methods.c.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/osadi/osadi.c" "CMakeFiles/core_c.dir/src/numerical_methods/osadi/osadi.c.o" "gcc" "CMakeFiles/core_c.dir/src/numerical_methods/osadi/osadi.c.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/ssiadi/ssiadi.c" "CMakeFiles/core_c.dir/src/numerical_methods/ssiadi/ssiadi.c.o" "gcc" "CMakeFiles/core_c.dir/src/numerical_methods/ssiadi/ssiadi.c.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/save_functions.c" "CMakeFiles/core_c.dir/src/save_functions.c.o" "gcc" "CMakeFiles/core_c.dir/src/save_functions.c.o.d"
+  "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/solvers/monodomain.c" "CMakeFiles/core_c.dir/src/solvers/monodomain.c.o" "gcc" "CMakeFiles/core_c.dir/src/solvers/monodomain.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

@@ -1,4 +1,4 @@
-#include "../include/logger.h"
+#include "logger.h"
 
 __host__ void log_device_info(FILE *log_file)
 {

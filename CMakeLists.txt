@@ -21,30 +21,40 @@ option(USE_OPENMP "Enable OpenMP support" ON)
 option(USE_FLOAT "Use float precision instead of double" OFF)
 
 # === Directories ===
-set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
-set(CELL_MODELS_DIR "${SRC_DIR}/cell_models")
-set(NUMERICAL_METHODS_DIR "${SRC_DIR}/numerical_methods")
 set(INC_DIR "${CMAKE_SOURCE_DIR}/include")
 set(EXT_DIR "${CMAKE_SOURCE_DIR}/external")
 set(BIN_DIR "${CMAKE_SOURCE_DIR}/bin")
+set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
+
+set(CELL_MODELS_DIR "${SRC_DIR}/cell_models")
+set(NUMERICAL_METHODS_DIR "${SRC_DIR}/numerical_methods")
+set(LOGGER_DIR "${SRC_DIR}/logger")
+set(SOLVERS_DIR "${SRC_DIR}/solvers")
+
 
 # === Include paths ===
-include_directories(${INC_DIR} ${EXT_DIR} ${CELL_MODELS_DIR} ${NUMERICAL_METHODS_DIR})
+include_directories(${INC_DIR} ${EXT_DIR} ${CELL_MODELS_DIR} ${NUMERICAL_METHODS_DIR} ${LOGGER_DIR} ${SOLVERS_DIR})
 file(GLOB_RECURSE EXT_HEADERS "${EXT_DIR}/*.h")
 file(GLOB_RECURSE CELL_HEADERS "${CELL_MODELS_DIR}/*.h")
 file(GLOB_RECURSE NUMERICAL_METHODS_HEADERS "${NUMERICAL_METHODS_DIR}/*.h")
+file(GLOB_RECURSE LOGGER_HEADERS "${LOGGER_DIR}/*.h")
+file(GLOB_RECURSE SOLVERS_HEADERS "${SOLVERS_DIR}/*.h")
 
 # === Source files ===
 file(GLOB SRC_C_FILES "${SRC_DIR}/*.c")
 file(GLOB_RECURSE EXT_C_FILES "${EXT_DIR}/*.c")
 file(GLOB_RECURSE CELL_C_FILES "${CELL_MODELS_DIR}/*.c")
 file(GLOB_RECURSE NUMERICAL_METHODS_C_FILES "${NUMERICAL_METHODS_DIR}/*.c")
+file(GLOB_RECURSE LOGGER_C_FILES "${LOGGER_DIR}/*.c")
+file(GLOB_RECURSE SOLVERS_C_FILES "${SOLVERS_DIR}/*.c")
 
 set (C_SOURCES
     ${SRC_C_FILES}
     ${EXT_C_FILES}
     ${CELL_C_FILES}
     ${NUMERICAL_METHODS_C_FILES}
+    ${LOGGER_C_FILES}
+    ${SOLVERS_C_FILES}
 )
 
 # === Separate libraries ===
@@ -56,8 +66,10 @@ if (USE_CUDA)
     file(GLOB_RECURSE SRC_CU_FILES "${SRC_DIR}/*.cu")
     file(GLOB_RECURSE CELL_CU_FILES "${CELL_MODELS_DIR}/*.cu*")
     file(GLOB_RECURSE NUMERICAL_METHODS_CU_FILES "${NUMERICAL_METHODS_DIR}/*.cu")
+    file(GLOB_RECURSE LOGGER_CU_FILES "${LOGGER_DIR}/*.cu")
+    file(GLOB_RECURSE SOLVERS_CU_FILES "${SOLVERS_DIR}/*.cu")
     
-    set(CUDA_SOURCES ${SRC_CU_FILES} ${CELL_CU_FILES} ${NUMERICAL_METHODS_CU_FILES})
+    set(CUDA_SOURCES ${SRC_CU_FILES} ${CELL_CU_FILES} ${NUMERICAL_METHODS_CU_FILES} ${LOGGER_CU_FILES} ${SOLVERS_CU_FILES})
     
     add_library(core_cuda STATIC ${CUDA_SOURCES})
     target_include_directories(core_cuda PUBLIC ${INC_DIR} ${EXT_DIR})

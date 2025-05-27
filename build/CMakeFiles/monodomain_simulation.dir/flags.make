@@ -4,7 +4,7 @@
 # compile C with /home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc
 C_DEFINES = -DUSE_CUDA -DUSE_DOUBLE -DUSE_OPENMP
 
-C_INCLUDES = -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/include -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/external -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods
+C_INCLUDES = -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/include -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/external -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/solvers
 
 C_FLAGS = -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/guilherme-couto/.conda/envs/numerical-env/include  -I/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/include  -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib/stubs -O3 -march=native -finline-functions -fopenmp
 

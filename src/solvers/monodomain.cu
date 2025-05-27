@@ -1,9 +1,4 @@
-#include "../include/auxfuncs.h"
-#include "../include/core_definitions.h"
-#include "../include/monodomain.h"
-#include "../include/config_parser.h"
-#include "../include/monodomain.h"
-#include "numerical_methods/numerical_methods.h"
+#include "monodomain.h"
 
 int runMonodomainSimulationCUDA(const SimulationConfig *config)
 {
@@ -37,20 +32,25 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
     real *Vm = (real *)malloc(total_points * sizeof(real));
     real *sV = (real *)malloc(total_points * cell_model_solver->n_state_vars * sizeof(real));
     cell_model_solver->initialize(Vm, sV, config->Nx, config->Ny);
+
+    // Allocate and initialize elements properties arrays
+    ElementProperties *elements_properties = (ElementProperties *)malloc(total_points * sizeof(ElementProperties));
+    initializeElementsProperties(config, cell_model_solver->chiCm, elements_properties);
     
     // Run the simulation based on the selected method
     numerical_method_t run_method = get_numerical_method_CUDA(&config->method);
     if (run_method == NULL)
     {
-        fprintf(stderr, "Error: Invalid numerical method\n");
+        ERRORMSG("Invalid numerical method selected.");
         free(time_array);
         free(Vm);
         free(sV);
+        free(elements_properties);
         return -2;
     }
     
     // Run the selected method
-    run_method(config, &measurement, time_array, cell_model_solver, Vm, sV);
+    run_method(config, &measurement, time_array, cell_model_solver, Vm, sV, elements_properties);
     
     // Save last frame
     if (config->save_last_frame)
@@ -82,6 +82,7 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
     free(time_array);
     free(Vm);
     free(sV);
+    free(elements_properties);
 
     // Save simulation information
     saveSimulationInfos(config, &measurement);
@@ -602,9 +603,9 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
 //         // Start measuring time of 1st part
 //         startTime = omp_get_wtime();
 
-//         // ================================================!
-//         //  Calculate Approx. and ODEs                     !
-//         // ================================================!
+//         // =================================================
+//         //  Calculate Approx. and ODEs                   
+//         // =================================================
 
 // #ifdef AFHN
 
@@ -635,10 +636,10 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
 
 // #if defined(SSIADI) || defined(THETASSIADI)
 
-//         // ================================================!
-//         //  Calculate Vm at n+1/2 -> Result goes to RHS    !
-//         //  diffusion implicit in y and explicit in x      !
-//         // ================================================!
+//         // =================================================
+//         //  Calculate Vm at n+1/2 -> Result goes to RHS  
+//         //  diffusion implicit in y and explicit in x    
+//         // =================================================
 //         // Calculate RHS for Thomas batch algorithm
 //         prepareRHSjDiff<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, phi_x, diff_coeff, tau, d_Vm, d_RHS, d_partRHS);
 //         CUDA_CALL(cudaDeviceSynchronize());
@@ -654,10 +655,10 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
 //         finishLSTime = omp_get_wtime();
 //         elapsedTime1stLS += finishLSTime - startLSTime;
 
-//         // ================================================!
-//         //  Calculate Vm at n+1 -> Result goes to Vm       !
-//         //  diffusion implicit in x and explicit in y      !
-//         // ================================================!
+//         // =================================================
+//         //  Calculate Vm at n+1 -> Result goes to Vm     
+//         //  diffusion implicit in x and explicit in y    
+//         // =================================================
 //         // Calculate RHS for Thomas batch algorithm
 //         prepareRHSiDiff<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, phi_y, diff_coeff, tau, d_RHS, d_Vm, d_partRHS);
 //         CUDA_CALL(cudaDeviceSynchronize());
@@ -677,9 +678,9 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
 
 // #ifdef OSADI
 
-//         // ================================================!
-//         //  Calculate Vm at n+1/2 -> Result goes to RHS    !
-//         // ================================================!
+//         // =================================================
+//         //  Calculate Vm at n+1/2 -> Result goes to RHS  
+//         // =================================================
 //         // Calculate RHS for Thomas batch algorithm
 //         prepareRHS<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, d_Vm, d_partRHS);
 //         CUDA_CALL(cudaDeviceSynchronize());
@@ -695,9 +696,9 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
 //         finishLSTime = omp_get_wtime();
 //         elapsedTime1stLS += finishLSTime - startLSTime;
 
-//         // ================================================!
-//         //  Calculate Vm at n+1 -> Result goes to Vm       !
-//         // ================================================!
+//         // =================================================
+//         //  Calculate Vm at n+1 -> Result goes to Vm     
+//         // =================================================
 //         // Calculate RHS for Thomas batch algorithm
 //         prepareRHS<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, d_Vm, d_partRHS);
 //         CUDA_CALL(cudaDeviceSynchronize());

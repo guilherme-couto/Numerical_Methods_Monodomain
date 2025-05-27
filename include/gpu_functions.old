@@ -3,7 +3,7 @@
 
 #include "config_parser.h"
 #include "core_definitions.h"
-#include "logger.h"
+#include "../src/logger/logger.h"
 #include "auxfuncs.h"
 
 #ifdef USE_CUDA

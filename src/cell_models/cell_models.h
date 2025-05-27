@@ -3,8 +3,6 @@
 
 #include "../../include/core_definitions.h"
 #include "../../include/config_parser.h"
-#include "../../include/auxfuncs.h"
-#include "../../include/logger.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -13,7 +11,6 @@ extern "C"
 
     // Types definition for the cell model solvers
     typedef void (*initialize_t)(real *, real *, const int, const int);
-    typedef real (*compute_diffusion_coefficient_t)(const real);
     typedef void (*get_actual_sV_t)(real *, const real *, const int);
     typedef real (*compute_dVmdt_t)(const real, const real *);
     typedef void (*update_sVtilde_t)(real *, const real, const real *, const real);
@@ -23,9 +20,9 @@ extern "C"
     typedef struct
     {
         int n_state_vars;
+        real chiCm;
         real activation_thershold;
         initialize_t initialize;
-        compute_diffusion_coefficient_t compute_diffusion_coefficient;
         get_actual_sV_t get_actual_sV;
         compute_dVmdt_t compute_dVmdt;
         update_sVtilde_t update_sVtilde;

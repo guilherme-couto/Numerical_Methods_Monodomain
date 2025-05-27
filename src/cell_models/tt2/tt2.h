@@ -4,7 +4,7 @@
 #include "../../../include/core_definitions.h"
 #include "../../../include/config_parser.h"
 #include "../../../include/auxfuncs.h"
-#include "../../../include/logger.h"
+#include "../../logger/logger.h"
 
 // Options: ENDO, MCELL, EPI -> default is ENDO
 #if !defined(MCELL) && !defined(EPI) && !defined(ENDO)

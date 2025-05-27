@@ -96,16 +96,19 @@ static int config_parser_handler(void *user, const char *section, const char *na
         config->save_function = get_save_function(config->save_function_name);
         strncpy(config->file_extension, get_file_extension(config->save_function_name), sizeof(config->file_extension));
     }
-    else if (MATCH("simulation", "theta"))
-        config->theta = te_interp_no_comments(value, 0);
+    
     else if (MATCH("simulation", "dt"))
         config->dt = te_interp_no_comments(value, 0);
     else if (MATCH("simulation", "dx"))
         config->dx = te_interp_no_comments(value, 0);
     else if (MATCH("simulation", "dy"))
         config->dy = te_interp_no_comments(value, 0);
-    else if (MATCH("simulation", "sigma"))
-        config->sigma = te_interp_no_comments(value, 0);
+    else if (MATCH("simulation", "sigma_l"))
+        config->sigma_l = te_interp_no_comments(value, 0);
+    else if (MATCH("simulation", "sigma_t"))
+        config->sigma_t = te_interp_no_comments(value, 0);
+    else if (MATCH("simulation", "fiber_orientation"))
+        config->fiber_orientation = te_interp_no_comments(value, 0);
     else if (MATCH("simulation", "total_time"))
         config->total_time = te_interp_no_comments(value, 0);
     else if (MATCH("simulation", "length_x"))
@@ -197,14 +200,12 @@ int load_simulation_config(const char *filename, SimulationConfig *config)
     config->equation_type = EQUATION_INVALID;
     config->cell_model = CELL_MODEL_INVALID;
     config->method = METHOD_INVALID;
-    config->theta = -1.0f;
     config->dt = -1.0f;
     config->dx = -1.0f;
     config->dy = -1.0f;
-    config->sigma = -1.0f;
     config->sigma_l = -1.0f;
     config->sigma_t = -1.0f;
-    config->sigma_i = -1.0f;
+    config->fiber_orientation = 0.0f;
     config->total_time = -1.0;
     config->Lx = -1.0f;
     config->Ly = -1.0f;
@@ -289,9 +290,14 @@ bool validate_simulation_config(const SimulationConfig *config)
         printf("Spatial steps (dx, dy) must be positive\n");
         valid = false;
     }
-    if (config->sigma <= 0)
+    if (config->sigma_l <= 0 || config->sigma_t <= 0)
     {
-        printf("Diffusion coefficient (sigma) must be positive\n");
+        printf("Diffusion coefficients (sigma_l, sigma_t) must be positive\n");
+        valid = false;
+    }
+    if (config->fiber_orientation < 0 || config->fiber_orientation > 180)
+    {
+        printf("Fiber orientation must be between 0 and 180 degrees\n");
         valid = false;
     }
     if (config->total_time <= 0)

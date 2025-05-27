@@ -40,8 +40,10 @@ extern "C" {
 
 #if defined(__CUDACC__)
 #define FORCE_INLINE __forceinline__
+#define STATIC_MODIFIER static __device__
 #else
 #define FORCE_INLINE inline
+#define STATIC_MODIFIER static
 #endif
 
 // Define block size for GPU
@@ -97,6 +99,24 @@ typedef struct
         real max;
     } x_range, y_range, x_discretized, y_discretized;
 } Stimulus;
+
+// Define cell phenotypes
+typedef enum
+{
+    CELL_PHENOTYPE_EPI,
+    CELL_PHENOTYPE_ENDO,
+    CELL_PHENOTYPE_M,
+    CELL_PHENOTYPE_INVALID
+} CellPhenotype;
+
+// Define a structure for element properties
+typedef struct
+{
+    CellPhenotype cell_phenotype;
+    real D_xx; // Diffusion coefficient in x direction
+    real D_yy; // Diffusion coefficient in y direction
+    real D_xy; // Diffusion coefficient in xy direction
+} ElementProperties;
 
 // Define CUDA error checking
 #define CUDA_CALL(call)                                                                                                          \

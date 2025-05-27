@@ -1,5 +1,4 @@
-#include "../include/monodomain.h"
-#include "numerical_methods/numerical_methods.h"
+#include "monodomain.h"
 
 int runMonodomainSimulationSerial(const SimulationConfig *config)
 {
@@ -26,19 +25,24 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
     real *sV = (real *)malloc(total_points * cell_model_solver->n_state_vars * sizeof(real));
     cell_model_solver->initialize(Vm, sV, config->Nx, config->Ny);
 
+    // Allocate and initialize elements properties arrays
+    ElementProperties *elements_properties = (ElementProperties *)malloc(total_points * sizeof(ElementProperties));
+    initializeElementsProperties(config, cell_model_solver->chiCm, elements_properties);
+
     // Run the simulation based on the selected method
     numerical_method_t run_method = get_numerical_method(&config->method);
     if (run_method == NULL)
     {
-        fprintf(stderr, "Error: Invalid numerical method\n");
+        ERRORMSG("Invalid numerical method selected.");
         free(time_array);
         free(Vm);
         free(sV);
+        free(elements_properties);
         return -2;
     }
 
     // Run the selected method
-    run_method(config, &measurement, time_array, cell_model_solver, Vm, sV);
+    run_method(config, &measurement, time_array, cell_model_solver, Vm, sV, elements_properties);
 
     // Save last frame
     if (config->save_last_frame)
@@ -66,6 +70,7 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
     free(time_array);
     free(Vm);
     free(sV);
+    free(elements_properties);
 
     // Save simulation information
     saveSimulationInfos(config, &measurement);
@@ -285,9 +290,9 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 //         // Start measuring time of 1st part
 //         startTime = omp_get_wtime();
 
-//         // ================================================!
-//         //  Calculate Approxs. and Update ODEs             !
-//         // ================================================!
+//         // =================================================
+//         //  Calculate Approxs. and Update ODEs           
+//         // =================================================
 //         real diff_term = 0.0f;
 //         for (int i = 0; i < Ny; i++)
 //         {
@@ -311,10 +316,10 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 
 // #if defined(SSIADI) || defined(THETASSIADI)
 
-//         // ================================================!
-//         //  Calculate Vm at n+1/2 -> Result goes to RHS    !
-//         //  diffusion implicit in y and explicit in x      !
-//         // ================================================!
+//         // =================================================
+//         //  Calculate Vm at n+1/2 -> Result goes to RHS  
+//         //  diffusion implicit in y and explicit in x    
+//         // =================================================
 //         for (int j = 0; j < Nx; j++)
 //         {
 //             // Calculate the RHS of the linear system with the explicit diffusion term along x
@@ -344,10 +349,10 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 //             elapsedTime1stLS += finishLSTime - startLSTime;
 //         }
 
-//         // ================================================!
-//         //  Calculate Vm at n+1 -> Result goes to Vm       !
-//         //  diffusion implicit in x and explicit in y      !
-//         // ================================================!
+//         // =================================================
+//         //  Calculate Vm at n+1 -> Result goes to Vm     
+//         //  diffusion implicit in x and explicit in y    
+//         // =================================================
 //         for (int i = 0; i < Ny; i++)
 //         {
 //             // Calculate the RHS of the linear system with the explicit diffusion term along y
@@ -381,9 +386,9 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 
 // #ifdef OSADI
 
-//         // ================================================!
-//         //  Calculate Vm at n+1/2 -> Result goes to Vm       !
-//         // ================================================!
+//         // =================================================
+//         //  Calculate Vm at n+1/2 -> Result goes to Vm     
+//         // =================================================
 //         for (int j = 0; j < Nx; j++)
 //         {
 //             // Calculate the RHS of the linear system
@@ -411,9 +416,9 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 //             elapsedTime1stLS += finishLSTime - startLSTime;
 //         }
 
-//         // ================================================!
-//         //  Calculate Vm at n+1 -> Result goes to Vm         !
-//         // ================================================!
+//         // =================================================
+//         //  Calculate Vm at n+1 -> Result goes to Vm       
+//         // =================================================
 //         for (int i = 0; i < Ny; i++)
 //         {
 //             // Calculate the RHS of the linear system
@@ -445,9 +450,9 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 
 // #ifdef FE
 
-//         // ==================!
-//         //  Update Vm         !
-//         // ==================!
+//         // ===================
+//         //  Update Vm       
+//         // ===================
 //         for (int i = 0; i < Ny; i++)
 //             for (int j = 0; j < Nx; j++)
 //             {
@@ -1340,9 +1345,9 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 //         // Start measuring time of 1st part
 //         startTime = omp_get_wtime();
 
-//         // ================================================!
-//         //  Calculate Approxs. and Update ODEs             !
-//         // ================================================!
+//         // =================================================
+//         //  Calculate Approxs. and Update ODEs           
+//         // =================================================
 //         real diff_term = 0.0f;
 //         for (int i = 0; i < Ny; i++)
 //         {
@@ -1672,10 +1677,10 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 
 // #if defined(SSIADI) || defined(THETASSIADI)
 
-//         // ================================================!
-//         //  Calculate Vm at n+1/2 -> Result goes to RHS    !
-//         //  diffusion implicit in y and explicit in x      !
-//         // ================================================!
+//         // =================================================
+//         //  Calculate Vm at n+1/2 -> Result goes to RHS  
+//         //  diffusion implicit in y and explicit in x    
+//         // =================================================
 //         for (int j = 0; j < Nx; j++)
 //         {
 //             // Calculate the RHS of the linear system with the explicit diffusion term along x
@@ -1705,10 +1710,10 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 //             elapsedTime1stLS += finishLSTime - startLSTime;
 //         }
 
-//         // ================================================!
-//         //  Calculate Vm at n+1 -> Result goes to Vm       !
-//         //  diffusion implicit in x and explicit in y      !
-//         // ================================================!
+//         // =================================================
+//         //  Calculate Vm at n+1 -> Result goes to Vm     
+//         //  diffusion implicit in x and explicit in y    
+//         // =================================================
 //         for (int i = 0; i < Ny; i++)
 //         {
 //             // Calculate the RHS of the linear system with the explicit diffusion term along y
@@ -1742,9 +1747,9 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 
 // #ifdef OSADI
 
-//         // ================================================!
-//         //  Calculate Vm at n+1/2 -> Result goes to Vm       !
-//         // ================================================!
+//         // =================================================
+//         //  Calculate Vm at n+1/2 -> Result goes to Vm     
+//         // =================================================
 //         for (int j = 0; j < Nx; j++)
 //         {
 //             // Calculate the RHS of the linear system
@@ -1772,9 +1777,9 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 //             elapsedTime1stLS += finishLSTime - startLSTime;
 //         }
 
-//         // ================================================!
-//         //  Calculate Vm at n+1 -> Result goes to Vm         !
-//         // ================================================!
+//         // =================================================
+//         //  Calculate Vm at n+1 -> Result goes to Vm       
+//         // =================================================
 //         for (int i = 0; i < Ny; i++)
 //         {
 //             // Calculate the RHS of the linear system
@@ -1805,9 +1810,9 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 
 // #ifdef FE
 
-//         // ==================!
-//         //  Update Vm         !
-//         // ==================!
+//         // ===================
+//         //  Update Vm       
+//         // ===================
 //         for (int i = 0; i < Ny; i++)
 //             for (int j = 0; j < Nx; j++)
 //             {
@@ -1903,9 +1908,9 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 //             // Get info for Action Potential
 //             AP[timeStepCounter] = Vm[APCellIndex];
 
-//             // ================================================!
-//             //  Calcula Approx.                                !
-//             // ================================================!
+//             // =================================================
+//             //  Calcula Approx.                              
+//             // =================================================
 //             real diff_term = 0.0f;
 //             for (int i = 0; i < Nx; i++)
 //             {
@@ -2290,9 +2295,9 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 // #endif // TT2
 //             }
 
-//             // ================================================!
-//             //  Calculate Vm at n + 1 -> Result goes to Vm     !
-//             // ================================================!
+//             // =================================================
+//             //  Calculate Vm at n + 1 -> Result goes to Vm   
+//             // =================================================
 //             // Calculate the RHS
 //             for (int i = 0; i < Nx; i++)
 //             {
