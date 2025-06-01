@@ -20,7 +20,7 @@ extern "C"
     typedef struct
     {
         int n_state_vars;
-        real chiCm;
+        real denom_chiCm;
         real activation_thershold;
         initialize_t initialize;
         get_actual_sV_t get_actual_sV;

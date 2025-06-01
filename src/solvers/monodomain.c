@@ -35,7 +35,7 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
         free(sV);
         return -1;
     }
-    initializeElementsProperties(config, cell_model_solver->chiCm, elements_properties);
+    initializeElementsProperties(config, elements_properties);
 
     // Run the simulation based on the selected method
     numerical_method_t run_method = get_numerical_method(&config->method);
@@ -1405,7 +1405,7 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 //                 partRHS[index] = delta_t * (for_term - RHS_Vmtilde_term);
 
 //                 // Update state variables
-//                 W[index] = actualW + delta_t * (eta2 * ((Vmtilde / vp) - (eta3 * Wtilde))); // with RK2 -> Wn+1 = Wn + dt*R(Vm*, W*)
+//                 W[index] = actualW + delta_t * (eta2 * ((Vmtilde / vp) - (eta3 * Wtilde))); // with RK2 -> sV+1 = sV + dt*R(Vm*, W*)
 
 // #endif // SSIADI || THETASSIADI
 
@@ -1415,7 +1415,7 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 //                 partRHS[index] = delta_t * (for_term - RHS_Vm_term);
 
 //                 // Update state variables
-//                 W[index] = actualW + delta_t * (eta2 * ((actualVm / vp) - (eta3 * actualW))); // with Forward Euler -> Wn+1 = Wn + dt*R(Vmn, Wn)
+//                 W[index] = actualW + delta_t * (eta2 * ((actualVm / vp) - (eta3 * actualW))); // with Forward Euler -> sV+1 = sV + dt*R(Vmn, sV)
 
 // #endif // OSADI
 
@@ -1436,7 +1436,7 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 
 // #if defined(SSIADI) || defined(THETASSIADI)
 
-//                 // Calculate aproximation with RK2 -> Vmn+1/2 = Vmn + 0.5*diffusion + 0.5*dt*R(Vmn, Wn)
+//                 // Calculate aproximation with RK2 -> Vmn+1/2 = Vmn + 0.5*diffusion + 0.5*dt*R(Vmn, sV)
 //                 diff_term = diff_coeff * (phi_x * (Vm[i * Nx + (lim(j - 1, Nx))] - 2.0f * actualVm + Vm[i * Nx + lim(j + 1, Nx)]) + phi_y * (Vm[(lim(i - 1, Ny) * Nx + j)] - 2.0f * actualVm + Vm[(lim(i + 1, Ny) * Nx + j)]));
 //                 real Vmtilde = actualVm + 0.5f * diff_term + (0.5f * delta_t * (stim - RHS_Vm_term));
 
@@ -1446,7 +1446,7 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 //                 partRHS[index] = delta_t * (stim - RHS_Vmtilde_term);
 
 //                 // Update state variables
-//                 W[index] = actualW + delta_t * (eta2 * ((Vmtilde / vp) - (eta3 * Wtilde))); // with RK2 -> Wn+1 = Wn + dt*R(Vm*, W*)
+//                 W[index] = actualW + delta_t * (eta2 * ((Vmtilde / vp) - (eta3 * Wtilde))); // with RK2 -> sV+1 = sV + dt*R(Vm*, W*)
 
 // #endif // SSIADI || THETASSIADI
 
@@ -1456,7 +1456,7 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 //                 partRHS[index] = delta_t * (stim - RHS_Vm_term);
 
 //                 // Update state variables
-//                 W[index] = actualW + delta_t * (eta2 * ((actualVm / vp) - (eta3 * actualW))); // with Forward Euler -> Wn+1 = Wn + dt*R(Vmn, Wn)
+//                 W[index] = actualW + delta_t * (eta2 * ((actualVm / vp) - (eta3 * actualW))); // with Forward Euler -> sV+1 = sV + dt*R(Vmn, sV)
 
 // #endif // OSADI
 
@@ -1953,7 +1953,7 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
 //                 real RHS_Vmtilde_term = (G * Vmtilde * (1.0f - (Vmtilde / vth)) * (1.0f - (Vmtilde / vp))) + (eta1 * Vmtilde * Wtilde);
 //                 partRHS[i] = delta_t * (stim - RHS_Vmtilde_term);
 
-//                 // Update Wn+1 with RK2 -> Wn+1 = Wn + dt*R(Vm*, W*)
+//                 // Update sV+1 with RK2 -> sV+1 = sV + dt*R(Vm*, W*)
 //                 W[i] = actualW + delta_t * (eta2 * ((Vmtilde / vp) - (eta3 * Wtilde)));
 
 // #endif // AFHN

@@ -26,6 +26,7 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
     const bool measureVelocity = config->measure_velocity;
 
     // Get the solver functions
+    const real denom_chiCm = cell_model_solver->denom_chiCm;
     const real activation_threshold = cell_model_solver->activation_thershold;
     const get_actual_sV_t get_actual_sV = cell_model_solver->get_actual_sV;
     const compute_dVmdt_t compute_dVmdt = cell_model_solver->compute_dVmdt;
@@ -49,16 +50,16 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
 
     // Auxiliary variables for the operations
     Stimulus *active_stimuli = (Stimulus *)malloc(numberOfStimuli * sizeof(Stimulus));
-    real diff_term, stim, actualVm, diff_coeff_x, diff_coeff_y;
+    real diff_term, stim, actualVm;
     real Vmtilde;
     real *actualsV = (real *)malloc(cell_model_solver->n_state_vars * sizeof(real));
     real *sVtilde = (real *)malloc(cell_model_solver->n_state_vars * sizeof(real));
-    real *partRHS = (real *)malloc(Nx * Ny * sizeof(real));
+    real *reaction = (real *)malloc(Nx * Ny * sizeof(real));
     real *auxVm = (real *)malloc(Nx * Ny * sizeof(real));
 
-    // Calculate coefficients
-    const real phi_x = delta_t / (delta_x * delta_x);
-    const real phi_y = delta_t / (delta_y * delta_y);
+    // Calculate auxiliary coefficients for Thomas algorithm
+    const real thomas_coeff_x = (0.5f * delta_t * denom_chiCm) / (delta_x * delta_x);
+    const real thomas_coeff_y = (0.5f * delta_t * denom_chiCm) / (delta_y * delta_y);
 
     // Auxiliary arrays for Thomas algorithm
     real *c_prime, *d_prime, *ls_rhs, *result;
@@ -119,22 +120,18 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
                 actualVm = Vm[idx];
                 get_actual_sV(actualsV, sV, idx);
 
-                // Get the diffusion coefficients
-                diff_coeff_x = elements[idx].D_xx;
-                diff_coeff_y = elements[idx].D_yy;
-
                 // Stimulation
                 stim = (num_active_stimuli > 0)
                            ? (get_stimulus_value(actualTime, i, j, active_stimuli, num_active_stimuli))
                            : (0.0f);
 
-                // Calculate aproximation with RK2 -> Vmn+1/2 = Vmn + 0.5*diffusion + 0.5*dt*R(Vmn, Wn)
-                diff_term = compute_diffusion_term(Vm, i, j, Nx, Ny, diff_coeff_x, diff_coeff_y, phi_x, phi_y);
-                Vmtilde = actualVm + 0.5f * (diff_term + delta_t * (stim - compute_dVmdt(actualVm, actualsV)));
+                // Calculate aproximation with RK2 -> Vmn+1/2 = Vmn + 0.5*dt*(diffusion + R(Vmn, sV))
+                diff_term = compute_diffusion_term_anisotropic(Vm, elements, i, j, Nx, Ny, delta_x, delta_y);
+                Vmtilde = actualVm + 0.5f * delta_t * ((diff_term * denom_chiCm) + stim - compute_dVmdt(actualVm, actualsV));
 
                 // Calculate approximation for state variables and prepare part of the RHS of the following linear systems
                 update_sVtilde(sVtilde, actualVm, actualsV, 0.5f * delta_t);
-                partRHS[idx] = delta_t * (stim - compute_dVmdt(Vmtilde, sVtilde));
+                reaction[idx] = stim - compute_dVmdt(Vmtilde, sVtilde);
 
                 // Update state variables
                 update_sV(sV, actualsV, Vmtilde, sVtilde, delta_t, idx);
@@ -155,20 +152,15 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
             for (i = 0; i < Ny; i++)
             {
                 idx = i * Nx + j;
-                idx_left = i * Nx + lim(j - 1, Nx);
-                idx_right = i * Nx + lim(j + 1, Nx);
-
                 actualVm = Vm[idx];
-                diff_coeff_x = elements[idx].D_xx;
-                
-                diff_term = diff_coeff_x * phi_x * (Vm[idx_left] - 2.0f * actualVm + Vm[idx_right]);
-                ls_rhs[i] = actualVm + 0.5f * (diff_term + partRHS[idx]);
+                diff_term = compute_diffusion_term_x_axis(Vm, elements, i, j, Nx, Ny, delta_x, delta_y);
+                ls_rhs[i] = actualVm + 0.5f * delta_t * ((diff_term * denom_chiCm) + reaction[idx]);
             }
 
             // Solve the linear system
             startLSTime = omp_get_wtime();
 
-            tridiagonalSystemSolver_y(Ny, ls_rhs, result, c_prime, d_prime, 0.5f * phi_y, elements, j, Nx);
+            tridiagonalSystemSolver_y(Ny, ls_rhs, result, c_prime, d_prime, thomas_coeff_y, elements, j, Nx);
 
             // Update with the result
             for (i = 0; i < Ny; i++)
@@ -190,20 +182,15 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
             for (j = 0; j < Nx; j++)
             {
                 idx = i * Nx + j;
-                idx_top = lim(i + 1, Ny) * Nx + j;
-                idx_bottom = lim(i - 1, Ny) * Nx + j;
-
                 actualVm = auxVm[idx];
-                diff_coeff_y = elements[idx].D_yy;
-
-                diff_term = diff_coeff_y * phi_y * (auxVm[idx_bottom] - 2.0f * actualVm + auxVm[idx_top]);
-                ls_rhs[j] = actualVm + 0.5f * (diff_term + partRHS[idx]);
+                diff_term = compute_diffusion_term_y_axis(auxVm, elements, i, j, Nx, Ny, delta_x, delta_y);
+                ls_rhs[j] = actualVm + 0.5f * delta_t * ((diff_term * denom_chiCm) + reaction[idx]);
             }
 
             // Solve the linear system
             startLSTime = omp_get_wtime();
 
-            tridiagonalSystemSolver_x(Nx, ls_rhs, result, c_prime, d_prime, 0.5f * phi_x, elements, i);
+            tridiagonalSystemSolver_x(Nx, ls_rhs, result, c_prime, d_prime, thomas_coeff_x, elements, i);
 
             // Update with the result
             for (j = 0; j < Nx; j++)
@@ -256,7 +243,7 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
     free(active_stimuli);
     free(actualsV);
     free(sVtilde);
-    free(partRHS);
+    free(reaction);
     free(auxVm);
     free(c_prime);
     free(d_prime);

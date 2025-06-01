@@ -91,6 +91,7 @@ void log_simulation_header(const SimulationConfig *config, const char *config_fi
     fprintf(log_file, " Time Step (dt)         : %.6g\n", config->dt);
     fprintf(log_file, " Total Time             : %.2f\n", config->total_time);
     fprintf(log_file, " Number of Steps (M)    : %d\n", config->M);
+    fprintf(log_file, " Fiber Orientation      : %.2f degrees\n", config->fiber_orientation);
     fprintf(log_file, " Sigma Longitudinal     : %.8g\n", config->sigma_l);
     fprintf(log_file, " Sigma Transversal      : %.8g\n", config->sigma_t);
     fprintf(log_file, "\n");

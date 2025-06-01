@@ -518,77 +518,149 @@ src/main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/monodomain_simulation.dir/build.make CMakeFiles/monodomain_simulation.dir/src/main.c.s
 .PHONY : src/main.c.s
 
-src/numerical_methods/dg/dg.o: src/numerical_methods/dg/dg.cu.o
-.PHONY : src/numerical_methods/dg/dg.o
+src/numerical_methods/douglas/do.o: src/numerical_methods/douglas/do.c.o
+.PHONY : src/numerical_methods/douglas/do.o
 
 # target to build an object file
-src/numerical_methods/dg/dg.cu.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/dg/dg.cu.o
-.PHONY : src/numerical_methods/dg/dg.cu.o
+src/numerical_methods/douglas/do.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o
+.PHONY : src/numerical_methods/douglas/do.c.o
 
-src/numerical_methods/dg/dg.i: src/numerical_methods/dg/dg.cu.i
-.PHONY : src/numerical_methods/dg/dg.i
+src/numerical_methods/douglas/do.i: src/numerical_methods/douglas/do.c.i
+.PHONY : src/numerical_methods/douglas/do.i
 
 # target to preprocess a source file
-src/numerical_methods/dg/dg.cu.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/dg/dg.cu.i
-.PHONY : src/numerical_methods/dg/dg.cu.i
+src/numerical_methods/douglas/do.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.i
+.PHONY : src/numerical_methods/douglas/do.c.i
 
-src/numerical_methods/dg/dg.s: src/numerical_methods/dg/dg.cu.s
-.PHONY : src/numerical_methods/dg/dg.s
+src/numerical_methods/douglas/do.s: src/numerical_methods/douglas/do.c.s
+.PHONY : src/numerical_methods/douglas/do.s
 
 # target to generate assembly for a file
-src/numerical_methods/dg/dg.cu.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/dg/dg.cu.s
-.PHONY : src/numerical_methods/dg/dg.cu.s
+src/numerical_methods/douglas/do.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.s
+.PHONY : src/numerical_methods/douglas/do.c.s
 
-src/numerical_methods/fe/fe.o: src/numerical_methods/fe/fe.c.o
-.PHONY : src/numerical_methods/fe/fe.o
+src/numerical_methods/douglas/do.o: src/numerical_methods/douglas/do.cu.o
+.PHONY : src/numerical_methods/douglas/do.o
 
 # target to build an object file
-src/numerical_methods/fe/fe.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/fe/fe.c.o
-.PHONY : src/numerical_methods/fe/fe.c.o
+src/numerical_methods/douglas/do.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o
+.PHONY : src/numerical_methods/douglas/do.cu.o
 
-src/numerical_methods/fe/fe.i: src/numerical_methods/fe/fe.c.i
-.PHONY : src/numerical_methods/fe/fe.i
+src/numerical_methods/douglas/do.i: src/numerical_methods/douglas/do.cu.i
+.PHONY : src/numerical_methods/douglas/do.i
 
 # target to preprocess a source file
-src/numerical_methods/fe/fe.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/fe/fe.c.i
-.PHONY : src/numerical_methods/fe/fe.c.i
+src/numerical_methods/douglas/do.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.i
+.PHONY : src/numerical_methods/douglas/do.cu.i
 
-src/numerical_methods/fe/fe.s: src/numerical_methods/fe/fe.c.s
-.PHONY : src/numerical_methods/fe/fe.s
+src/numerical_methods/douglas/do.s: src/numerical_methods/douglas/do.cu.s
+.PHONY : src/numerical_methods/douglas/do.s
 
 # target to generate assembly for a file
-src/numerical_methods/fe/fe.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/fe/fe.c.s
-.PHONY : src/numerical_methods/fe/fe.c.s
+src/numerical_methods/douglas/do.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.s
+.PHONY : src/numerical_methods/douglas/do.cu.s
 
-src/numerical_methods/fe/fe.o: src/numerical_methods/fe/fe.cu.o
-.PHONY : src/numerical_methods/fe/fe.o
+src/numerical_methods/forward_euler/fe.o: src/numerical_methods/forward_euler/fe.c.o
+.PHONY : src/numerical_methods/forward_euler/fe.o
 
 # target to build an object file
-src/numerical_methods/fe/fe.cu.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/fe/fe.cu.o
-.PHONY : src/numerical_methods/fe/fe.cu.o
+src/numerical_methods/forward_euler/fe.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o
+.PHONY : src/numerical_methods/forward_euler/fe.c.o
 
-src/numerical_methods/fe/fe.i: src/numerical_methods/fe/fe.cu.i
-.PHONY : src/numerical_methods/fe/fe.i
+src/numerical_methods/forward_euler/fe.i: src/numerical_methods/forward_euler/fe.c.i
+.PHONY : src/numerical_methods/forward_euler/fe.i
 
 # target to preprocess a source file
-src/numerical_methods/fe/fe.cu.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/fe/fe.cu.i
-.PHONY : src/numerical_methods/fe/fe.cu.i
+src/numerical_methods/forward_euler/fe.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.i
+.PHONY : src/numerical_methods/forward_euler/fe.c.i
 
-src/numerical_methods/fe/fe.s: src/numerical_methods/fe/fe.cu.s
-.PHONY : src/numerical_methods/fe/fe.s
+src/numerical_methods/forward_euler/fe.s: src/numerical_methods/forward_euler/fe.c.s
+.PHONY : src/numerical_methods/forward_euler/fe.s
 
 # target to generate assembly for a file
-src/numerical_methods/fe/fe.cu.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/fe/fe.cu.s
-.PHONY : src/numerical_methods/fe/fe.cu.s
+src/numerical_methods/forward_euler/fe.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.s
+.PHONY : src/numerical_methods/forward_euler/fe.c.s
+
+src/numerical_methods/forward_euler/fe.o: src/numerical_methods/forward_euler/fe.cu.o
+.PHONY : src/numerical_methods/forward_euler/fe.o
+
+# target to build an object file
+src/numerical_methods/forward_euler/fe.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o
+.PHONY : src/numerical_methods/forward_euler/fe.cu.o
+
+src/numerical_methods/forward_euler/fe.i: src/numerical_methods/forward_euler/fe.cu.i
+.PHONY : src/numerical_methods/forward_euler/fe.i
+
+# target to preprocess a source file
+src/numerical_methods/forward_euler/fe.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.i
+.PHONY : src/numerical_methods/forward_euler/fe.cu.i
+
+src/numerical_methods/forward_euler/fe.s: src/numerical_methods/forward_euler/fe.cu.s
+.PHONY : src/numerical_methods/forward_euler/fe.s
+
+# target to generate assembly for a file
+src/numerical_methods/forward_euler/fe.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.s
+.PHONY : src/numerical_methods/forward_euler/fe.cu.s
+
+src/numerical_methods/hundsdorfer-verwer/hv.o: src/numerical_methods/hundsdorfer-verwer/hv.c.o
+.PHONY : src/numerical_methods/hundsdorfer-verwer/hv.o
+
+# target to build an object file
+src/numerical_methods/hundsdorfer-verwer/hv.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.o
+.PHONY : src/numerical_methods/hundsdorfer-verwer/hv.c.o
+
+src/numerical_methods/hundsdorfer-verwer/hv.i: src/numerical_methods/hundsdorfer-verwer/hv.c.i
+.PHONY : src/numerical_methods/hundsdorfer-verwer/hv.i
+
+# target to preprocess a source file
+src/numerical_methods/hundsdorfer-verwer/hv.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.i
+.PHONY : src/numerical_methods/hundsdorfer-verwer/hv.c.i
+
+src/numerical_methods/hundsdorfer-verwer/hv.s: src/numerical_methods/hundsdorfer-verwer/hv.c.s
+.PHONY : src/numerical_methods/hundsdorfer-verwer/hv.s
+
+# target to generate assembly for a file
+src/numerical_methods/hundsdorfer-verwer/hv.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.s
+.PHONY : src/numerical_methods/hundsdorfer-verwer/hv.c.s
+
+src/numerical_methods/hundsdorfer-verwer/hv.o: src/numerical_methods/hundsdorfer-verwer/hv.cu.o
+.PHONY : src/numerical_methods/hundsdorfer-verwer/hv.o
+
+# target to build an object file
+src/numerical_methods/hundsdorfer-verwer/hv.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o
+.PHONY : src/numerical_methods/hundsdorfer-verwer/hv.cu.o
+
+src/numerical_methods/hundsdorfer-verwer/hv.i: src/numerical_methods/hundsdorfer-verwer/hv.cu.i
+.PHONY : src/numerical_methods/hundsdorfer-verwer/hv.i
+
+# target to preprocess a source file
+src/numerical_methods/hundsdorfer-verwer/hv.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.i
+.PHONY : src/numerical_methods/hundsdorfer-verwer/hv.cu.i
+
+src/numerical_methods/hundsdorfer-verwer/hv.s: src/numerical_methods/hundsdorfer-verwer/hv.cu.s
+.PHONY : src/numerical_methods/hundsdorfer-verwer/hv.s
+
+# target to generate assembly for a file
+src/numerical_methods/hundsdorfer-verwer/hv.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.s
+.PHONY : src/numerical_methods/hundsdorfer-verwer/hv.cu.s
 
 src/numerical_methods/numerical_methods.o: src/numerical_methods/numerical_methods.c.o
 .PHONY : src/numerical_methods/numerical_methods.o
@@ -614,101 +686,101 @@ src/numerical_methods/numerical_methods.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/numerical_methods.c.s
 .PHONY : src/numerical_methods/numerical_methods.c.s
 
-src/numerical_methods/osadi/osadi.o: src/numerical_methods/osadi/osadi.c.o
-.PHONY : src/numerical_methods/osadi/osadi.o
+src/numerical_methods/os-adi/osadi.o: src/numerical_methods/os-adi/osadi.c.o
+.PHONY : src/numerical_methods/os-adi/osadi.o
 
 # target to build an object file
-src/numerical_methods/osadi/osadi.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/osadi/osadi.c.o
-.PHONY : src/numerical_methods/osadi/osadi.c.o
+src/numerical_methods/os-adi/osadi.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.o
+.PHONY : src/numerical_methods/os-adi/osadi.c.o
 
-src/numerical_methods/osadi/osadi.i: src/numerical_methods/osadi/osadi.c.i
-.PHONY : src/numerical_methods/osadi/osadi.i
+src/numerical_methods/os-adi/osadi.i: src/numerical_methods/os-adi/osadi.c.i
+.PHONY : src/numerical_methods/os-adi/osadi.i
 
 # target to preprocess a source file
-src/numerical_methods/osadi/osadi.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/osadi/osadi.c.i
-.PHONY : src/numerical_methods/osadi/osadi.c.i
+src/numerical_methods/os-adi/osadi.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.i
+.PHONY : src/numerical_methods/os-adi/osadi.c.i
 
-src/numerical_methods/osadi/osadi.s: src/numerical_methods/osadi/osadi.c.s
-.PHONY : src/numerical_methods/osadi/osadi.s
+src/numerical_methods/os-adi/osadi.s: src/numerical_methods/os-adi/osadi.c.s
+.PHONY : src/numerical_methods/os-adi/osadi.s
 
 # target to generate assembly for a file
-src/numerical_methods/osadi/osadi.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/osadi/osadi.c.s
-.PHONY : src/numerical_methods/osadi/osadi.c.s
+src/numerical_methods/os-adi/osadi.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.s
+.PHONY : src/numerical_methods/os-adi/osadi.c.s
 
-src/numerical_methods/osadi/osadi.o: src/numerical_methods/osadi/osadi.cu.o
-.PHONY : src/numerical_methods/osadi/osadi.o
+src/numerical_methods/os-adi/osadi.o: src/numerical_methods/os-adi/osadi.cu.o
+.PHONY : src/numerical_methods/os-adi/osadi.o
 
 # target to build an object file
-src/numerical_methods/osadi/osadi.cu.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/osadi/osadi.cu.o
-.PHONY : src/numerical_methods/osadi/osadi.cu.o
+src/numerical_methods/os-adi/osadi.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/os-adi/osadi.cu.o
+.PHONY : src/numerical_methods/os-adi/osadi.cu.o
 
-src/numerical_methods/osadi/osadi.i: src/numerical_methods/osadi/osadi.cu.i
-.PHONY : src/numerical_methods/osadi/osadi.i
+src/numerical_methods/os-adi/osadi.i: src/numerical_methods/os-adi/osadi.cu.i
+.PHONY : src/numerical_methods/os-adi/osadi.i
 
 # target to preprocess a source file
-src/numerical_methods/osadi/osadi.cu.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/osadi/osadi.cu.i
-.PHONY : src/numerical_methods/osadi/osadi.cu.i
+src/numerical_methods/os-adi/osadi.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/os-adi/osadi.cu.i
+.PHONY : src/numerical_methods/os-adi/osadi.cu.i
 
-src/numerical_methods/osadi/osadi.s: src/numerical_methods/osadi/osadi.cu.s
-.PHONY : src/numerical_methods/osadi/osadi.s
+src/numerical_methods/os-adi/osadi.s: src/numerical_methods/os-adi/osadi.cu.s
+.PHONY : src/numerical_methods/os-adi/osadi.s
 
 # target to generate assembly for a file
-src/numerical_methods/osadi/osadi.cu.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/osadi/osadi.cu.s
-.PHONY : src/numerical_methods/osadi/osadi.cu.s
+src/numerical_methods/os-adi/osadi.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/os-adi/osadi.cu.s
+.PHONY : src/numerical_methods/os-adi/osadi.cu.s
 
-src/numerical_methods/ssiadi/ssiadi.o: src/numerical_methods/ssiadi/ssiadi.c.o
-.PHONY : src/numerical_methods/ssiadi/ssiadi.o
+src/numerical_methods/ssi-adi/ssiadi.o: src/numerical_methods/ssi-adi/ssiadi.c.o
+.PHONY : src/numerical_methods/ssi-adi/ssiadi.o
 
 # target to build an object file
-src/numerical_methods/ssiadi/ssiadi.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/ssiadi/ssiadi.c.o
-.PHONY : src/numerical_methods/ssiadi/ssiadi.c.o
+src/numerical_methods/ssi-adi/ssiadi.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.o
+.PHONY : src/numerical_methods/ssi-adi/ssiadi.c.o
 
-src/numerical_methods/ssiadi/ssiadi.i: src/numerical_methods/ssiadi/ssiadi.c.i
-.PHONY : src/numerical_methods/ssiadi/ssiadi.i
+src/numerical_methods/ssi-adi/ssiadi.i: src/numerical_methods/ssi-adi/ssiadi.c.i
+.PHONY : src/numerical_methods/ssi-adi/ssiadi.i
 
 # target to preprocess a source file
-src/numerical_methods/ssiadi/ssiadi.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/ssiadi/ssiadi.c.i
-.PHONY : src/numerical_methods/ssiadi/ssiadi.c.i
+src/numerical_methods/ssi-adi/ssiadi.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.i
+.PHONY : src/numerical_methods/ssi-adi/ssiadi.c.i
 
-src/numerical_methods/ssiadi/ssiadi.s: src/numerical_methods/ssiadi/ssiadi.c.s
-.PHONY : src/numerical_methods/ssiadi/ssiadi.s
+src/numerical_methods/ssi-adi/ssiadi.s: src/numerical_methods/ssi-adi/ssiadi.c.s
+.PHONY : src/numerical_methods/ssi-adi/ssiadi.s
 
 # target to generate assembly for a file
-src/numerical_methods/ssiadi/ssiadi.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/ssiadi/ssiadi.c.s
-.PHONY : src/numerical_methods/ssiadi/ssiadi.c.s
+src/numerical_methods/ssi-adi/ssiadi.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.s
+.PHONY : src/numerical_methods/ssi-adi/ssiadi.c.s
 
-src/numerical_methods/ssiadi/ssiadi.o: src/numerical_methods/ssiadi/ssiadi.cu.o
-.PHONY : src/numerical_methods/ssiadi/ssiadi.o
+src/numerical_methods/ssi-adi/ssiadi.o: src/numerical_methods/ssi-adi/ssiadi.cu.o
+.PHONY : src/numerical_methods/ssi-adi/ssiadi.o
 
 # target to build an object file
-src/numerical_methods/ssiadi/ssiadi.cu.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/ssiadi/ssiadi.cu.o
-.PHONY : src/numerical_methods/ssiadi/ssiadi.cu.o
+src/numerical_methods/ssi-adi/ssiadi.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.o
+.PHONY : src/numerical_methods/ssi-adi/ssiadi.cu.o
 
-src/numerical_methods/ssiadi/ssiadi.i: src/numerical_methods/ssiadi/ssiadi.cu.i
-.PHONY : src/numerical_methods/ssiadi/ssiadi.i
+src/numerical_methods/ssi-adi/ssiadi.i: src/numerical_methods/ssi-adi/ssiadi.cu.i
+.PHONY : src/numerical_methods/ssi-adi/ssiadi.i
 
 # target to preprocess a source file
-src/numerical_methods/ssiadi/ssiadi.cu.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/ssiadi/ssiadi.cu.i
-.PHONY : src/numerical_methods/ssiadi/ssiadi.cu.i
+src/numerical_methods/ssi-adi/ssiadi.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.i
+.PHONY : src/numerical_methods/ssi-adi/ssiadi.cu.i
 
-src/numerical_methods/ssiadi/ssiadi.s: src/numerical_methods/ssiadi/ssiadi.cu.s
-.PHONY : src/numerical_methods/ssiadi/ssiadi.s
+src/numerical_methods/ssi-adi/ssiadi.s: src/numerical_methods/ssi-adi/ssiadi.cu.s
+.PHONY : src/numerical_methods/ssi-adi/ssiadi.s
 
 # target to generate assembly for a file
-src/numerical_methods/ssiadi/ssiadi.cu.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/ssiadi/ssiadi.cu.s
-.PHONY : src/numerical_methods/ssiadi/ssiadi.cu.s
+src/numerical_methods/ssi-adi/ssiadi.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.s
+.PHONY : src/numerical_methods/ssi-adi/ssiadi.cu.s
 
 src/save_functions.o: src/save_functions.c.o
 .PHONY : src/save_functions.o
@@ -838,30 +910,39 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... src/numerical_methods/dg/dg.o"
-	@echo "... src/numerical_methods/dg/dg.i"
-	@echo "... src/numerical_methods/dg/dg.s"
-	@echo "... src/numerical_methods/fe/fe.o"
-	@echo "... src/numerical_methods/fe/fe.i"
-	@echo "... src/numerical_methods/fe/fe.s"
-	@echo "... src/numerical_methods/fe/fe.o"
-	@echo "... src/numerical_methods/fe/fe.i"
-	@echo "... src/numerical_methods/fe/fe.s"
+	@echo "... src/numerical_methods/douglas/do.o"
+	@echo "... src/numerical_methods/douglas/do.i"
+	@echo "... src/numerical_methods/douglas/do.s"
+	@echo "... src/numerical_methods/douglas/do.o"
+	@echo "... src/numerical_methods/douglas/do.i"
+	@echo "... src/numerical_methods/douglas/do.s"
+	@echo "... src/numerical_methods/forward_euler/fe.o"
+	@echo "... src/numerical_methods/forward_euler/fe.i"
+	@echo "... src/numerical_methods/forward_euler/fe.s"
+	@echo "... src/numerical_methods/forward_euler/fe.o"
+	@echo "... src/numerical_methods/forward_euler/fe.i"
+	@echo "... src/numerical_methods/forward_euler/fe.s"
+	@echo "... src/numerical_methods/hundsdorfer-verwer/hv.o"
+	@echo "... src/numerical_methods/hundsdorfer-verwer/hv.i"
+	@echo "... src/numerical_methods/hundsdorfer-verwer/hv.s"
+	@echo "... src/numerical_methods/hundsdorfer-verwer/hv.o"
+	@echo "... src/numerical_methods/hundsdorfer-verwer/hv.i"
+	@echo "... src/numerical_methods/hundsdorfer-verwer/hv.s"
 	@echo "... src/numerical_methods/numerical_methods.o"
 	@echo "... src/numerical_methods/numerical_methods.i"
 	@echo "... src/numerical_methods/numerical_methods.s"
-	@echo "... src/numerical_methods/osadi/osadi.o"
-	@echo "... src/numerical_methods/osadi/osadi.i"
-	@echo "... src/numerical_methods/osadi/osadi.s"
-	@echo "... src/numerical_methods/osadi/osadi.o"
-	@echo "... src/numerical_methods/osadi/osadi.i"
-	@echo "... src/numerical_methods/osadi/osadi.s"
-	@echo "... src/numerical_methods/ssiadi/ssiadi.o"
-	@echo "... src/numerical_methods/ssiadi/ssiadi.i"
-	@echo "... src/numerical_methods/ssiadi/ssiadi.s"
-	@echo "... src/numerical_methods/ssiadi/ssiadi.o"
-	@echo "... src/numerical_methods/ssiadi/ssiadi.i"
-	@echo "... src/numerical_methods/ssiadi/ssiadi.s"
+	@echo "... src/numerical_methods/os-adi/osadi.o"
+	@echo "... src/numerical_methods/os-adi/osadi.i"
+	@echo "... src/numerical_methods/os-adi/osadi.s"
+	@echo "... src/numerical_methods/os-adi/osadi.o"
+	@echo "... src/numerical_methods/os-adi/osadi.i"
+	@echo "... src/numerical_methods/os-adi/osadi.s"
+	@echo "... src/numerical_methods/ssi-adi/ssiadi.o"
+	@echo "... src/numerical_methods/ssi-adi/ssiadi.i"
+	@echo "... src/numerical_methods/ssi-adi/ssiadi.s"
+	@echo "... src/numerical_methods/ssi-adi/ssiadi.o"
+	@echo "... src/numerical_methods/ssi-adi/ssiadi.i"
+	@echo "... src/numerical_methods/ssi-adi/ssiadi.s"
 	@echo "... src/save_functions.o"
 	@echo "... src/save_functions.i"
 	@echo "... src/save_functions.s"

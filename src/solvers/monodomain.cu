@@ -35,7 +35,7 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
 
     // Allocate and initialize elements properties arrays
     ElementProperties *elements_properties = (ElementProperties *)malloc(total_points * sizeof(ElementProperties));
-    initializeElementsProperties(config, cell_model_solver->chiCm, elements_properties);
+    initializeElementsProperties(config, elements_properties);
     
     // Run the simulation based on the selected method
     numerical_method_t run_method = get_numerical_method_CUDA(&config->method);

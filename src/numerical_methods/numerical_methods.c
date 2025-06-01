@@ -9,6 +9,8 @@ static const struct
     {METHOD_SSIADI, runSSIADI},
     {METHOD_OSADI, runOSADI},
     {METHOD_FE, runFE},
+    {METHOD_DO, runDO},
+    // {METHOD_HV, runHV}, // HV method is not implemented yet
     {METHOD_INVALID, NULL}};
 
 numerical_method_t get_numerical_method(const NumericalMethod *method)
@@ -34,6 +36,8 @@ static const struct
     {METHOD_SSIADI, runSSIADI_CUDA},
     {METHOD_OSADI, runOSADI_CUDA},
     {METHOD_FE, runFE_CUDA},
+    {METHOD_DO, runDO_CUDA},
+    {METHOD_HV, runHV_CUDA},
     {METHOD_INVALID, NULL}};
 
 numerical_method_t get_numerical_method_CUDA(const NumericalMethod *method)

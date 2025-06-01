@@ -20,7 +20,7 @@ void tridiagonalSystemSolver_x(const int Nx, real *rhs, real *result, real *c_pr
 void tridiagonalSystemSolver_y(const int Ny, real *rhs, real *result, real *c_prime, real *d_prime, const real phi_y, const ElementProperties *elements, const int sys_idx, const int Nx);
 int saveSimulationInfos(const SimulationConfig *config, const Measurement *measurement);
 real calculateNorm2Error(real *Vm, real *exact, int Nx, int Ny, real totalTime, real delta_x, real delta_y, real Lx, real Ly);
-void initializeElementsProperties(const SimulationConfig *config, const real chiCm, ElementProperties *elements_properties);
+void initializeElementsProperties(const SimulationConfig *config, ElementProperties *elements_properties);
 void initializeVariableWithExactSolution(real *Var, int Nx, int Ny, real delta_x, real delta_y, real Lx, real Ly);
 void initializeVariableWithValue(real *Var, int Nx, int Ny, real value);
 void initializeVariableFromFile(real *Var, int Nx, int Ny, char *filename, real delta_x, real delta_y, char *varName, real reference_dx, real reference_dy, real Lx, real Ly);

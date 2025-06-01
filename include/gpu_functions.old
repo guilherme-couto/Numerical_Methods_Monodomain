@@ -71,7 +71,7 @@ __global__ void computeApprox(int Nx, int Ny, real delta_t, real phi_x, real phi
         real RHS_Vmtilde_term = ((G * Vmtilde * (1.0f - (Vmtilde * denom_vth)) * (1.0f - (Vmtilde * denom_vp))) + (eta1 * Vmtilde * Wtilde)) * denom_Cm_chi; // RHS with Vm* and W*
         d_partRHS[index] = delta_t * (stim - RHS_Vmtilde_term);
 
-        // Update state variables with RK2 -> Wn+1 = Wn + dt*R(Vm*, W*)
+        // Update state variables with RK2 -> sV+1 = sV + dt*R(Vm*, W*)
         real RHS_Wtilde_term = eta2 * ((Vmtilde * denom_vp) - (eta3 * Wtilde));
         d_W[index] = actualW + delta_t * RHS_Wtilde_term;
 
@@ -85,7 +85,7 @@ __global__ void computeApprox(int Nx, int Ny, real delta_t, real phi_x, real phi
 
         // Update state variables
         real RHS_W_term = eta2 * ((actualVm * denom_vp) - (eta3 * actualW));
-        d_W[index] = actualW + delta_t * RHS_W_term; // with Forward Euler -> Wn+1 = Wn + dt*R(Vmn, Wn)
+        d_W[index] = actualW + delta_t * RHS_W_term; // with Forward Euler -> sV+1 = sV + dt*R(Vmn, sV)
 
 #endif // OSADI
 

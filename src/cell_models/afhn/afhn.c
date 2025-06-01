@@ -34,7 +34,7 @@ static void update_sV_AFHN(real *sV, const real *rhs_sV, const real dSdt_Vm, con
 // Instantiate the AFHN model
 const CellModelSolver AFHN_SOLVER = {
     .n_state_vars = AFHN_NSV,
-    .chiCm = AFHN_chi * AFHN_Cm,
+    .denom_chiCm = 1.0f / (AFHN_chi * AFHN_Cm),
     .activation_thershold = AFHN_ACTIVATION_THRESHOLD,
     .initialize = initialize_AFHN,
     .get_actual_sV = get_actual_sV_AFHN,

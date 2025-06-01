@@ -1,11 +1,15 @@
 // ==============================================
-//             Operator-Splitting ADI
+//                Douglas Scheme
 // ==============================================
 
 #include "../numerical_methods.h"
 #include "../numerical_methods_helpers.h"
 
-void runOSADI(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
+#ifndef DO_THETA
+#define DO_THETA 0.5f
+#endif // DO_THETA
+
+void runDO(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
 {
     // Unpack configuration parameters
     const int M = config->M;
@@ -26,9 +30,11 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
     const bool measureVelocity = config->measure_velocity;
 
     // Get the solver functions
+    const real denom_chiCm = cell_model_solver->denom_chiCm;
     const real activation_threshold = cell_model_solver->activation_thershold;
     const get_actual_sV_t get_actual_sV = cell_model_solver->get_actual_sV;
     const compute_dVmdt_t compute_dVmdt = cell_model_solver->compute_dVmdt;
+    const update_sVtilde_t update_sVtilde = cell_model_solver->update_sVtilde;
     const update_sV_t update_sV = cell_model_solver->update_sV;
 
     // Measure velocity variables
@@ -44,17 +50,20 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
     int timeStepCounter = 0;
     real actualTime = 0.0f;
     int i, j, num_active_stimuli;
-    int idx;
+    int idx, idx_left, idx_right, idx_top, idx_bottom;
 
     // Auxiliary variables for the operations
     Stimulus *active_stimuli = (Stimulus *)malloc(numberOfStimuli * sizeof(Stimulus));
-    real stim, actualVm;
+    real diff_term, stim, actualVm;
+    real Vmtilde, dVmdt, prevY;
     real *actualsV = (real *)malloc(cell_model_solver->n_state_vars * sizeof(real));
-    real *partRHS = (real *)malloc(Nx * Ny * sizeof(real));
+    real *sVtilde = (real *)malloc(cell_model_solver->n_state_vars * sizeof(real));
+    real *Y = (real *)malloc(Nx * Ny * sizeof(real));
+    real *auxVm = (real *)malloc(Nx * Ny * sizeof(real));
 
-    // Calculate coefficients
-    const real phi_x = delta_t / (delta_x * delta_x);
-    const real phi_y = delta_t / (delta_y * delta_y);
+    // Calculate auxiliary coefficients for Thomas algorithm
+    const real thomas_coeff_x = (DO_THETA * delta_t * denom_chiCm) / (delta_x * delta_x);
+    const real thomas_coeff_y = (DO_THETA * delta_t * denom_chiCm) / (delta_y * delta_y);
 
     // Auxiliary arrays for Thomas algorithm
     real *c_prime, *d_prime, *ls_rhs, *result;
@@ -86,7 +95,7 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
     real elapsedTime2ndLS = 0.0f;
 
     SIMPLEMSG("");
-    INFOMSG("Starting simulation with OSADI (SERIAL)...\n");
+    INFOMSG("Starting simulation with Do (SERIAL)...\n");
 
     // Main time loop
     startExecutionTime = omp_get_wtime();
@@ -100,17 +109,18 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
         num_active_stimuli = update_and_get_num_active_stimuli(actualTime, stimuli, numberOfStimuli, active_stimuli);
 
         // =================================================
-        //  Compute Reaction and Update ODEs
+        //  Calculate Y0 and Update ODEs
         // =================================================
         startTime = omp_get_wtime();
 
+        diff_term = 0.0f;
         for (i = 0; i < Ny; i++)
         {
             for (j = 0; j < Nx; j++)
             {
                 idx = i * Nx + j;
 
-                // Get the actual Vm and sV
+                // Calculate the explicit part of the RHS, including the diffusion term in both directions
                 actualVm = Vm[idx];
                 get_actual_sV(actualsV, sV, idx);
 
@@ -119,67 +129,83 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
                            ? (get_stimulus_value(actualTime, i, j, active_stimuli, num_active_stimuli))
                            : (0.0f);
 
-                // Calculate part of the RHS of the following linear systems with Forward Euler
-                partRHS[idx] = delta_t * (stim - compute_dVmdt(actualVm, actualsV));
+                // Calculate aproximation with RK2 -> Vmn+1/2 = Vmn + 0.5*dt*(diffusion + R(Vmn, sV))
+                diff_term = compute_diffusion_term_anisotropic(Vm, elements, i, j, Nx, Ny, delta_x, delta_y);
+                dVmdt = compute_dVmdt(actualVm, actualsV);
+                Vmtilde = actualVm + 0.5f * delta_t * ((diff_term * denom_chiCm) + stim - dVmdt);
 
-                // Update state variables
-                update_sV(sV, actualsV, actualVm, actualsV, delta_t, idx);
+                // Calculate approximation for state variables using Vmtilde and update them
+                update_sVtilde(sVtilde, actualVm, actualsV, 0.5f * delta_t);
+                update_sV(sV, actualsV, Vmtilde, sVtilde, delta_t, idx);
+
+                // Update Y with the new approximation -> Y_0 = U_n-1 + dt * F(t_n-1, U_n-1)
+                Y[idx] = actualVm + delta_t * ((diff_term * denom_chiCm) + stim - dVmdt);
             }
         }
 
         elapsedTime1stPart += omp_get_wtime() - startTime;
 
         // =================================================
-        //  Calculate Vm at n+1/2 -> Result goes to Vm
+        //  First step -> Result goes to d_RHS
+        //  diffusion implicit and explicit in x
         // =================================================
         startTime = omp_get_wtime();
 
-        for (j = 0; j < Nx; j++)
+        for (i = 0; i < Ny; i++)
         {
-            // Calculate the RHS of the linear system
-            for (i = 0; i < Ny; i++)
+            // Calculate the RHS of the linear system with the explicit diffusion term along x
+            for (j = 0; j < Nx; j++)
             {
                 idx = i * Nx + j;
-                ls_rhs[i] = Vm[idx] + 0.5f * partRHS[idx];
+                prevY = Y[idx];
+                diff_term = compute_diffusion_term_x_axis(Vm, elements, i, j, Nx, Ny, delta_x, delta_y);
+
+                // Y_1 = Y_0 + theta * dt * F_1(t_n-1, U_n-1) -> 0 represents the first step and 1 represents the x-axis
+                ls_rhs[j] = prevY - DO_THETA * delta_t * diff_term * denom_chiCm;
             }
 
             // Solve the linear system
             startLSTime = omp_get_wtime();
 
-            tridiagonalSystemSolver_y(Ny, ls_rhs, result, c_prime, d_prime, phi_y, elements, j, Nx);
+            tridiagonalSystemSolver_x(Nx, ls_rhs, result, c_prime, d_prime, thomas_coeff_x, elements, i);
 
             // Update with the result
-            for (i = 0; i < Ny; i++)
+            for (j = 0; j < Nx; j++)
             {
                 idx = i * Nx + j;
-                Vm[idx] = result[i];
+                auxVm[idx] = result[j];
             }
 
             elapsedTime1stLS += omp_get_wtime() - startLSTime;
         }
 
         // =================================================
-        //  Calculate Vm at n+1 -> Result goes to Vm
+        //  Second step -> Result goes to Vm
+        //  diffusion implicit and explicit in y
         // =================================================
-        for (i = 0; i < Ny; i++)
+        for (j = 0; j < Nx; j++)
         {
-            // Calculate the RHS of the linear system
-            for (j = 0; j < Nx; j++)
+            // Calculate the RHS of the linear system with the explicit diffusion term along y
+            for (i = 0; i < Ny; i++)
             {
                 idx = i * Nx + j;
-                ls_rhs[j] = Vm[idx] + 0.5f * partRHS[idx];
+                prevY = auxVm[idx];
+                diff_term = compute_diffusion_term_y_axis(Vm, elements, i, j, Nx, Ny, delta_x, delta_y);
+
+                // Y_2 = Y_1 + theta * dt * F_2(t_n-1, U_n-1) -> 1 represents the x-axis and 2 represents the y-axis
+                ls_rhs[i] = prevY - DO_THETA * delta_t * diff_term * denom_chiCm;
             }
 
             // Solve the linear system
             startLSTime = omp_get_wtime();
 
-            tridiagonalSystemSolver_x(Nx, ls_rhs, result, c_prime, d_prime, phi_x, elements, i);
+            tridiagonalSystemSolver_y(Ny, ls_rhs, result, c_prime, d_prime, thomas_coeff_y, elements, j, Nx);
 
             // Update with the result
-            for (j = 0; j < Nx; j++)
+            for (i = 0; i < Ny; i++)
             {
                 idx = i * Nx + j;
-                Vm[idx] = result[j];
+                Vm[idx] = result[i];
             }
 
             elapsedTime2ndLS += omp_get_wtime() - startLSTime;
@@ -225,7 +251,9 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
     // Free allocated memory
     free(active_stimuli);
     free(actualsV);
-    free(partRHS);
+    free(sVtilde);
+    free(Y);
+    free(auxVm);
     free(c_prime);
     free(d_prime);
     free(ls_rhs);

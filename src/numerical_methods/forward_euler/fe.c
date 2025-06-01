@@ -6,7 +6,7 @@
 #include "../numerical_methods_helpers.h"
 
 void runFE(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
-{ 
+{
     // Unpack configuration parameters
     const int M = config->M;
     const int Nx = config->Nx;
@@ -26,6 +26,7 @@ void runFE(const SimulationConfig *config, Measurement *measurement, const real 
     const bool measureVelocity = config->measure_velocity;
 
     // Get the solver functions
+    const real denom_chiCm = cell_model_solver->denom_chiCm;
     const real activation_threshold = cell_model_solver->activation_thershold;
     const get_actual_sV_t get_actual_sV = cell_model_solver->get_actual_sV;
     const compute_dVmdt_t compute_dVmdt = cell_model_solver->compute_dVmdt;
@@ -39,7 +40,7 @@ void runFE(const SimulationConfig *config, Measurement *measurement, const real 
     const int idx_x1 = round(x1 / delta_x) + 1;
     bool aux_stim_velocity_flag = false;
     bool stim_velocity_measured = false;
-    
+
     // Auxiliary variables for the loops
     int timeStepCounter = 0;
     real actualTime = 0.0f;
@@ -48,13 +49,9 @@ void runFE(const SimulationConfig *config, Measurement *measurement, const real 
 
     // Auxiliary variables for the operations
     Stimulus *active_stimuli = (Stimulus *)malloc(numberOfStimuli * sizeof(Stimulus));
-    real diff_term, stim, actualVm, diff_coeff_x, diff_coeff_y;
+    real diff_term, stim, actualVm;
     real *actualsV = (real *)malloc(cell_model_solver->n_state_vars * sizeof(real));
     real *RHS = (real *)malloc(Nx * Ny * sizeof(real));
-
-    // Calculate coefficients
-    const real phi_x = delta_t / (delta_x * delta_x);
-    const real phi_y = delta_t / (delta_y * delta_y);
 
     // Variables for time measurement
     real startTime = 0.0f;
@@ -66,13 +63,13 @@ void runFE(const SimulationConfig *config, Measurement *measurement, const real 
     real elapsedMeasureVelocityTime = 0.0f;
 
     SIMPLEMSG("");
-    INFOMSG("Starting simulation with FE (SERIAL)...\n");  
+    INFOMSG("Starting simulation with FE (SERIAL)...\n");
 
     // Main time loop
     startExecutionTime = omp_get_wtime();
 
     while (timeStepCounter < M)
-    {  
+    {
         // Get time step
         actualTime = time_array[timeStepCounter];
 
@@ -95,19 +92,15 @@ void runFE(const SimulationConfig *config, Measurement *measurement, const real 
                 actualVm = Vm[idx];
                 get_actual_sV(actualsV, sV, idx);
 
-                // Get the diffusion coefficients
-                diff_coeff_x = elements[idx].D_xx;
-                diff_coeff_y = elements[idx].D_yy;
-
                 // Stimulation
                 stim = (num_active_stimuli > 0)
                            ? (get_stimulus_value(actualTime, i, j, active_stimuli, num_active_stimuli))
                            : (0.0f);
 
                 // Update variables explicitly
-                diff_term = compute_diffusion_term(Vm, i, j, Nx, Ny, diff_coeff_x, diff_coeff_y, phi_x, phi_y);
+                diff_term = compute_diffusion_term_anisotropic(Vm, elements, i, j, Nx, Ny, delta_x, delta_y);
 
-                RHS[idx] = actualVm + diff_term + delta_t * (stim - compute_dVmdt(actualVm, actualsV));
+                RHS[idx] = actualVm + delta_t * ((diff_term * denom_chiCm) + stim - compute_dVmdt(actualVm, actualsV));
 
                 // Update state variables
                 update_sV(sV, actualsV, actualVm, actualsV, delta_t, idx);

@@ -502,7 +502,7 @@ void runSimulationOpenMP(const SimulationConfig *config)
 
 #if defined(SSIADI)
 
-                // Calculate aproximation with RK2 -> Vmn+1/2 = Vmn + 0.5*diffusion + 0.5*dt*R(Vmn, Wn)
+                // Calculate aproximation with RK2 -> Vmn+1/2 = Vmn + 0.5*diffusion + 0.5*dt*R(Vmn, sV)
                 diff_term = diff_coeff * (phi_x * (Vm[i][lim(j - 1, Nx)] - 2.0f * actualVm + Vm[i][lim(j + 1, Nx)]) + phi_y * (Vm[lim(i - 1, Ny)][j] - 2.0f * actualVm + Vm[lim(i + 1, Ny)][j]));
                 Vmtilde = actualVm + 0.5f * diff_term + (0.5f * delta_t * (stim - RHS_Vm_term));
 
@@ -512,7 +512,7 @@ void runSimulationOpenMP(const SimulationConfig *config)
                 partRHS[i][j] = delta_t * (stim - RHS_Vmtilde_term);
 
                 // Update state variables
-                W[i][j] = actualW + delta_t * (eta2 * ((Vmtilde / vp) - (eta3 * Wtilde))); // with RK2 -> Wn+1 = Wn + dt*R(Vm*, W*)
+                W[i][j] = actualW + delta_t * (eta2 * ((Vmtilde / vp) - (eta3 * Wtilde))); // with RK2 -> sV+1 = sV + dt*R(Vm*, W*)
 
 #endif // SSIADI
 
@@ -522,7 +522,7 @@ void runSimulationOpenMP(const SimulationConfig *config)
                 partRHS[i][j] = delta_t * (stim - RHS_Vm_term);
 
                 // Update state variables
-                W[i][j] = actualW + delta_t * (eta2 * ((actualVm / vp) - (eta3 * actualW))); // with Forward Euler -> Wn+1 = Wn + dt*R(Vmn, Wn)
+                W[i][j] = actualW + delta_t * (eta2 * ((actualVm / vp) - (eta3 * actualW))); // with Forward Euler -> sV+1 = sV + dt*R(Vmn, sV)
 
 #endif // OSADI
 

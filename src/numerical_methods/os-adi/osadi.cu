@@ -1,14 +1,13 @@
 // ==============================================
-//                 Forward Euler
+//             Operator-Splitting ADI
 // ==============================================
 
 #include "../numerical_methods.h"
 #include "../numerical_methods_helpers.h"
 #include "../../cell_models/cell_models.h"
 
-static __global__ void solveAndUpdateSV(const int Nx, const int Ny, const real delta_t, const real phi_x, const real phi_y,
-                                        const real actualTime, const int num_active_stimuli, const Stimulus *d_active_stimuli,
-                                        const real *d_Vm, real *d_sV, real *d_RHS, const ElementProperties *d_elements, const CellModel cell_model)
+static __global__ void computeReactionAndUpdateSV(const int Nx, const int Ny, const real delta_t, const real actualTime, const int num_active_stimuli,
+                                                  const Stimulus *d_active_stimuli, const real *d_Vm, real *d_sV, real *d_reaction, const CellModel cell_model)
 {
     // Obtain the thread index
     const int i = blockIdx.y * blockDim.y + threadIdx.y;
@@ -17,32 +16,116 @@ static __global__ void solveAndUpdateSV(const int Nx, const int Ny, const real d
 
     if (i < Ny && j < Nx)
     {
-        // Declare auxiliary array
+        // Declare auxiliary arrays
         real d_actualsV[MAX_NSV];
 
         // Calculate the explicit part of the RHS, including the diffusion term in both directions
-        real actualVm = d_Vm[idx];
+        const real actualVm = d_Vm[idx];
         select_get_actual_sV(cell_model, d_actualsV, d_sV, idx);
 
-        // Get the diffusion coefficients for the current element
-        const real diff_coeff_x = d_elements[idx].D_xx;
-        const real diff_coeff_y = d_elements[idx].D_yy;
-
         // Stimulation
-        real stim = get_stimulus_value(actualTime, i, j, d_active_stimuli, num_active_stimuli);
+        const real stim = get_stimulus_value(actualTime, i, j, d_active_stimuli, num_active_stimuli);
 
-        // Update variables explicitly
-        real diff_term = compute_diffusion_term(d_Vm, i, j, Nx, Ny, diff_coeff_x, diff_coeff_y, phi_x, phi_y);
-
-        d_RHS[idx] = actualVm + diff_term + delta_t * (stim - select_compute_dVmdt(cell_model, actualVm, d_actualsV));
+        // Calculate part of the RHS of the following linear systems with Forward Euler
+        d_reaction[idx] = stim - select_compute_dVmdt(cell_model, actualVm, d_actualsV);
 
         // Update state variables
         select_update_sV(cell_model, d_sV, d_actualsV, actualVm, d_actualsV, delta_t, idx);
     }
 }
 
-void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array,
-                const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
+static __global__ void prepareRHS(const int Nx, const int Ny, const real delta_t, real *d_Vm, const real *d_reaction)
+{
+    // Obtain the thread index
+    const int i = blockIdx.y * blockDim.y + threadIdx.y;
+    const int j = blockIdx.x * blockDim.x + threadIdx.x;
+    const int idx = i * Nx + j;
+
+    if (i < Ny && j < Nx)
+        d_Vm[idx] = d_Vm[idx] + 0.5f * delta_t * d_reaction[idx];
+}
+
+static __global__ void parallelThomas_x(const int numSys, const int sysSize, real *d_rhs,
+                                        const real phi_x, const ElementProperties *d_elements)
+{
+    // Obtain the index of the thread - each thread will handle a system
+    const int sysIdx = blockIdx.x * blockDim.x + threadIdx.x;
+    const int offset = sysIdx * sysSize;
+
+    if (sysIdx < numSys)
+    {
+        // Local variables
+        real c_prime[MAX_SYS_SIZE];
+        real d_prime[MAX_SYS_SIZE];
+    
+        real denom;
+        real coeff = phi_x * d_elements[offset].D_xx;
+        real lalc = -coeff;
+        real lb = 1.0f + coeff; // Coefficient for the first element
+
+        c_prime[0] = lalc / lb;
+        d_prime[0] = d_rhs[offset] / lb;
+
+        for (int i = 1; i < sysSize; i++)
+        {
+            coeff = phi_x * d_elements[offset + i].D_xx;
+
+            lalc = -coeff;
+            lb = (i < sysSize - 1) ? 1.0f + 2.0f * coeff : 1.0f + coeff; // Last element has a different coefficient
+            denom = 1.0f / (lb - c_prime[i - 1] * lalc);
+
+            c_prime[i] = lalc * denom;
+            d_prime[i] = (d_rhs[offset + i] - d_prime[i - 1] * lalc) * denom;
+        }
+
+        d_rhs[offset + sysSize - 1] = d_prime[sysSize - 1];
+
+        for (int i = sysSize - 2; i >= 0; i--)
+            d_rhs[offset + i] = d_prime[i] - c_prime[i] * d_rhs[offset + i + 1];
+    }
+}
+
+static __global__ void parallelThomas_y(const int numSys, const int sysSize, real *d_rhs,
+                                        const real phi_y, const ElementProperties *d_elements)
+{
+    // Obtain the index of the thread - each thread will handle a system
+    const int sysIdx = blockIdx.x * blockDim.x + threadIdx.x;
+
+    if (sysIdx < numSys)
+    {
+        // Local variables
+        real c_prime[MAX_SYS_SIZE];
+        real d_prime[MAX_SYS_SIZE];
+
+        real denom;
+        real coeff = phi_y * d_elements[sysIdx].D_yy;
+        real lalc = -coeff;
+        real lb = 1.0f + coeff; // Coefficient for the first element
+
+        c_prime[0] = lalc / lb;
+        d_prime[0] = d_rhs[sysIdx] / lb;
+
+        for (int i = 1; i < sysSize; i++)
+        {
+            coeff = phi_y * d_elements[sysIdx + numSys * i].D_yy;
+
+            lalc = -coeff;
+            lb = (i < sysSize - 1) ? 1.0f + 2.0f * coeff : 1.0f + coeff; // Last element has a different coefficient
+            denom = 1.0f / (lb - c_prime[i - 1] * lalc);
+
+            c_prime[i] = lalc * denom;
+            d_prime[i] = (d_rhs[sysIdx + numSys * i] - d_prime[i - 1] * lalc) * denom;
+        }
+
+        d_rhs[sysIdx + numSys * (sysSize - 1)] = d_prime[sysSize - 1];
+
+        for (int i = sysSize - 2; i >= 0; i--)
+            d_rhs[sysIdx + numSys * i] = d_prime[i] - c_prime[i] * d_rhs[sysIdx + numSys * (i + 1)];
+    }
+}
+
+void runOSADI_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array,
+                   const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
 {
     // Unpack configuration parameters
     const int M = config->M;
@@ -63,6 +146,7 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
     const bool measureVelocity = config->measure_velocity;
 
     // Get the solver functions
+    const real denom_chiCm = cell_model_solver->denom_chiCm;
     const real activation_threshold = cell_model_solver->activation_thershold;
 
     // Measure velocity variables
@@ -95,12 +179,12 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
     CUDA_CALL(cudaMemcpy(d_elements, elements, total_points * sizeof(ElementProperties), cudaMemcpyHostToDevice));
 
     // Auxiliary variables for the operations
-    real *d_RHS;
-    CUDA_CALL(cudaMalloc(&d_RHS, total_points * sizeof(real)));
+    real *d_reaction;
+    CUDA_CALL(cudaMalloc(&d_reaction, total_points * sizeof(real)));
 
-    // Calculate coefficients
-    const real phi_x = delta_t / (delta_x * delta_x);
-    const real phi_y = delta_t / (delta_y * delta_y);
+    // Calculate auxiliary coefficients for Thomas algorithm
+    const real thomas_coeff_x = (delta_t * denom_chiCm) / (delta_x * delta_x);
+    const real thomas_coeff_y = (delta_t * denom_chiCm) / (delta_y * delta_y);
 
     // CUDA grid and block allocation
     // Device properties
@@ -129,6 +213,16 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
     INFOMSG("Block size: %d x %d threads (total %d threads per block)\n", fullDomainBlockSize.x, fullDomainBlockSize.y, fullDomainBlockSize.x * fullDomainBlockSize.y);
     INFOMSG("Grid size: %d x %d blocks (total %d blocks, total %d threads)\n", fullDomainGridSize.x, fullDomainGridSize.y, fullDomainGridSize.x * fullDomainGridSize.y, fullDomainGridSize.x * fullDomainGridSize.y * fullDomainBlockSize.x * fullDomainBlockSize.y);
 
+    // Calculate the number of blocks and threads for individual directions of ADI that will be used in Thomas kernel
+    const int gridSize_x = (Nx + THOMAS_KERNEL_BLOCK_SIZE - 1) / THOMAS_KERNEL_BLOCK_SIZE;
+    const int gridSize_y = (Ny + THOMAS_KERNEL_BLOCK_SIZE - 1) / THOMAS_KERNEL_BLOCK_SIZE;
+
+    // Print information
+    SIMPLEMSG("");
+    INFOMSG("For Thomas kernel:\n");
+    INFOMSG("Grid size for x: %d blocks (%d threads per block, total %d threads)\n", gridSize_x, THOMAS_KERNEL_BLOCK_SIZE, gridSize_x * THOMAS_KERNEL_BLOCK_SIZE);
+    INFOMSG("Grid size for y: %d blocks (%d threads per block, total %d threads)\n", gridSize_y, THOMAS_KERNEL_BLOCK_SIZE, gridSize_y * THOMAS_KERNEL_BLOCK_SIZE);
+
     // Variables for time measurement
     real startTime = 0.0f;
     real startExecutionTime = 0.0f;
@@ -137,9 +231,12 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
     real elapsedTime2ndPart = 0.0f;
     real elapsedSaveFramesTime = 0.0f;
     real elapsedMeasureVelocityTime = 0.0f;
+    real startLSTime = 0.0f;
+    real elapsedTime1stLS = 0.0f;
+    real elapsedTime2ndLS = 0.0f;
 
     SIMPLEMSG("");
-    INFOMSG("Starting simulation with FE (CUDA)...\n");
+    INFOMSG("Starting simulation with OSADI (CUDA)...\n");
 
     // Main time loop
     startExecutionTime = omp_get_wtime();
@@ -155,17 +252,39 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
         startTime = omp_get_wtime();
 
         // Launch kernel to compute the reaction term and update state variables
-        solveAndUpdateSV<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, delta_t, phi_x, phi_y, actualTime, numberOfStimuli, d_stimuli,
-                                                                      d_Vm, d_sV, d_RHS, d_elements, cell_model);
+        computeReactionAndUpdateSV<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, delta_t, actualTime, numberOfStimuli, d_stimuli, d_Vm, d_sV, d_reaction, cell_model);
         CUDA_CALL(cudaDeviceSynchronize());
 
         elapsedTime1stPart += omp_get_wtime() - startTime;
 
-        // ===================
-        //  Update Vm
-        // ===================
+        // =================================================
+        //  Calculate Vm at n+1/2 -> Result goes to Vm
+        // =================================================
         startTime = omp_get_wtime();
-        CUDA_CALL(cudaMemcpy(d_Vm, d_RHS, total_points * sizeof(real), cudaMemcpyDeviceToDevice));
+
+        prepareRHS<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, delta_t, d_Vm, d_reaction);
+        CUDA_CALL(cudaDeviceSynchronize());
+
+        startLSTime = omp_get_wtime();
+
+        parallelThomas_y<<<gridSize_x, THOMAS_KERNEL_BLOCK_SIZE>>>(Nx, Ny, d_Vm, thomas_coeff_y, d_elements);
+        CUDA_CALL(cudaDeviceSynchronize());
+
+        elapsedTime1stLS += omp_get_wtime() - startLSTime;
+
+        // =================================================
+        //  Calculate Vm at n+1 -> Result goes to Vm
+        // =================================================
+        prepareRHS<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, delta_t, d_Vm, d_reaction);
+        CUDA_CALL(cudaDeviceSynchronize());
+
+        startLSTime = omp_get_wtime();
+
+        parallelThomas_x<<<gridSize_y, THOMAS_KERNEL_BLOCK_SIZE>>>(Ny, Nx, d_Vm, thomas_coeff_x, d_elements);
+        CUDA_CALL(cudaDeviceSynchronize());
+
+        elapsedTime2ndLS += omp_get_wtime() - startLSTime;
+
         elapsedTime2ndPart += omp_get_wtime() - startTime;
 
         // Save frame if needed
@@ -204,6 +323,8 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
     measurement->elapsedExecutionTime = elapsedExecutionTime;
     measurement->elapsedTime1stPart = elapsedTime1stPart;
     measurement->elapsedTime2ndPart = elapsedTime2ndPart;
+    measurement->elapsedTime1stLS = elapsedTime1stLS;
+    measurement->elapsedTime2ndLS = elapsedTime2ndLS;
     measurement->elapsedSaveFramesTime = elapsedSaveFramesTime;
     measurement->elapsedMeasureVelocityTime = elapsedMeasureVelocityTime;
     measurement->stimVelocity = stim_velocity;
@@ -217,5 +338,5 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
     CUDA_CALL(cudaFree(d_sV));
     CUDA_CALL(cudaFree(d_stimuli));
     CUDA_CALL(cudaFree(d_elements));
-    CUDA_CALL(cudaFree(d_RHS));
+    CUDA_CALL(cudaFree(d_reaction));
 }

@@ -281,26 +281,23 @@ void saveCopyOfSimulationConfig(const char *ini_file_path, const char *output_di
 // Basic Thomas algorithm for solving tridiagonal systems
 void tridiagonalSystemSolver_x(const int Nx, real *rhs, real *result, real *c_prime, real *d_prime, const real phi_x, const ElementProperties *elements, const int sys_idx)
 {
-    real lalc, denom;
+    real denom;
     real coeff = phi_x * elements[sys_idx].D_xx;
-    real lb = 1.0f + 2.0f * coeff;
+    real lalc = -coeff;
+    real lb = 1.0f + coeff; // Coefficient for the first element
 
-    c_prime[0] = -2.0f * coeff / lb;
+    c_prime[0] = lalc / lb;
     d_prime[0] = rhs[0] / lb;
 
     for (int i = 1; i < Nx; i++)
     {
         coeff = phi_x * elements[sys_idx + i].D_xx;
+        
         lalc = -coeff;
-        lb = 1.0f + 2.0f * coeff;
+        lb = (i < Nx - 1) ? 1.0f + 2.0f * coeff : 1.0f + coeff; // Last element has a different coefficient
         denom = 1.0f / (lb - c_prime[i - 1] * lalc);
-        if (i < Nx - 1)
-            c_prime[i] = lalc * denom;
-        else
-        {
-            lalc = -2.0f * coeff; // Last element has a different coefficient
-            denom = 1.0f / (lb - c_prime[i - 1] * lalc);
-        }
+        
+        c_prime[i] = lalc * denom;
         d_prime[i] = (rhs[i] - d_prime[i - 1] * lalc) * denom;
     }
 
@@ -314,27 +311,23 @@ void tridiagonalSystemSolver_x(const int Nx, real *rhs, real *result, real *c_pr
 
 void tridiagonalSystemSolver_y(const int Ny, real *rhs, real *result, real *c_prime, real *d_prime, const real phi_y, const ElementProperties *elements, const int sys_idx, const int Nx)
 {
-    real lalc, denom;
+    real denom;
     real coeff = phi_y * elements[sys_idx].D_yy;
-    real lb = 1.0f + 2.0f * coeff;
+    real lalc = -coeff;
+    real lb = 1.0f + coeff; // Coefficient for the first element
 
-    c_prime[0] = -2.0f * coeff / lb;
+    c_prime[0] = lalc / lb;
     d_prime[0] = rhs[0] / lb;
 
     for (int i = 1; i < Ny; i++)
     {
         coeff = phi_y * elements[sys_idx + Nx * i].D_yy;
+        
         lalc = -coeff;
-        lb = 1.0f + 2.0f * coeff;
+        lb = (i < Ny - 1) ? 1.0f + 2.0f * coeff : 1.0f + coeff; // Last element has a different coefficient
         denom = 1.0f / (lb - c_prime[i - 1] * lalc);
-        if (i < Ny - 1)
-            c_prime[i] = lalc * denom;
-        else
-        {
-            lalc = -2.0f * coeff; // Last element has a different coefficient
-            denom = 1.0f / (lb - c_prime[i - 1] * lalc);
-        }
-            
+        
+        c_prime[i] = lalc * denom;
         d_prime[i] = (rhs[i] - d_prime[i - 1] * lalc) * denom;
     }
 
@@ -394,10 +387,17 @@ int saveSimulationInfos(const SimulationConfig *config, const Measurement *measu
     fprintf(fpInfos, "TIME OF THE FIRST PART = %.5g s\n", measurement->elapsedTime1stPart);
     fprintf(fpInfos, "TIME OF THE SECOND PART = %.5g s\n", measurement->elapsedTime2ndPart);
 
-    if (config->method != METHOD_FE)
+    if (config->method == METHOD_OSADI || config->method == METHOD_SSIADI || config->method == METHOD_DO || config->method == METHOD_HV)
     {
         fprintf(fpInfos, "TIME TO SOLVE THE 1st LINEAR SYSTEM = %.5g s\n", measurement->elapsedTime1stLS);
         fprintf(fpInfos, "TIME TO SOLVE THE 2nd LINEAR SYSTEM = %.5g s\n", measurement->elapsedTime2ndLS);
+    }
+
+    if (config->method == METHOD_HV)
+    {
+        fprintf(fpInfos, "TIME TO COMPUTE THE APPROXIMATION = %.5g s\n", measurement->elapsedTimeApproximation);
+        fprintf(fpInfos, "TIME TO SOLVE THE 3rd LINEAR SYSTEM = %.5g s\n", measurement->elapsedTime3rdLS);
+        fprintf(fpInfos, "TIME TO SOLVE THE 4th LINEAR SYSTEM = %.5g s\n", measurement->elapsedTime4thLS);
     }
 
     if (config->measure_velocity)
@@ -450,7 +450,7 @@ real calculateNorm2Error(real *Vm, real *exact, int Nx, int Ny, real totalTime, 
     return sqrt(sum / (Nx * Ny));
 }
 
-void initializeElementsProperties(const SimulationConfig *config, const real chiCm, ElementProperties *elements_properties)
+void initializeElementsProperties(const SimulationConfig *config, ElementProperties *elements_properties)
 {
     // Unpack parameters from the config
     const int Nx = config->Nx;
@@ -469,9 +469,9 @@ void initializeElementsProperties(const SimulationConfig *config, const real chi
         // D_xx = (sigma_l - sigma_t) * cos^2(theta) + sigma_t
         // D_yy = (sigma_l - sigma_t) * sin^2(theta) + sigma_t
         // D_xy = (sigma_l - sigma_t) * sin(theta) * cos(theta)
-        elements_properties[idx].D_xx = ((sigma_l - sigma_t) * cos(fiber_orientation_rad) * cos(fiber_orientation_rad) + sigma_t) / chiCm;
-        elements_properties[idx].D_yy = ((sigma_l - sigma_t) * sin(fiber_orientation_rad) * sin(fiber_orientation_rad) + sigma_t) / chiCm;
-        elements_properties[idx].D_xy = ((sigma_l - sigma_t) * sin(fiber_orientation_rad) * cos(fiber_orientation_rad)) / chiCm;
+        elements_properties[idx].D_xx = (sigma_l - sigma_t) * cos(fiber_orientation_rad) * cos(fiber_orientation_rad) + sigma_t;
+        elements_properties[idx].D_yy = (sigma_l - sigma_t) * sin(fiber_orientation_rad) * sin(fiber_orientation_rad) + sigma_t;
+        elements_properties[idx].D_xy = (sigma_l - sigma_t) * sin(fiber_orientation_rad) * cos(fiber_orientation_rad);
     }
 }
 

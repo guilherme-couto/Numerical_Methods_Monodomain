@@ -87,6 +87,10 @@ static int config_parser_handler(void *user, const char *section, const char *na
             config->method = METHOD_SSIADI;
         else if (strstr(lower_value, "fe"))
             config->method = METHOD_FE;
+        else if (strstr(lower_value, "do"))
+            config->method = METHOD_DO;
+        else if (strstr(lower_value, "hv"))
+            config->method = METHOD_HV;
         else
             config->method = METHOD_INVALID;
     }
@@ -96,7 +100,7 @@ static int config_parser_handler(void *user, const char *section, const char *na
         config->save_function = get_save_function(config->save_function_name);
         strncpy(config->file_extension, get_file_extension(config->save_function_name), sizeof(config->file_extension));
     }
-    
+
     else if (MATCH("simulation", "dt"))
         config->dt = te_interp_no_comments(value, 0);
     else if (MATCH("simulation", "dx"))

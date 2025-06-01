@@ -61,9 +61,21 @@
 },
 {
   "directory": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build",
-  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc -DUSE_OPENMP -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/include -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/external -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/solvers -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/guilherme-couto/.conda/envs/numerical-env/include  -I/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/include  -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib/stubs -O3 -march=native -finline-functions -o CMakeFiles/core_c.dir/src/numerical_methods/fe/fe.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/fe/fe.c",
-  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/fe/fe.c",
-  "output": "CMakeFiles/core_c.dir/src/numerical_methods/fe/fe.c.o"
+  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc -DUSE_OPENMP -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/include -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/external -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/solvers -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/guilherme-couto/.conda/envs/numerical-env/include  -I/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/include  -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib/stubs -O3 -march=native -finline-functions -o CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/douglas/do.c",
+  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/douglas/do.c",
+  "output": "CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o"
+},
+{
+  "directory": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build",
+  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc -DUSE_OPENMP -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/include -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/external -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/solvers -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/guilherme-couto/.conda/envs/numerical-env/include  -I/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/include  -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib/stubs -O3 -march=native -finline-functions -o CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/forward_euler/fe.c",
+  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/forward_euler/fe.c",
+  "output": "CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o"
+},
+{
+  "directory": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build",
+  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc -DUSE_OPENMP -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/include -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/external -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/solvers -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/guilherme-couto/.conda/envs/numerical-env/include  -I/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/include  -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib/stubs -O3 -march=native -finline-functions -o CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/hundsdorfer-verwer/hv.c",
+  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/hundsdorfer-verwer/hv.c",
+  "output": "CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.o"
 },
 {
   "directory": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build",
@@ -73,15 +85,15 @@
 },
 {
   "directory": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build",
-  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc -DUSE_OPENMP -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/include -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/external -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/solvers -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/guilherme-couto/.conda/envs/numerical-env/include  -I/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/include  -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib/stubs -O3 -march=native -finline-functions -o CMakeFiles/core_c.dir/src/numerical_methods/osadi/osadi.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/osadi/osadi.c",
-  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/osadi/osadi.c",
-  "output": "CMakeFiles/core_c.dir/src/numerical_methods/osadi/osadi.c.o"
+  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc -DUSE_OPENMP -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/include -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/external -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/solvers -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/guilherme-couto/.conda/envs/numerical-env/include  -I/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/include  -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib/stubs -O3 -march=native -finline-functions -o CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/os-adi/osadi.c",
+  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/os-adi/osadi.c",
+  "output": "CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.o"
 },
 {
   "directory": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build",
-  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc -DUSE_OPENMP -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/include -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/external -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/solvers -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/guilherme-couto/.conda/envs/numerical-env/include  -I/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/include  -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib/stubs -O3 -march=native -finline-functions -o CMakeFiles/core_c.dir/src/numerical_methods/ssiadi/ssiadi.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/ssiadi/ssiadi.c",
-  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/ssiadi/ssiadi.c",
-  "output": "CMakeFiles/core_c.dir/src/numerical_methods/ssiadi/ssiadi.c.o"
+  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc -DUSE_OPENMP -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/include -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/external -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger -I/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/solvers -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/guilherme-couto/.conda/envs/numerical-env/include  -I/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/include  -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib -L/home/guilherme-couto/.conda/envs/numerical-env/targets/x86_64-linux/lib/stubs -O3 -march=native -finline-functions -o CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/ssi-adi/ssiadi.c",
+  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/ssi-adi/ssiadi.c",
+  "output": "CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.o"
 },
 {
   "directory": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build",
@@ -127,27 +139,33 @@
 },
 {
   "directory": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build",
-  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler -DUSE_CUDA --options-file CMakeFiles/core_cuda.dir/includes_CUDA.rsp -O3 -Xcompiler=-march=native -finline-functions -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/dg/dg.cu -o CMakeFiles/core_cuda.dir/src/numerical_methods/dg/dg.cu.o",
-  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/dg/dg.cu",
-  "output": "CMakeFiles/core_cuda.dir/src/numerical_methods/dg/dg.cu.o"
+  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler -DUSE_CUDA --options-file CMakeFiles/core_cuda.dir/includes_CUDA.rsp -O3 -Xcompiler=-march=native -finline-functions -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/douglas/do.cu -o CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o",
+  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/douglas/do.cu",
+  "output": "CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o"
 },
 {
   "directory": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build",
-  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler -DUSE_CUDA --options-file CMakeFiles/core_cuda.dir/includes_CUDA.rsp -O3 -Xcompiler=-march=native -finline-functions -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/fe/fe.cu -o CMakeFiles/core_cuda.dir/src/numerical_methods/fe/fe.cu.o",
-  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/fe/fe.cu",
-  "output": "CMakeFiles/core_cuda.dir/src/numerical_methods/fe/fe.cu.o"
+  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler -DUSE_CUDA --options-file CMakeFiles/core_cuda.dir/includes_CUDA.rsp -O3 -Xcompiler=-march=native -finline-functions -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/forward_euler/fe.cu -o CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o",
+  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/forward_euler/fe.cu",
+  "output": "CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o"
 },
 {
   "directory": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build",
-  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler -DUSE_CUDA --options-file CMakeFiles/core_cuda.dir/includes_CUDA.rsp -O3 -Xcompiler=-march=native -finline-functions -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/osadi/osadi.cu -o CMakeFiles/core_cuda.dir/src/numerical_methods/osadi/osadi.cu.o",
-  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/osadi/osadi.cu",
-  "output": "CMakeFiles/core_cuda.dir/src/numerical_methods/osadi/osadi.cu.o"
+  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler -DUSE_CUDA --options-file CMakeFiles/core_cuda.dir/includes_CUDA.rsp -O3 -Xcompiler=-march=native -finline-functions -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/hundsdorfer-verwer/hv.cu -o CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o",
+  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/hundsdorfer-verwer/hv.cu",
+  "output": "CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o"
 },
 {
   "directory": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build",
-  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler -DUSE_CUDA --options-file CMakeFiles/core_cuda.dir/includes_CUDA.rsp -O3 -Xcompiler=-march=native -finline-functions -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/ssiadi/ssiadi.cu -o CMakeFiles/core_cuda.dir/src/numerical_methods/ssiadi/ssiadi.cu.o",
-  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/ssiadi/ssiadi.cu",
-  "output": "CMakeFiles/core_cuda.dir/src/numerical_methods/ssiadi/ssiadi.cu.o"
+  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler -DUSE_CUDA --options-file CMakeFiles/core_cuda.dir/includes_CUDA.rsp -O3 -Xcompiler=-march=native -finline-functions -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/os-adi/osadi.cu -o CMakeFiles/core_cuda.dir/src/numerical_methods/os-adi/osadi.cu.o",
+  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/os-adi/osadi.cu",
+  "output": "CMakeFiles/core_cuda.dir/src/numerical_methods/os-adi/osadi.cu.o"
+},
+{
+  "directory": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build",
+  "command": "/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler -DUSE_CUDA --options-file CMakeFiles/core_cuda.dir/includes_CUDA.rsp -O3 -Xcompiler=-march=native -finline-functions -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/ssi-adi/ssiadi.cu -o CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.o",
+  "file": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/ssi-adi/ssiadi.cu",
+  "output": "CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.o"
 },
 {
   "directory": "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build",

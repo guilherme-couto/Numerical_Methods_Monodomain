@@ -147,7 +147,7 @@ static void update_sV_MV(real *sV, const real *rhs_sV, const real dSdt_Vm, const
 // Instantiate the MV model
 const CellModelSolver MV_SOLVER = {
     .n_state_vars = MV_NSV,
-    .chiCm = MV_chi * MV_Cm,
+    .denom_chiCm = 1.0f / (MV_chi * MV_Cm),
     .activation_thershold = MV_ACTIVATION_THRESHOLD,
     .initialize = initialize_MV,
     .get_actual_sV = get_actual_sV_MV,

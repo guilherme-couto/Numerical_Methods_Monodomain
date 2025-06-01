@@ -6,7 +6,7 @@
  Architecture          : x86_64
  CPU Cores             : 16
  Total Memory (GB)     : 62.63
- Free Memory (GB)      : 22.32
+ Free Memory (GB)      : 18.78
 ---------------------------- OpenMP -----------------------------
  Available Threads     : 16
  Max Threads Allowed   : 16
@@ -29,14 +29,14 @@
 ================================================================
                          Simulation Log
 ----------------------------------------------------------------
- Start Time             : 2025-05-27 15:37:56
+ Start Time             : 2025-06-01 15:53:07
  Configuration File     : configs/test.ini
  Output Directory       : outputs/test
 
  Execution Mode         : CUDA
  Equation Type          : MONODOMAIN
  Cell Model             : AFHN
- Numerical Method       : SSIADI
+ Numerical Method       : UNKNOWN
  Real Precision         : double
 
  Save Frames            : Yes
@@ -53,6 +53,7 @@
  Time Step (dt)         : 0.01
  Total Time             : 500.00
  Number of Steps (M)    : 50000
+ Fiber Orientation      : 0.00 degrees
  Sigma Longitudinal     : 0.0012
  Sigma Transversal      : 0.0012
 
@@ -82,7 +83,7 @@
 [i] Grid size for x: 7 blocks (32 threads per block, total 224 threads)
 [i] Grid size for y: 7 blocks (32 threads per block, total 224 threads)
 
-[i] Starting simulation with SSIADI (CUDA)...
+[i] Starting simulation with HV (CUDA)...
 [+] Frame at time 0.00 ms saved to outputs/test/frames/Vm_00000.vtk
 [+] Frame at time 1.00 ms saved to outputs/test/frames/Vm_00100.vtk
 [+] Frame at time 2.00 ms saved to outputs/test/frames/Vm_00200.vtk
@@ -588,5 +589,5 @@
 
 [+] Last frame (500.00 ms) saved to outputs/test/frames/Vm_50000.vtk
 
-[i] Simulation total execution time = 17.959 s
+[i] Simulation total execution time = 32.63 s
 [+] Simulation infos saved to outputs/test/simulation_infos.txt

@@ -37,82 +37,275 @@ STATIC_MODIFIER int lim(const int num, const int N)
     return num == -1 ? 1 : (num == N ? N - 2 : num);
 }
 
-// Function to compute the diffusion term in 2D considering isotropic diffusion
-STATIC_MODIFIER real compute_diffusion_term(const real *Vm, const int i, const int j, const int Nx, const int Ny,
-                                            const real diff_coeff_x, const real diff_coeff_y, const real phi_x, const real phi_y)
+STATIC_MODIFIER real harmonic_mean(const real s1, const real s2)
 {
-    // Get the neighboring values
-    const int idx = i * Nx + j;
-    const int idx_left = i * Nx + lim(j - 1, Nx);
-    const int idx_right = i * Nx + lim(j + 1, Nx);
-    const int idx_top = lim(i + 1, Ny) * Nx + j;
-    const int idx_bottom = lim(i - 1, Ny) * Nx + j;
-
-    const real Vm_center = Vm[idx];
-    const real Vm_left = Vm[idx_left];
-    const real Vm_right = Vm[idx_right];
-    const real Vm_top = Vm[idx_top];
-    const real Vm_bottom = Vm[idx_bottom];
-
-    // Compute the diffusion term
-    const real x_term = Vm_left - 2.0f * Vm_center + Vm_right;
-    const real y_term = Vm_top - 2.0f * Vm_center + Vm_bottom;
-
-    return diff_coeff_x * phi_x * x_term +
-           diff_coeff_y * phi_y * y_term;
+    return (s1 + s2) > 0.0f ? 2.0f * s1 * s2 / (s1 + s2) : 0.0f;
 }
 
-// Funtion to determine the limits of the grid and the boundaries condition
-STATIC_MODIFIER bool validate_boundary(const int num, const int N)
+STATIC_MODIFIER real compute_diffusion_term_x_axis(const real *Vm, const ElementProperties *elements,
+                                                   const int i, const int j, const int Nx, const int Ny,
+                                                   const real delta_x, const real delta_y)
 {
-    // TODO: check if this is correct and second order accurate
-    return num == -1 ? false : (num == N ? false : true);
+    const int idx = i * Nx + j;
+
+    // Neighbor validation
+    const bool left  = (j > 0);
+    const bool right = (j < Nx - 1);
+    const bool top   = (i < Ny - 1);
+    const bool bottom = (i > 0);
+
+    const bool ne = top && right;
+    const bool nw = top && left;
+    const bool se = bottom && right;
+    const bool sw = bottom && left;
+
+    // Indexing
+    const int idx_l = i * Nx + (j - 1);
+    const int idx_r = i * Nx + (j + 1);
+    const int idx_t = (i + 1) * Nx + j;
+    const int idx_b = (i - 1) * Nx + j;
+
+    const int idx_ne = (i + 1) * Nx + (j + 1);
+    const int idx_nw = (i + 1) * Nx + (j - 1);
+    const int idx_se = (i - 1) * Nx + (j + 1);
+    const int idx_sw = (i - 1) * Nx + (j - 1);
+
+    // Vm values
+    const real Vm_c  = Vm[idx];
+    const real Vm_l  = left   ? Vm[idx_l]  : 0.0f;
+    const real Vm_r  = right  ? Vm[idx_r]  : 0.0f;
+    const real Vm_t  = top    ? Vm[idx_t]  : 0.0f;
+    const real Vm_b  = bottom ? Vm[idx_b]  : 0.0f;
+    
+    const real Vm_ne = ne     ? Vm[idx_ne] : 0.0f;
+    const real Vm_nw = nw     ? Vm[idx_nw] : 0.0f;
+    const real Vm_se = se     ? Vm[idx_se] : 0.0f;
+    const real Vm_sw = sw     ? Vm[idx_sw] : 0.0f;
+
+    // Diffusion coefficients at center
+    const ElementProperties center = elements[idx];
+
+    // Interpolated coefficients using harmonic mean
+    const real Dxx_r = right  ? harmonic_mean(center.D_xx, elements[idx_r].D_xx) : center.D_xx;
+    const real Dxy_r = right  ? harmonic_mean(center.D_xy, elements[idx_r].D_xy) : center.D_xy;
+
+    const real Dxx_l = left   ? harmonic_mean(center.D_xx, elements[idx_l].D_xx) : center.D_xx;
+    const real Dxy_l = left   ? harmonic_mean(center.D_xy, elements[idx_l].D_xy) : center.D_xy;
+
+    // Fluxes
+    const real J_r = right ? (
+        (Dxx_r / delta_x) * (Vm_r - Vm_c)
+        +(Dxy_r / (4.0f * delta_y)) * ((Vm_ne - Vm_se) + (Vm_t - Vm_b))
+    ) : 0.0f;
+
+    const real J_l = left ? (
+        (Dxx_l / delta_x) * (Vm_c - Vm_l)
+        +(Dxy_l / (4.0f * delta_y)) * ((Vm_t - Vm_b) + (Vm_nw - Vm_sw))
+    ) : 0.0f;
+
+    // Divergence of flux -> nabla dot J
+    const real x_term = (J_r - J_l) / delta_x;
+
+    return x_term;
 }
 
-// Function to compute the diffusion term in 2D considering anisotropic diffusion with cross-terms
-STATIC_MODIFIER real compute_diffusion_term_anisotropic(const real *Vm, const int i, const int j, const int Nx, const int Ny,
-                                                        const real diff_coeff_x, const real diff_coeff_y, const real diff_coeff_xy,
-                                                        const real phi_x, const real phi_y, const real phi_xy)
+STATIC_MODIFIER real compute_diffusion_term_y_axis(const real *Vm, const ElementProperties *elements,
+                                                   const int i, const int j, const int Nx, const int Ny,
+                                                   const real delta_x, const real delta_y)
 {
-    // Get the neighboring values (TODO: check if this is correct and second order accurate)
-   
-    const bool is_left_valid = validate_boundary(j - 1, Nx);
-    const bool is_right_valid = validate_boundary(j + 1, Nx);
-    const bool is_top_valid = validate_boundary(i + 1, Ny);
-    const bool is_bottom_valid = validate_boundary(i - 1, Ny);
-    const bool is_northeast_valid = validate_boundary(i + 1, Nx) && validate_boundary(j + 1, Ny);
-    const bool is_northwest_valid = validate_boundary(i + 1, Nx) && validate_boundary(j - 1, Ny);
-    const bool is_southeast_valid = validate_boundary(i - 1, Nx) && validate_boundary(j + 1, Ny);
-    const bool is_southwest_valid = validate_boundary(i - 1, Nx) && validate_boundary(j - 1, Ny);
-
     const int idx = i * Nx + j;
-    const int idx_left = i * Nx + (j - 1);
-    const int idx_right = i * Nx + (j + 1);
-    const int idx_top = (i + 1) * Nx + j;
-    const int idx_bottom = (i - 1) * Nx + j;
-    const int idx_northeast = (i + 1) * Nx + (j + 1);
-    const int idx_northwest = (i + 1) * Nx + (j - 1);
-    const int idx_southeast = (i - 1) * Nx + (j + 1);
-    const int idx_southwest = (i - 1) * Nx + (j - 1);
 
-    const real Vm_center = Vm[idx];
-    const real Vm_left = is_left_valid ? Vm[idx_left] : 0.0f;
-    const real Vm_right = is_right_valid ? Vm[idx_right] : 0.0f;
-    const real Vm_top = is_top_valid ? Vm[idx_top] : 0.0f;
-    const real Vm_bottom = is_bottom_valid ? Vm[idx_bottom] : 0.0f;
-    const real Vm_northeast = is_northeast_valid ? Vm[idx_northeast] : 0.0f;
-    const real Vm_northwest = is_northwest_valid ? Vm[idx_northwest] : 0.0f;
-    const real Vm_southeast = is_southeast_valid ? Vm[idx_southeast] : 0.0f;
-    const real Vm_southwest = is_southwest_valid ? Vm[idx_southwest] : 0.0f;
+    // Neighbor validation
+    const bool left   = (j > 0);
+    const bool right  = (j < Nx - 1);
+    const bool top    = (i < Ny - 1);
+    const bool bottom = (i > 0);
 
-    // Compute the diffusion term
-    const real x_term = Vm_left - 2.0f * Vm_center + Vm_right;
-    const real y_term = Vm_top - 2.0f * Vm_center + Vm_bottom;
-    const real xy_term = Vm_northeast - Vm_northwest - Vm_southeast + Vm_southwest;
+    const bool ne = top && right;
+    const bool nw = top && left;
+    const bool se = bottom && right;
+    const bool sw = bottom && left;
 
-    return diff_coeff_x  * phi_x  * x_term +
-           diff_coeff_y  * phi_y  * y_term +
-           diff_coeff_xy * phi_xy * xy_term;
+    // Indexing
+    const int idx_l = i * Nx + (j - 1);
+    const int idx_r = i * Nx + (j + 1);
+    const int idx_t = (i + 1) * Nx + j;
+    const int idx_b = (i - 1) * Nx + j;
+
+    const int idx_ne = (i + 1) * Nx + (j + 1);
+    const int idx_nw = (i + 1) * Nx + (j - 1);
+    const int idx_se = (i - 1) * Nx + (j + 1);
+    const int idx_sw = (i - 1) * Nx + (j - 1);
+
+    // Vm values
+    const real Vm_c  = Vm[idx];
+    const real Vm_l  = left   ? Vm[idx_l]  : 0.0f;
+    const real Vm_r  = right  ? Vm[idx_r]  : 0.0f;
+    const real Vm_t  = top    ? Vm[idx_t]  : 0.0f;
+    const real Vm_b  = bottom ? Vm[idx_b]  : 0.0f;
+    
+    const real Vm_ne = ne     ? Vm[idx_ne] : 0.0f;
+    const real Vm_nw = nw     ? Vm[idx_nw] : 0.0f;
+    const real Vm_se = se     ? Vm[idx_se] : 0.0f;
+    const real Vm_sw = sw     ? Vm[idx_sw] : 0.0f;
+
+    // Diffusion coefficients at center
+    const ElementProperties center = elements[idx];
+
+    // Interpolated coefficients using harmonic mean
+    const real Dyy_t = top    ? harmonic_mean(center.D_yy, elements[idx_t].D_yy) : center.D_yy;
+    const real Dxy_t = top    ? harmonic_mean(center.D_xy, elements[idx_t].D_xy) : center.D_xy;
+
+    const real Dyy_b = bottom ? harmonic_mean(center.D_yy, elements[idx_b].D_yy) : center.D_yy;
+    const real Dxy_b = bottom ? harmonic_mean(center.D_xy, elements[idx_b].D_xy) : center.D_xy;
+
+    // Fluxes
+    const real J_t = top ? (
+        (Dyy_t / delta_y) * (Vm_t - Vm_c)
+        +(Dxy_t / (4.0f * delta_x)) * ((Vm_ne - Vm_nw) + (Vm_r - Vm_l))
+    ) : 0.0f;
+
+    const real J_b = bottom ? (
+        (Dyy_b / delta_y) * (Vm_c - Vm_b)
+        +(Dxy_b / (4.0f * delta_x)) * ((Vm_r - Vm_l) + (Vm_se - Vm_sw))
+    ) : 0.0f;
+
+    // Divergence of flux -> nabla dot J
+    const real y_term = (J_t - J_b) / delta_y;
+
+    return y_term;
+}
+
+// Function to compute the diffusion term in 2D considering no rotation
+STATIC_MODIFIER real compute_diffusion_term_no_rotation(const real *Vm, const ElementProperties *elements,
+                                                        const int i, const int j, const int Nx, const int Ny,
+                                                        const real delta_x, const real delta_y)
+{
+    const int idx = i * Nx + j;
+
+    // Neighbor validation
+    const bool left   = (j > 0);
+    const bool right  = (j < Nx - 1);
+    const bool top    = (i < Ny - 1);
+    const bool bottom = (i > 0);
+
+    // Indexing
+    const int idx_l = i * Nx + (j - 1);
+    const int idx_r = i * Nx + (j + 1);
+    const int idx_t = (i + 1) * Nx + j;
+    const int idx_b = (i - 1) * Nx + j;
+
+    // Vm values
+    const real Vm_c  = Vm[idx];
+    const real Vm_l  = left   ? Vm[idx_l]  : 0.0f;
+    const real Vm_r  = right  ? Vm[idx_r]  : 0.0f;
+    const real Vm_t  = top    ? Vm[idx_t]  : 0.0f;
+    const real Vm_b  = bottom ? Vm[idx_b]  : 0.0f;
+
+    // Diffusion coefficients at center
+    const ElementProperties center = elements[idx];
+
+    // Interpolated coefficients using harmonic mean
+    const real Dxx_r = right  ? harmonic_mean(center.D_xx, elements[idx_r].D_xx)  : center.D_xx;
+    const real Dxx_l = left   ? harmonic_mean(center.D_xx, elements[idx_l].D_xx)  : center.D_xx;
+    const real Dyy_t = top    ? harmonic_mean(center.D_yy, elements[idx_t].D_yy)  : center.D_yy;
+    const real Dyy_b = bottom ? harmonic_mean(center.D_yy, elements[idx_b].D_yy)  : center.D_yy;
+
+    // Fluxes
+    const real J_r = right  ? ((Dxx_r / delta_x) * (Vm_r - Vm_c))  : 0.0f;
+    const real J_l = left   ? ((Dxx_l / delta_x) * (Vm_c - Vm_l))  : 0.0f;
+    const real J_t = top    ? ((Dyy_t / delta_y) * (Vm_t - Vm_c))  : 0.0f;
+    const real J_b = bottom ? ((Dyy_b / delta_y) * (Vm_c - Vm_b))  : 0.0f;
+
+    // Divergence of flux -> nabla dot J
+    const real x_term = (J_r - J_l) / delta_x;
+    const real y_term = (J_t - J_b) / delta_y;
+
+    return x_term + y_term;
+}
+
+STATIC_MODIFIER real compute_diffusion_term_anisotropic(const real *Vm, const ElementProperties *elements,
+                                                        const int i, const int j, const int Nx, const int Ny,
+                                                        const real delta_x, const real delta_y)
+{
+    const int idx = i * Nx + j;
+
+    // Neighbor validation
+    const bool left   = (j > 0);
+    const bool right  = (j < Nx - 1);
+    const bool top    = (i < Ny - 1);
+    const bool bottom = (i > 0);
+
+    const bool ne = top && right;
+    const bool nw = top && left;
+    const bool se = bottom && right;
+    const bool sw = bottom && left;
+
+    // Indexing
+    const int idx_l = i * Nx + (j - 1);
+    const int idx_r = i * Nx + (j + 1);
+    const int idx_t = (i + 1) * Nx + j;
+    const int idx_b = (i - 1) * Nx + j;
+
+    const int idx_ne = (i + 1) * Nx + (j + 1);
+    const int idx_nw = (i + 1) * Nx + (j - 1);
+    const int idx_se = (i - 1) * Nx + (j + 1);
+    const int idx_sw = (i - 1) * Nx + (j - 1);
+
+    // Vm values
+    const real Vm_c  = Vm[idx];
+    const real Vm_l  = left   ? Vm[idx_l]  : 0.0f;
+    const real Vm_r  = right  ? Vm[idx_r]  : 0.0f;
+    const real Vm_t  = top    ? Vm[idx_t]  : 0.0f;
+    const real Vm_b  = bottom ? Vm[idx_b]  : 0.0f;
+    
+    const real Vm_ne = ne     ? Vm[idx_ne] : 0.0f;
+    const real Vm_nw = nw     ? Vm[idx_nw] : 0.0f;
+    const real Vm_se = se     ? Vm[idx_se] : 0.0f;
+    const real Vm_sw = sw     ? Vm[idx_sw] : 0.0f;
+
+    // Diffusion coefficients at center
+    const ElementProperties center = elements[idx];
+
+    // Interpolated coefficients using harmonic mean
+    const real Dxx_r = right  ? harmonic_mean(center.D_xx, elements[idx_r].D_xx) : center.D_xx;
+    const real Dxy_r = right  ? harmonic_mean(center.D_xy, elements[idx_r].D_xy) : center.D_xy;
+
+    const real Dxx_l = left   ? harmonic_mean(center.D_xx, elements[idx_l].D_xx) : center.D_xx;
+    const real Dxy_l = left   ? harmonic_mean(center.D_xy, elements[idx_l].D_xy) : center.D_xy;
+
+    const real Dyy_t = top    ? harmonic_mean(center.D_yy, elements[idx_t].D_yy) : center.D_yy;
+    const real Dxy_t = top    ? harmonic_mean(center.D_xy, elements[idx_t].D_xy) : center.D_xy;
+
+    const real Dyy_b = bottom ? harmonic_mean(center.D_yy, elements[idx_b].D_yy) : center.D_yy;
+    const real Dxy_b = bottom ? harmonic_mean(center.D_xy, elements[idx_b].D_xy) : center.D_xy;
+
+    // Fluxes
+    const real J_r = right ? (
+        (Dxx_r / delta_x) * (Vm_r - Vm_c)
+        +(Dxy_r / (4.0f * delta_y)) * ((Vm_ne - Vm_se) + (Vm_t - Vm_b))
+    ) : 0.0f;
+
+    const real J_l = left ? (
+        (Dxx_l / delta_x) * (Vm_c - Vm_l)
+        +(Dxy_l / (4.0f * delta_y)) * ((Vm_t - Vm_b) + (Vm_nw - Vm_sw))
+    ) : 0.0f;
+
+    const real J_t = top ? (
+        (Dyy_t / delta_y) * (Vm_t - Vm_c)
+        +(Dxy_t / (4.0f * delta_x)) * ((Vm_ne - Vm_nw) + (Vm_r - Vm_l))
+    ) : 0.0f;
+
+    const real J_b = bottom ? (
+        (Dyy_b / delta_y) * (Vm_c - Vm_b)
+        +(Dxy_b / (4.0f * delta_x)) * ((Vm_r - Vm_l) + (Vm_se - Vm_sw))
+    ) : 0.0f;
+
+    // Divergence of flux -> nabla dot J
+    const real x_term = (J_r - J_l) / delta_x;
+    const real y_term = (J_t - J_b) / delta_y;
+
+    return x_term + y_term;
 }
 
 // Function to get the active stimuli

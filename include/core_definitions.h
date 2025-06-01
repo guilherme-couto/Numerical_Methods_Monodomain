@@ -39,11 +39,9 @@ extern "C" {
 #define MAX_STRING_SIZE 200
 
 #if defined(__CUDACC__)
-#define FORCE_INLINE __forceinline__
-#define STATIC_MODIFIER static __host__ __device__
+#define STATIC_MODIFIER static inline __host__ __device__
 #else
-#define FORCE_INLINE inline
-#define STATIC_MODIFIER static
+#define STATIC_MODIFIER static inline
 #endif
 
 // Define block size for GPU
@@ -81,6 +79,9 @@ typedef struct
     real elapsedTime2ndPart;
     real elapsedTime1stLS;
     real elapsedTime2ndLS;
+    real elapsedTime3rdLS;
+    real elapsedTime4thLS;
+    real elapsedTimeApproximation;
     real elapsedSaveFramesTime;
     real elapsedMeasureVelocityTime;
     real elapsedSaveStateTime;
