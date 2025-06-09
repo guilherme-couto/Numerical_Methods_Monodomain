@@ -251,30 +251,6 @@ src/cell_models/afhn/afhn.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/cell_models/afhn/afhn.c.s
 .PHONY : src/cell_models/afhn/afhn.c.s
 
-src/cell_models/afhn/afhn.o: src/cell_models/afhn/afhn.cu.o
-.PHONY : src/cell_models/afhn/afhn.o
-
-# target to build an object file
-src/cell_models/afhn/afhn.cu.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/cell_models/afhn/afhn.cu.o
-.PHONY : src/cell_models/afhn/afhn.cu.o
-
-src/cell_models/afhn/afhn.i: src/cell_models/afhn/afhn.cu.i
-.PHONY : src/cell_models/afhn/afhn.i
-
-# target to preprocess a source file
-src/cell_models/afhn/afhn.cu.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/cell_models/afhn/afhn.cu.i
-.PHONY : src/cell_models/afhn/afhn.cu.i
-
-src/cell_models/afhn/afhn.s: src/cell_models/afhn/afhn.cu.s
-.PHONY : src/cell_models/afhn/afhn.s
-
-# target to generate assembly for a file
-src/cell_models/afhn/afhn.cu.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/cell_models/afhn/afhn.cu.s
-.PHONY : src/cell_models/afhn/afhn.cu.s
-
 src/cell_models/cell_models.o: src/cell_models/cell_models.c.o
 .PHONY : src/cell_models/cell_models.o
 
@@ -298,30 +274,6 @@ src/cell_models/cell_models.s: src/cell_models/cell_models.c.s
 src/cell_models/cell_models.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/cell_models/cell_models.c.s
 .PHONY : src/cell_models/cell_models.c.s
-
-src/cell_models/cell_models.o: src/cell_models/cell_models.cu.o
-.PHONY : src/cell_models/cell_models.o
-
-# target to build an object file
-src/cell_models/cell_models.cu.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/cell_models/cell_models.cu.o
-.PHONY : src/cell_models/cell_models.cu.o
-
-src/cell_models/cell_models.i: src/cell_models/cell_models.cu.i
-.PHONY : src/cell_models/cell_models.i
-
-# target to preprocess a source file
-src/cell_models/cell_models.cu.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/cell_models/cell_models.cu.i
-.PHONY : src/cell_models/cell_models.cu.i
-
-src/cell_models/cell_models.s: src/cell_models/cell_models.cu.s
-.PHONY : src/cell_models/cell_models.s
-
-# target to generate assembly for a file
-src/cell_models/cell_models.cu.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/cell_models/cell_models.cu.s
-.PHONY : src/cell_models/cell_models.cu.s
 
 src/cell_models/minimal_ventricular/mv.o: src/cell_models/minimal_ventricular/mv.c.o
 .PHONY : src/cell_models/minimal_ventricular/mv.o
@@ -347,30 +299,6 @@ src/cell_models/minimal_ventricular/mv.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/cell_models/minimal_ventricular/mv.c.s
 .PHONY : src/cell_models/minimal_ventricular/mv.c.s
 
-src/cell_models/minimal_ventricular/mv.o: src/cell_models/minimal_ventricular/mv.cu.o
-.PHONY : src/cell_models/minimal_ventricular/mv.o
-
-# target to build an object file
-src/cell_models/minimal_ventricular/mv.cu.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/cell_models/minimal_ventricular/mv.cu.o
-.PHONY : src/cell_models/minimal_ventricular/mv.cu.o
-
-src/cell_models/minimal_ventricular/mv.i: src/cell_models/minimal_ventricular/mv.cu.i
-.PHONY : src/cell_models/minimal_ventricular/mv.i
-
-# target to preprocess a source file
-src/cell_models/minimal_ventricular/mv.cu.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/cell_models/minimal_ventricular/mv.cu.i
-.PHONY : src/cell_models/minimal_ventricular/mv.cu.i
-
-src/cell_models/minimal_ventricular/mv.s: src/cell_models/minimal_ventricular/mv.cu.s
-.PHONY : src/cell_models/minimal_ventricular/mv.s
-
-# target to generate assembly for a file
-src/cell_models/minimal_ventricular/mv.cu.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/cell_models/minimal_ventricular/mv.cu.s
-.PHONY : src/cell_models/minimal_ventricular/mv.cu.s
-
 src/cell_models/tt2/tt2.o: src/cell_models/tt2/tt2.c.o
 .PHONY : src/cell_models/tt2/tt2.o
 
@@ -394,30 +322,6 @@ src/cell_models/tt2/tt2.s: src/cell_models/tt2/tt2.c.s
 src/cell_models/tt2/tt2.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/cell_models/tt2/tt2.c.s
 .PHONY : src/cell_models/tt2/tt2.c.s
-
-src/cell_models/tt2/tt2.o: src/cell_models/tt2/tt2.cu.o
-.PHONY : src/cell_models/tt2/tt2.o
-
-# target to build an object file
-src/cell_models/tt2/tt2.cu.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/cell_models/tt2/tt2.cu.o
-.PHONY : src/cell_models/tt2/tt2.cu.o
-
-src/cell_models/tt2/tt2.i: src/cell_models/tt2/tt2.cu.i
-.PHONY : src/cell_models/tt2/tt2.i
-
-# target to preprocess a source file
-src/cell_models/tt2/tt2.cu.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/cell_models/tt2/tt2.cu.i
-.PHONY : src/cell_models/tt2/tt2.cu.i
-
-src/cell_models/tt2/tt2.s: src/cell_models/tt2/tt2.cu.s
-.PHONY : src/cell_models/tt2/tt2.s
-
-# target to generate assembly for a file
-src/cell_models/tt2/tt2.cu.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/cell_models/tt2/tt2.cu.s
-.PHONY : src/cell_models/tt2/tt2.cu.s
 
 src/config_parser.o: src/config_parser.c.o
 .PHONY : src/config_parser.o
@@ -877,24 +781,12 @@ help:
 	@echo "... src/cell_models/afhn/afhn.o"
 	@echo "... src/cell_models/afhn/afhn.i"
 	@echo "... src/cell_models/afhn/afhn.s"
-	@echo "... src/cell_models/afhn/afhn.o"
-	@echo "... src/cell_models/afhn/afhn.i"
-	@echo "... src/cell_models/afhn/afhn.s"
-	@echo "... src/cell_models/cell_models.o"
-	@echo "... src/cell_models/cell_models.i"
-	@echo "... src/cell_models/cell_models.s"
 	@echo "... src/cell_models/cell_models.o"
 	@echo "... src/cell_models/cell_models.i"
 	@echo "... src/cell_models/cell_models.s"
 	@echo "... src/cell_models/minimal_ventricular/mv.o"
 	@echo "... src/cell_models/minimal_ventricular/mv.i"
 	@echo "... src/cell_models/minimal_ventricular/mv.s"
-	@echo "... src/cell_models/minimal_ventricular/mv.o"
-	@echo "... src/cell_models/minimal_ventricular/mv.i"
-	@echo "... src/cell_models/minimal_ventricular/mv.s"
-	@echo "... src/cell_models/tt2/tt2.o"
-	@echo "... src/cell_models/tt2/tt2.i"
-	@echo "... src/cell_models/tt2/tt2.s"
 	@echo "... src/cell_models/tt2/tt2.o"
 	@echo "... src/cell_models/tt2/tt2.i"
 	@echo "... src/cell_models/tt2/tt2.s"

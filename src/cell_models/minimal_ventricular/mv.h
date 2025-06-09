@@ -47,13 +47,6 @@ extern "C"
         return 85.7f * Vm - 84.0f;
     }
 
-    #if defined(__CUDACC__)
-    __device__ void d_get_actual_sV_MV(real *actualsV, const real *sV, const int idx);
-    __device__ real d_compute_dVmdt_MV(const real Vm, const real *sV);
-    __device__ void d_update_sVtilde_MV(real *sVtilde, const real Vm, const real *rhs_sV, const real delta_t);
-    __device__ void d_update_sV_MV(real *sV, const real *rhs_sV, const real dSdt_Vm, const real *dSdt_sV, const real delta_t, const int idx);
-    #endif 
-
     // Parameters - Based on Minimal Ventricular model
     // Model definition https://www.sciencedirect.com/science/article/pii/S0022519308001690?via%3Dihub
 

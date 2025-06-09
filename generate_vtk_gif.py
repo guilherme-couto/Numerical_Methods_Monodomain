@@ -96,3 +96,8 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     create_gif_from_vtk_frames(args.output_dir, args.gif_name, args.cmap, args.fps)
+
+# Example usage:
+# python generate_vtk_gif.py /path/to/simulation/output --gif_name my_simulation.gif --cmap plasma --fps 20
+# Make sure to have the 'frames' directory with VTK files in the specified output directory.
+# The script will read all VTK files, generate images, and save them as a GIF.

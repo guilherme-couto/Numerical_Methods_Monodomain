@@ -39,9 +39,11 @@ extern "C" {
 #define MAX_STRING_SIZE 200
 
 #if defined(__CUDACC__)
-#define STATIC_MODIFIER static inline __host__ __device__
+#define MODIFIERS static __forceinline__ __host__ __device__
+#define ALIGN __align__(16)
 #else
-#define STATIC_MODIFIER static inline
+#define MODIFIERS static inline
+#define ALIGN __attribute__((aligned(16)))
 #endif
 
 // Define block size for GPU
@@ -52,18 +54,24 @@ extern "C" {
 #define MAX_SYS_SIZE 1024
 #define NUMTHREADS 6
 
+// Define max number of state variables for cell models
+#define MAX_NSV 16
+
 // Convert CM to UM
 #define CM_TO_UM(x) ((int)(x * 1.0e4))
 
 // Define real type
+#ifndef USE_FLOAT
 typedef double real;
 #define REAL_TYPE "double"
+#define REAL_TYPE_NAME "Float64"
 #define STRTOREAL strtod
 #define FSCANF_REAL "%le"
 #define PRINTF_REAL "%lf"
-#ifdef USE_FLOAT
+#else
 typedef float real;
 #define REAL_TYPE "float"
+#define REAL_TYPE_NAME "Float32"
 #define STRTOREAL strtof
 #define FSCANF_REAL "%e"
 #define PRINTF_REAL "%f"
@@ -89,7 +97,7 @@ typedef struct
 } Measurement;
 
 // Define stimulus structure
-typedef struct
+typedef struct ALIGN
 {
     real amplitude;
     real start_time;
@@ -109,15 +117,6 @@ typedef enum
     CELL_PHENOTYPE_M,
     CELL_PHENOTYPE_INVALID
 } CellPhenotype;
-
-// Define a structure for element properties
-typedef struct
-{
-    CellPhenotype cell_phenotype;
-    real D_xx; // Diffusion coefficient in x direction
-    real D_yy; // Diffusion coefficient in y direction
-    real D_xy; // Diffusion coefficient in xy direction
-} ElementProperties;
 
 // Define CUDA error checking
 #define CUDA_CALL(call)                                                                                                          \

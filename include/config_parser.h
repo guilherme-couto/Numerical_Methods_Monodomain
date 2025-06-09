@@ -61,6 +61,7 @@ extern "C"
         real sigma_l;           // Longitudinal diffusion coefficient
         real sigma_t;           // Transversal diffusion coefficient
         real fiber_orientation; // Fiber angle with respect to the x-axis (in degrees)
+        bool is_fiber_aligned;  // Whether the fiber orientation is aligned with the grid
 
         // Simulation parameters
         real total_time;

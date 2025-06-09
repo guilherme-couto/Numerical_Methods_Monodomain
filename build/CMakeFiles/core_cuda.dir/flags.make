@@ -6,5 +6,5 @@ CUDA_DEFINES = -DUSE_CUDA
 
 CUDA_INCLUDES = --options-file CMakeFiles/core_cuda.dir/includes_CUDA.rsp
 
-CUDA_FLAGS = -O3 -Xcompiler=-march=native -finline-functions -std=c++17 "--generate-code=arch=compute_89,code=[compute_89,sm_89]"
+CUDA_FLAGS = -O3 --use_fast_math --fmad=true -Xcompiler "-O3 -march=native -ffast-math -funroll-loops -fno-trapping-math"  -std=c++17 "--generate-code=arch=compute_89,code=[compute_89,sm_89]"
 

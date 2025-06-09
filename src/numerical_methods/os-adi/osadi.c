@@ -5,7 +5,7 @@
 #include "../numerical_methods.h"
 #include "../numerical_methods_helpers.h"
 
-void runOSADI(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
+void runOSADI(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const real *Dxx, const real *Dyy, const real *Dxy)
 {
     // Unpack configuration parameters
     const int M = config->M;
@@ -14,6 +14,7 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
     const real delta_t = config->dt;
     const real delta_x = config->dx;
     const real delta_y = config->dy;
+    const bool is_aligned = config->is_fiber_aligned;
     const int numberOfStimuli = config->stimulus_count;
     const Stimulus *stimuli = config->stimuli;
 
@@ -147,7 +148,7 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
             // Solve the linear system
             startLSTime = omp_get_wtime();
 
-            tridiagonalSystemSolver_y(Ny, ls_rhs, result, c_prime, d_prime, thomas_coeff_y, elements, j, Nx);
+            tridiagonalSystemSolver_y(Ny, ls_rhs, result, c_prime, d_prime, thomas_coeff_y, Dyy, j, Nx);
 
             // Update with the result
             for (i = 0; i < Ny; i++)
@@ -174,7 +175,7 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
             // Solve the linear system
             startLSTime = omp_get_wtime();
 
-            tridiagonalSystemSolver_x(Nx, ls_rhs, result, c_prime, d_prime, thomas_coeff_x, elements, i);
+            tridiagonalSystemSolver_x(Nx, ls_rhs, result, c_prime, d_prime, thomas_coeff_x, Dxx, i);
 
             // Update with the result
             for (j = 0; j < Nx; j++)

@@ -279,10 +279,10 @@ void saveCopyOfSimulationConfig(const char *ini_file_path, const char *output_di
 }
 
 // Basic Thomas algorithm for solving tridiagonal systems
-void tridiagonalSystemSolver_x(const int Nx, real *rhs, real *result, real *c_prime, real *d_prime, const real phi_x, const ElementProperties *elements, const int sys_idx)
+void tridiagonalSystemSolver_x(const int Nx, real *rhs, real *result, real *c_prime, real *d_prime, const real phi_x, const real *Dxx, const int sys_idx)
 {
     real denom;
-    real coeff = phi_x * elements[sys_idx].D_xx;
+    real coeff = phi_x * Dxx[sys_idx];
     real lalc = -coeff;
     real lb = 1.0f + coeff; // Coefficient for the first element
 
@@ -291,7 +291,7 @@ void tridiagonalSystemSolver_x(const int Nx, real *rhs, real *result, real *c_pr
 
     for (int i = 1; i < Nx; i++)
     {
-        coeff = phi_x * elements[sys_idx + i].D_xx;
+        coeff = phi_x * Dxx[sys_idx + i];
         
         lalc = -coeff;
         lb = (i < Nx - 1) ? 1.0f + 2.0f * coeff : 1.0f + coeff; // Last element has a different coefficient
@@ -309,10 +309,10 @@ void tridiagonalSystemSolver_x(const int Nx, real *rhs, real *result, real *c_pr
     }
 }
 
-void tridiagonalSystemSolver_y(const int Ny, real *rhs, real *result, real *c_prime, real *d_prime, const real phi_y, const ElementProperties *elements, const int sys_idx, const int Nx)
+void tridiagonalSystemSolver_y(const int Ny, real *rhs, real *result, real *c_prime, real *d_prime, const real phi_y, const real *Dyy, const int sys_idx, const int Nx)
 {
     real denom;
-    real coeff = phi_y * elements[sys_idx].D_yy;
+    real coeff = phi_y * Dyy[sys_idx];
     real lalc = -coeff;
     real lb = 1.0f + coeff; // Coefficient for the first element
 
@@ -321,7 +321,7 @@ void tridiagonalSystemSolver_y(const int Ny, real *rhs, real *result, real *c_pr
 
     for (int i = 1; i < Ny; i++)
     {
-        coeff = phi_y * elements[sys_idx + Nx * i].D_yy;
+        coeff = phi_y * Dyy[sys_idx + Nx * i];
         
         lalc = -coeff;
         lb = (i < Ny - 1) ? 1.0f + 2.0f * coeff : 1.0f + coeff; // Last element has a different coefficient
@@ -450,7 +450,7 @@ real calculateNorm2Error(real *Vm, real *exact, int Nx, int Ny, real totalTime, 
     return sqrt(sum / (Nx * Ny));
 }
 
-void initializeElementsProperties(const SimulationConfig *config, ElementProperties *elements_properties)
+void initializeProperties(const SimulationConfig *config, real *Dxx, real *Dyy, real *Dxy)
 {
     // Unpack parameters from the config
     const int Nx = config->Nx;
@@ -459,19 +459,15 @@ void initializeElementsProperties(const SimulationConfig *config, ElementPropert
     const real sigma_t = config->sigma_t;
     const real fiber_orientation_rad = config->fiber_orientation * _PI / 180.0f;
 
-    printf("Endereço de elements_properties: %p\n", (void*)elements_properties);
     for (int idx = 0; idx < Nx * Ny; idx++)
     {
-        // Initialize the cell phenotype
-        elements_properties[idx].cell_phenotype = CELL_PHENOTYPE_ENDO; // Default value, can be changed later
-
         // Calculate the diffusion coefficients based on the fiber orientation
         // D_xx = (sigma_l - sigma_t) * cos^2(theta) + sigma_t
         // D_yy = (sigma_l - sigma_t) * sin^2(theta) + sigma_t
         // D_xy = (sigma_l - sigma_t) * sin(theta) * cos(theta)
-        elements_properties[idx].D_xx = (sigma_l - sigma_t) * cos(fiber_orientation_rad) * cos(fiber_orientation_rad) + sigma_t;
-        elements_properties[idx].D_yy = (sigma_l - sigma_t) * sin(fiber_orientation_rad) * sin(fiber_orientation_rad) + sigma_t;
-        elements_properties[idx].D_xy = (sigma_l - sigma_t) * sin(fiber_orientation_rad) * cos(fiber_orientation_rad);
+        Dxx[idx] = (sigma_l - sigma_t) * cos(fiber_orientation_rad) * cos(fiber_orientation_rad) + sigma_t;
+        Dyy[idx] = (sigma_l - sigma_t) * sin(fiber_orientation_rad) * sin(fiber_orientation_rad) + sigma_t;
+        Dxy[idx] = (sigma_l - sigma_t) * sin(fiber_orientation_rad) * cos(fiber_orientation_rad);
     }
 }
 

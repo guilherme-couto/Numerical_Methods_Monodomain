@@ -11,9 +11,9 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
-set(CMAKE_C_FLAGS_RELEASE "-O3 -march=native -finline-functions")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -finline-functions")
-set(CMAKE_CUDA_FLAGS_RELEASE "-O3 -Xcompiler=-march=native -finline-functions")
+set(CMAKE_C_FLAGS_RELEASE "-O3 -march=native -ffast-math -funroll-loops -fno-trapping-math")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -ffast-math -funroll-loops -fno-trapping-math")
+set(CMAKE_CUDA_FLAGS_RELEASE "-O3 --use_fast_math --fmad=true -Xcompiler \"-O3 -march=native -ffast-math -funroll-loops -fno-trapping-math\" ")
 
 # === Build options ===
 option(USE_CUDA "Enable CUDA support" ON)

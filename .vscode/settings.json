@@ -15,7 +15,9 @@
         "cpu_functions.h": "c",
         "stdlib.h": "c",
         "simulation_helpers.h": "c",
-        "numerical_methods_helpers.h": "c"
+        "numerical_methods_helpers.h": "c",
+        "unistd.h": "c",
+        "mv.cuh": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

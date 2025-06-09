@@ -5,7 +5,7 @@
 #include "../numerical_methods.h"
 #include "../numerical_methods_helpers.h"
 
-void runFE(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
+void runFE(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const real *Dxx, const real *Dyy, const real *Dxy)
 {
     // Unpack configuration parameters
     const int M = config->M;
@@ -14,6 +14,7 @@ void runFE(const SimulationConfig *config, Measurement *measurement, const real 
     const real delta_t = config->dt;
     const real delta_x = config->dx;
     const real delta_y = config->dy;
+    const bool is_aligned = config->is_fiber_aligned;
     const int numberOfStimuli = config->stimulus_count;
     const Stimulus *stimuli = config->stimuli;
 
@@ -98,7 +99,7 @@ void runFE(const SimulationConfig *config, Measurement *measurement, const real 
                            : (0.0f);
 
                 // Update variables explicitly
-                diff_term = compute_diffusion_term_anisotropic(Vm, elements, i, j, Nx, Ny, delta_x, delta_y);
+                diff_term = select_compute_diffusion_term(is_aligned, Vm, Dxx, Dyy, Dxy, i, j, Nx, Ny, delta_x, delta_y);
 
                 RHS[idx] = actualVm + delta_t * ((diff_term * denom_chiCm) + stim - compute_dVmdt(actualVm, actualsV));
 

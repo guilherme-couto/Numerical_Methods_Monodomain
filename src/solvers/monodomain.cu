@@ -24,7 +24,15 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
     {
         ERRORMSG("Number of state variables (%d) exceeds the maximum allowed (%d).", cell_model_solver->n_state_vars, MAX_NSV);
         free(time_array);
-        return -3;
+        return -2;
+    }
+
+    // If Nx or Ny is greater than MAX_SYS_SIZE, print an error message and exit
+    if (config->Nx > MAX_SYS_SIZE || config->Ny > MAX_SYS_SIZE)
+    {
+        ERRORMSG("Nx (%d) or Ny (%d) is greater than the maximum system allowed for Thomas (%d).", config->Nx, config->Ny, MAX_SYS_SIZE);
+        free(time_array);
+        return -2;
     }
     
     // Allocate and initialize state variables arrays
@@ -33,9 +41,19 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
     real *sV = (real *)malloc(total_points * cell_model_solver->n_state_vars * sizeof(real));
     cell_model_solver->initialize(Vm, sV, config->Nx, config->Ny);
 
-    // Allocate and initialize elements properties arrays
-    ElementProperties *elements_properties = (ElementProperties *)malloc(total_points * sizeof(ElementProperties));
-    initializeElementsProperties(config, elements_properties);
+    // Allocate and initialize diffusion coefficients arrays
+    real *Dxx = (real *)malloc(total_points * sizeof(real));
+    real *Dyy = (real *)malloc(total_points * sizeof(real));
+    real *Dxy = (real *)malloc(total_points * sizeof(real));
+    if (Dxx == NULL || Dyy == NULL || Dxy == NULL)
+    {
+        ERRORMSG("Failed to allocate memory for diffusion coefficients.");
+        free(time_array);
+        free(Vm);
+        free(sV);
+        return -3;
+    }
+    initializeProperties(config, Dxx, Dyy, Dxy);
     
     // Run the simulation based on the selected method
     numerical_method_t run_method = get_numerical_method_CUDA(&config->method);
@@ -45,12 +63,14 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
         free(time_array);
         free(Vm);
         free(sV);
-        free(elements_properties);
-        return -2;
+        free(Dxx);
+        free(Dyy);
+        free(Dxy);
+        return -4;
     }
     
     // Run the selected method
-    run_method(config, &measurement, time_array, cell_model_solver, Vm, sV, elements_properties);
+    run_method(config, &measurement, time_array, cell_model_solver, Vm, sV, Dxx, Dyy, Dxy);
     
     // Save last frame
     if (config->save_last_frame)
@@ -82,7 +102,9 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
     free(time_array);
     free(Vm);
     free(sV);
-    free(elements_properties);
+    free(Dxx);
+    free(Dyy);
+    free(Dxy);
 
     // Save simulation information
     saveSimulationInfos(config, &measurement);

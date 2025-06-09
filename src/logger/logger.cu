@@ -26,6 +26,7 @@ __host__ void log_device_info(FILE *log_file)
         fprintf(log_file, "  Device %d: %s\n", i, prop.name);
         fprintf(log_file, "    Compute Capability : %d.%d\n", prop.major, prop.minor);
         fprintf(log_file, "    Global Memory (GB) : %.2f\n", prop.totalGlobalMem / (1024.0 * 1024.0 * 1024.0));
+        fprintf(log_file, "    Shared Memory (KB) : %d\n", prop.sharedMemPerBlock / 1024);
         fprintf(log_file, "    Multiprocessors    : %d\n", prop.multiProcessorCount);
         fprintf(log_file, "    Clock Rate (MHz)   : %.2f\n", prop.clockRate / 1000.0);
     }

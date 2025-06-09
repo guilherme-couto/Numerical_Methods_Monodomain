@@ -5,7 +5,7 @@
 #include "../numerical_methods.h"
 #include "../numerical_methods_helpers.h"
 
-void runSSIADI(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
+void runSSIADI(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const real *Dxx, const real *Dyy, const real *Dxy)
 {
     // Unpack configuration parameters
     const int M = config->M;
@@ -14,6 +14,7 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
     const real delta_t = config->dt;
     const real delta_x = config->dx;
     const real delta_y = config->dy;
+    const bool is_aligned = config->is_fiber_aligned;
     const int numberOfStimuli = config->stimulus_count;
     const Stimulus *stimuli = config->stimuli;
 
@@ -126,7 +127,7 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
                            : (0.0f);
 
                 // Calculate aproximation with RK2 -> Vmn+1/2 = Vmn + 0.5*dt*(diffusion + R(Vmn, sV))
-                diff_term = compute_diffusion_term_anisotropic(Vm, elements, i, j, Nx, Ny, delta_x, delta_y);
+                diff_term = select_compute_diffusion_term(is_aligned, Vm, Dxx, Dyy, Dxy, i, j, Nx, Ny, delta_x, delta_y);
                 Vmtilde = actualVm + 0.5f * delta_t * ((diff_term * denom_chiCm) + stim - compute_dVmdt(actualVm, actualsV));
 
                 // Calculate approximation for state variables and prepare part of the RHS of the following linear systems
@@ -153,14 +154,14 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
             {
                 idx = i * Nx + j;
                 actualVm = Vm[idx];
-                diff_term = compute_diffusion_term_x_axis(Vm, elements, i, j, Nx, Ny, delta_x, delta_y);
+                diff_term = select_compute_diffusion_term_x(is_aligned, Vm, Dxx, Dxy, i, j, Nx, Ny, delta_x, delta_y);
                 ls_rhs[i] = actualVm + 0.5f * delta_t * ((diff_term * denom_chiCm) + reaction[idx]);
             }
 
             // Solve the linear system
             startLSTime = omp_get_wtime();
 
-            tridiagonalSystemSolver_y(Ny, ls_rhs, result, c_prime, d_prime, thomas_coeff_y, elements, j, Nx);
+            tridiagonalSystemSolver_y(Ny, ls_rhs, result, c_prime, d_prime, thomas_coeff_y, Dyy, j, Nx);
 
             // Update with the result
             for (i = 0; i < Ny; i++)
@@ -183,14 +184,14 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
             {
                 idx = i * Nx + j;
                 actualVm = auxVm[idx];
-                diff_term = compute_diffusion_term_y_axis(auxVm, elements, i, j, Nx, Ny, delta_x, delta_y);
+                diff_term = select_compute_diffusion_term_y(is_aligned, auxVm, Dyy, Dxy, i, j, Nx, Ny, delta_x, delta_y);
                 ls_rhs[j] = actualVm + 0.5f * delta_t * ((diff_term * denom_chiCm) + reaction[idx]);
             }
 
             // Solve the linear system
             startLSTime = omp_get_wtime();
 
-            tridiagonalSystemSolver_x(Nx, ls_rhs, result, c_prime, d_prime, thomas_coeff_x, elements, i);
+            tridiagonalSystemSolver_x(Nx, ls_rhs, result, c_prime, d_prime, thomas_coeff_x, Dxx, i);
 
             // Update with the result
             for (j = 0; j < Nx; j++)

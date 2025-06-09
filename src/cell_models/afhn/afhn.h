@@ -32,13 +32,6 @@ extern "C"
         }
     }
 
-#if defined(__CUDACC__)
-    __device__ void d_get_actual_sV_AFHN(real *actualsV, const real *sV, const int idx);
-    __device__ real d_compute_dVmdt_AFHN(const real Vm, const real *sV);
-    __device__ void d_update_sVtilde_AFHN(real *sVtilde, const real Vm, const real *rhs_sV, const real delta_t);
-    __device__ void d_update_sV_AFHN(real *sV, const real *rhs_sV, const real dSdt_Vm, const real *dSdt_sV, const real delta_t, const int idx);
-#endif
-
     // Model parameters - Based on Gerardo_Giorda 2007
     // #define sigma 1.2e-3f // omega^-1 * cm^-1
     // #define chi 1.0e3f    // cm^-1

@@ -1,13 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/core_cuda.dir/cmake_device_link.o"
-  "CMakeFiles/core_cuda.dir/src/cell_models/afhn/afhn.cu.o"
-  "CMakeFiles/core_cuda.dir/src/cell_models/afhn/afhn.cu.o.d"
-  "CMakeFiles/core_cuda.dir/src/cell_models/cell_models.cu.o"
-  "CMakeFiles/core_cuda.dir/src/cell_models/cell_models.cu.o.d"
-  "CMakeFiles/core_cuda.dir/src/cell_models/minimal_ventricular/mv.cu.o"
-  "CMakeFiles/core_cuda.dir/src/cell_models/minimal_ventricular/mv.cu.o.d"
-  "CMakeFiles/core_cuda.dir/src/cell_models/tt2/tt2.cu.o"
-  "CMakeFiles/core_cuda.dir/src/cell_models/tt2/tt2.cu.o.d"
   "CMakeFiles/core_cuda.dir/src/logger/logger.cu.o"
   "CMakeFiles/core_cuda.dir/src/logger/logger.cu.o.d"
   "CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o"

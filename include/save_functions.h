@@ -9,6 +9,7 @@ extern "C" {
 
 // Prototypes for saving functions
 void save_as_vtk(const char *file_path, const real *data, const int Nx, const int Ny, const real delta_x, const real delta_y);
+void save_as_vtu(const char *file_path, const real *data, const int Nx, const int Ny, const real delta_x, const real delta_y);
 void save_as_txt(const char *file_path, const real *data, const int Nx, const int Ny, const real delta_x, const real delta_y);
 
 typedef void (*save_function_t)(const char *, const real *, const int, const int, const real, const real);

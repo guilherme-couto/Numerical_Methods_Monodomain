@@ -9,7 +9,7 @@
 #define DO_THETA 0.5f
 #endif // DO_THETA
 
-void runDO(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
+void runDO(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const real *Dxx, const real *Dyy, const real *Dxy)
 {
     // Unpack configuration parameters
     const int M = config->M;
@@ -18,6 +18,7 @@ void runDO(const SimulationConfig *config, Measurement *measurement, const real 
     const real delta_t = config->dt;
     const real delta_x = config->dx;
     const real delta_y = config->dy;
+    const bool is_aligned = config->is_fiber_aligned;
     const int numberOfStimuli = config->stimulus_count;
     const Stimulus *stimuli = config->stimuli;
 
@@ -130,7 +131,7 @@ void runDO(const SimulationConfig *config, Measurement *measurement, const real 
                            : (0.0f);
 
                 // Calculate aproximation with RK2 -> Vmn+1/2 = Vmn + 0.5*dt*(diffusion + R(Vmn, sV))
-                diff_term = compute_diffusion_term_anisotropic(Vm, elements, i, j, Nx, Ny, delta_x, delta_y);
+                diff_term = select_compute_diffusion_term(is_aligned, Vm, Dxx, Dyy, Dxy, i, j, Nx, Ny, delta_x, delta_y);
                 dVmdt = compute_dVmdt(actualVm, actualsV);
                 Vmtilde = actualVm + 0.5f * delta_t * ((diff_term * denom_chiCm) + stim - dVmdt);
 
@@ -158,7 +159,7 @@ void runDO(const SimulationConfig *config, Measurement *measurement, const real 
             {
                 idx = i * Nx + j;
                 prevY = Y[idx];
-                diff_term = compute_diffusion_term_x_axis(Vm, elements, i, j, Nx, Ny, delta_x, delta_y);
+                diff_term = select_compute_diffusion_term_x(is_aligned, Vm, Dxx, Dxy, i, j, Nx, Ny, delta_x, delta_y);
 
                 // Y_1 = Y_0 + theta * dt * F_1(t_n-1, U_n-1) -> 0 represents the first step and 1 represents the x-axis
                 ls_rhs[j] = prevY - DO_THETA * delta_t * diff_term * denom_chiCm;
@@ -167,7 +168,7 @@ void runDO(const SimulationConfig *config, Measurement *measurement, const real 
             // Solve the linear system
             startLSTime = omp_get_wtime();
 
-            tridiagonalSystemSolver_x(Nx, ls_rhs, result, c_prime, d_prime, thomas_coeff_x, elements, i);
+            tridiagonalSystemSolver_x(Nx, ls_rhs, result, c_prime, d_prime, thomas_coeff_x, Dxx, i);
 
             // Update with the result
             for (j = 0; j < Nx; j++)
@@ -190,7 +191,7 @@ void runDO(const SimulationConfig *config, Measurement *measurement, const real 
             {
                 idx = i * Nx + j;
                 prevY = auxVm[idx];
-                diff_term = compute_diffusion_term_y_axis(Vm, elements, i, j, Nx, Ny, delta_x, delta_y);
+                diff_term = select_compute_diffusion_term_y(is_aligned, Vm, Dyy, Dxy, i, j, Nx, Ny, delta_x, delta_y);
 
                 // Y_2 = Y_1 + theta * dt * F_2(t_n-1, U_n-1) -> 1 represents the x-axis and 2 represents the y-axis
                 ls_rhs[i] = prevY - DO_THETA * delta_t * diff_term * denom_chiCm;
@@ -199,7 +200,7 @@ void runDO(const SimulationConfig *config, Measurement *measurement, const real 
             // Solve the linear system
             startLSTime = omp_get_wtime();
 
-            tridiagonalSystemSolver_y(Ny, ls_rhs, result, c_prime, d_prime, thomas_coeff_y, elements, j, Nx);
+            tridiagonalSystemSolver_y(Ny, ls_rhs, result, c_prime, d_prime, thomas_coeff_y, Dyy, j, Nx);
 
             // Update with the result
             for (i = 0; i < Ny; i++)

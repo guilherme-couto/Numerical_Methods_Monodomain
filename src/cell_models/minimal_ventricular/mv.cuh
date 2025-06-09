@@ -1,16 +1,27 @@
+#ifndef MV_CUH
+#define MV_CUH
+
+#if defined __CUDACC__
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "mv.h"
 
 // MV solver functions
-__device__ void d_get_actual_sV_MV(real *actualsV, const real *sV, const int idx)
+__forceinline__ __device__ void d_get_actual_sV_MV(real *actualsV, const real *sV, const int idx)
 {
     const int idx_sv = idx * MV_NSV;
+    #pragma unroll
     for (int i = 0; i < MV_NSV; i++)
     {
         actualsV[i] = sV[idx_sv + i];
     }
 }
 
-__device__ real d_compute_dVmdt_MV(const real Vm, const real *sV)
+__forceinline__ __device__ real d_compute_dVmdt_MV(const real Vm, const real *sV)
 {
     // Extract state variables
     const real v = sV[0];
@@ -38,7 +49,7 @@ __device__ real d_compute_dVmdt_MV(const real Vm, const real *sV)
     return J_fi + J_so + J_si;
 }
 
-__device__ void d_update_sVtilde_MV(real *sVtilde, const real Vm, const real *rhs_sV, const real delta_t)
+__forceinline__ __device__ void d_update_sVtilde_MV(real *sVtilde, const real Vm, const real *rhs_sV, const real delta_t)
 {
     // Extract state variables
     const real v = rhs_sV[0];
@@ -87,7 +98,7 @@ __device__ void d_update_sVtilde_MV(real *sVtilde, const real Vm, const real *rh
                      : s + delta_t * (s_inf_RL - s) / tau_s;
 }
 
-__device__ void d_update_sV_MV(real *sV, const real *rhs_sV, const real dSdt_Vm, const real *dSdt_sV, const real delta_t, const int idx)
+__forceinline__ __device__ void d_update_sV_MV(real *sV, const real *rhs_sV, const real dSdt_Vm, const real *dSdt_sV, const real delta_t, const int idx)
 {
     // Create a local copy of the state variables to avoid aliasing
     const real local_rhs[MV_NSV] = {rhs_sV[0], rhs_sV[1], rhs_sV[2]};
@@ -143,3 +154,11 @@ __device__ void d_update_sV_MV(real *sV, const real *rhs_sV, const real dSdt_Vm,
                          ? s_inf_RL - (s_inf_RL - s) * exp(-delta_t / tau_s)
                          : s + delta_t * (s_inf_RL - dSdt_s) / tau_s;
 }
+
+#endif // __CUDACC__
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // MV_CUH

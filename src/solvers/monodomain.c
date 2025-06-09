@@ -25,17 +25,19 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
     real *sV = (real *)malloc(total_points * cell_model_solver->n_state_vars * sizeof(real));
     cell_model_solver->initialize(Vm, sV, config->Nx, config->Ny);
 
-    // Allocate and initialize elements properties arrays
-    ElementProperties *elements_properties = (ElementProperties *)malloc(total_points * sizeof(ElementProperties));
-    if (elements_properties == NULL)
+    // Allocate and initialize diffusion coefficients arrays
+    real *Dxx = (real *)malloc(total_points * sizeof(real));
+    real *Dyy = (real *)malloc(total_points * sizeof(real));
+    real *Dxy = (real *)malloc(total_points * sizeof(real));
+    if (Dxx == NULL || Dyy == NULL || Dxy == NULL)
     {
-        ERRORMSG("Failed to allocate memory for elements properties.");
+        ERRORMSG("Failed to allocate memory for diffusion coefficients.");
         free(time_array);
         free(Vm);
         free(sV);
-        return -1;
+        return -2;
     }
-    initializeElementsProperties(config, elements_properties);
+    initializeProperties(config, Dxx, Dyy, Dxy);
 
     // Run the simulation based on the selected method
     numerical_method_t run_method = get_numerical_method(&config->method);
@@ -45,12 +47,14 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
         free(time_array);
         free(Vm);
         free(sV);
-        free(elements_properties);
-        return -2;
+        free(Dxx);
+        free(Dyy);
+        free(Dxy);
+        return -3;
     }
     
     // Run the selected method
-    run_method(config, &measurement, time_array, cell_model_solver, Vm, sV, elements_properties);
+    run_method(config, &measurement, time_array, cell_model_solver, Vm, sV, Dxx, Dyy, Dxy);
 
     // Save last frame
     if (config->save_last_frame)
@@ -78,7 +82,9 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
     free(time_array);
     free(Vm);
     free(sV);
-    free(elements_properties);
+    free(Dxx);
+    free(Dyy);
+    free(Dxy);
 
     // Save simulation information
     saveSimulationInfos(config, &measurement);

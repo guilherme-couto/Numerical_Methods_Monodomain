@@ -46,7 +46,7 @@ static __global__ void prepareRHS(const int Nx, const int Ny, const real delta_t
 }
 
 static __global__ void parallelThomas_x(const int numSys, const int sysSize, real *d_rhs,
-                                        const real phi_x, const ElementProperties *d_elements)
+                                        const real phi_x, const real *d_Dxx)
 {
     // Obtain the index of the thread - each thread will handle a system
     const int sysIdx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -57,9 +57,9 @@ static __global__ void parallelThomas_x(const int numSys, const int sysSize, rea
         // Local variables
         real c_prime[MAX_SYS_SIZE];
         real d_prime[MAX_SYS_SIZE];
-    
+
         real denom;
-        real coeff = phi_x * d_elements[offset].D_xx;
+        real coeff = phi_x * d_Dxx[offset];
         real lalc = -coeff;
         real lb = 1.0f + coeff; // Coefficient for the first element
 
@@ -68,7 +68,7 @@ static __global__ void parallelThomas_x(const int numSys, const int sysSize, rea
 
         for (int i = 1; i < sysSize; i++)
         {
-            coeff = phi_x * d_elements[offset + i].D_xx;
+            coeff = phi_x * d_Dxx[offset + i];
 
             lalc = -coeff;
             lb = (i < sysSize - 1) ? 1.0f + 2.0f * coeff : 1.0f + coeff; // Last element has a different coefficient
@@ -86,7 +86,7 @@ static __global__ void parallelThomas_x(const int numSys, const int sysSize, rea
 }
 
 static __global__ void parallelThomas_y(const int numSys, const int sysSize, real *d_rhs,
-                                        const real phi_y, const ElementProperties *d_elements)
+                                        const real phi_y, const real *d_Dyy)
 {
     // Obtain the index of the thread - each thread will handle a system
     const int sysIdx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -98,7 +98,7 @@ static __global__ void parallelThomas_y(const int numSys, const int sysSize, rea
         real d_prime[MAX_SYS_SIZE];
 
         real denom;
-        real coeff = phi_y * d_elements[sysIdx].D_yy;
+        real coeff = phi_y * d_Dyy[sysIdx];
         real lalc = -coeff;
         real lb = 1.0f + coeff; // Coefficient for the first element
 
@@ -107,7 +107,7 @@ static __global__ void parallelThomas_y(const int numSys, const int sysSize, rea
 
         for (int i = 1; i < sysSize; i++)
         {
-            coeff = phi_y * d_elements[sysIdx + numSys * i].D_yy;
+            coeff = phi_y * d_Dyy[sysIdx + numSys * i];
 
             lalc = -coeff;
             lb = (i < sysSize - 1) ? 1.0f + 2.0f * coeff : 1.0f + coeff; // Last element has a different coefficient
@@ -125,7 +125,7 @@ static __global__ void parallelThomas_y(const int numSys, const int sysSize, rea
 }
 
 void runOSADI_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array,
-                   const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
+                   const CellModelSolver *cell_model_solver, real *Vm, real *sV, const real *Dxx, const real *Dyy, const real *Dxy)
 {
     // Unpack configuration parameters
     const int M = config->M;
@@ -165,18 +165,22 @@ void runOSADI_CUDA(const SimulationConfig *config, Measurement *measurement, con
     // Create device variables, allocate memory on device, and copy data
     real *d_Vm, *d_sV;
     Stimulus *d_stimuli;
-    ElementProperties *d_elements;
+    real *d_Dxx, *d_Dyy, *d_Dxy;
     const int total_points = Nx * Ny;
 
     CUDA_CALL(cudaMalloc(&d_Vm, total_points * sizeof(real)));
     CUDA_CALL(cudaMalloc(&d_sV, total_points * cell_model_solver->n_state_vars * sizeof(real)));
     CUDA_CALL(cudaMalloc(&d_stimuli, numberOfStimuli * sizeof(Stimulus)));
-    CUDA_CALL(cudaMalloc(&d_elements, total_points * sizeof(ElementProperties)));
+    CUDA_CALL(cudaMalloc(&d_Dxx, total_points * sizeof(real)));
+    CUDA_CALL(cudaMalloc(&d_Dyy, total_points * sizeof(real)));
+    CUDA_CALL(cudaMalloc(&d_Dxy, total_points * sizeof(real)));
 
     CUDA_CALL(cudaMemcpy(d_Vm, Vm, total_points * sizeof(real), cudaMemcpyHostToDevice));
     CUDA_CALL(cudaMemcpy(d_sV, sV, total_points * cell_model_solver->n_state_vars * sizeof(real), cudaMemcpyHostToDevice));
     CUDA_CALL(cudaMemcpy(d_stimuli, stimuli, numberOfStimuli * sizeof(Stimulus), cudaMemcpyHostToDevice));
-    CUDA_CALL(cudaMemcpy(d_elements, elements, total_points * sizeof(ElementProperties), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(d_Dxx, Dxx, total_points * sizeof(real), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(d_Dyy, Dyy, total_points * sizeof(real), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(d_Dxy, Dxy, total_points * sizeof(real), cudaMemcpyHostToDevice));
 
     // Auxiliary variables for the operations
     real *d_reaction;
@@ -267,7 +271,7 @@ void runOSADI_CUDA(const SimulationConfig *config, Measurement *measurement, con
 
         startLSTime = omp_get_wtime();
 
-        parallelThomas_y<<<gridSize_x, THOMAS_KERNEL_BLOCK_SIZE>>>(Nx, Ny, d_Vm, thomas_coeff_y, d_elements);
+        parallelThomas_y<<<gridSize_x, THOMAS_KERNEL_BLOCK_SIZE>>>(Nx, Ny, d_Vm, thomas_coeff_y, d_Dyy);
         CUDA_CALL(cudaDeviceSynchronize());
 
         elapsedTime1stLS += omp_get_wtime() - startLSTime;
@@ -280,7 +284,7 @@ void runOSADI_CUDA(const SimulationConfig *config, Measurement *measurement, con
 
         startLSTime = omp_get_wtime();
 
-        parallelThomas_x<<<gridSize_y, THOMAS_KERNEL_BLOCK_SIZE>>>(Ny, Nx, d_Vm, thomas_coeff_x, d_elements);
+        parallelThomas_x<<<gridSize_y, THOMAS_KERNEL_BLOCK_SIZE>>>(Ny, Nx, d_Vm, thomas_coeff_x, d_Dxx);
         CUDA_CALL(cudaDeviceSynchronize());
 
         elapsedTime2ndLS += omp_get_wtime() - startLSTime;
@@ -337,6 +341,8 @@ void runOSADI_CUDA(const SimulationConfig *config, Measurement *measurement, con
     CUDA_CALL(cudaFree(d_Vm));
     CUDA_CALL(cudaFree(d_sV));
     CUDA_CALL(cudaFree(d_stimuli));
-    CUDA_CALL(cudaFree(d_elements));
+    CUDA_CALL(cudaFree(d_Dxx));
+    CUDA_CALL(cudaFree(d_Dyy));
+    CUDA_CALL(cudaFree(d_Dxy));
     CUDA_CALL(cudaFree(d_reaction));
 }

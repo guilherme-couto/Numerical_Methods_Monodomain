@@ -8,7 +8,7 @@
 
 static __global__ void computeReactionApproxAndUpdateSV(const int Nx, const int Ny, const real delta_t, const real delta_x, const real delta_y,
                                                         const real actualTime, const int num_active_stimuli, const Stimulus *d_active_stimuli,
-                                                        const real *d_Vm, real *d_sV, real *d_reaction, const ElementProperties *d_elements, const CellModel cell_model, const real denom_chiCm)
+                                                        const real *d_Vm, real *d_sV, real *d_reaction, const real *d_Dxx, const real *d_Dyy, const real *d_Dxy, const CellModel cell_model, const real denom_chiCm, const bool is_aligned)
 {
     // Obtain the thread index
     const int i = blockIdx.y * blockDim.y + threadIdx.y;
@@ -29,7 +29,8 @@ static __global__ void computeReactionApproxAndUpdateSV(const int Nx, const int 
         const real stim = get_stimulus_value(actualTime, i, j, d_active_stimuli, num_active_stimuli);
 
         // Calculate aproximation with RK2 -> Vmn+1/2 = Vmn + 0.5*dt*(diffusion + R(Vmn, sVn))
-        const real diff_term = compute_diffusion_term_anisotropic(d_Vm, d_elements, i, j, Nx, Ny, delta_x, delta_y);
+        const real diff_term = select_compute_diffusion_term(is_aligned, d_Vm, d_Dxx, d_Dyy, d_Dxy, i, j, Nx, Ny, delta_x, delta_y);
+
         const real Vmtilde = actualVm_center + 0.5f * delta_t * ((diff_term * denom_chiCm) + stim - select_compute_dVmdt(cell_model, actualVm_center, d_actualsV));
 
         // Calculate approximation for state variables and prepare part of the RHS of the following linear systems
@@ -42,7 +43,7 @@ static __global__ void computeReactionApproxAndUpdateSV(const int Nx, const int 
 }
 
 static __global__ void prepareRHS_x(const int Nx, const int Ny, const real delta_x, const real delta_y, const real delta_t, const real *d_Vm,
-                                    const real *d_reaction, real *d_auxVm, const ElementProperties *d_elements, const real denom_chiCm)
+                                    const real *d_reaction, real *d_auxVm, const real *d_Dxx, const real *d_Dxy, const real denom_chiCm, const bool is_aligned)
 {
     // Obtain the thread index
     const int i = blockIdx.y * blockDim.y + threadIdx.y;
@@ -53,13 +54,13 @@ static __global__ void prepareRHS_x(const int Nx, const int Ny, const real delta
     {
         // Calculate the RHS of the linear system with explicit diffusion term along x
         const real Vm_center = d_Vm[idx];
-        const real diff_term = compute_diffusion_term_x_axis(d_Vm, d_elements, i, j, Nx, Ny, delta_x, delta_y);
+        const real diff_term = select_compute_diffusion_term_x(is_aligned, d_Vm, d_Dxx, d_Dxy, i, j, Nx, Ny, delta_x, delta_y);
         d_auxVm[idx] = Vm_center + 0.5f * delta_t * ((diff_term * denom_chiCm) + d_reaction[idx]);
     }
 }
 
 static __global__ void prepareRHS_y(const int Nx, const int Ny, const real delta_x, const real delta_y, const real delta_t, const real *d_Vm,
-                                    const real *d_reaction, real *d_auxVm, const ElementProperties *d_elements, const real denom_chiCm)
+                                    const real *d_reaction, real *d_auxVm, const real *d_Dyy, const real *d_Dxy, const real denom_chiCm, const bool is_aligned)
 {
     // Obtain the thread index
     const int i = blockIdx.y * blockDim.y + threadIdx.y;
@@ -70,13 +71,13 @@ static __global__ void prepareRHS_y(const int Nx, const int Ny, const real delta
     {
         // Calculate the RHS of the linear system with the explicit diffusion term along y
         const real Vm_center = d_Vm[idx];
-        const real diff_term = compute_diffusion_term_y_axis(d_Vm, d_elements, i, j, Nx, Ny, delta_x, delta_y);
+        const real diff_term = select_compute_diffusion_term_y(is_aligned, d_Vm, d_Dyy, d_Dxy, i, j, Nx, Ny, delta_x, delta_y);
         d_auxVm[idx] = Vm_center + 0.5f * delta_t * ((diff_term * denom_chiCm) + d_reaction[idx]);
     }
 }
 
 static __global__ void parallelThomas_x(const int numSys, const int sysSize, real *d_rhs,
-                                        const real phi_x, const ElementProperties *d_elements)
+                                        const real phi_x, const real *d_Dxx)
 {
     // Obtain the index of the thread - each thread will handle a system
     const int sysIdx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -89,7 +90,7 @@ static __global__ void parallelThomas_x(const int numSys, const int sysSize, rea
         real d_prime[MAX_SYS_SIZE];
 
         real denom;
-        real coeff = phi_x * d_elements[offset].D_xx;
+        real coeff = phi_x * d_Dxx[offset];
         real lalc = -coeff;
         real lb = 1.0f + coeff; // Coefficient for the first element
 
@@ -98,7 +99,7 @@ static __global__ void parallelThomas_x(const int numSys, const int sysSize, rea
 
         for (int i = 1; i < sysSize; i++)
         {
-            coeff = phi_x * d_elements[offset + i].D_xx;
+            coeff = phi_x * d_Dxx[offset + i];
 
             lalc = -coeff;
             lb = (i < sysSize - 1) ? 1.0f + 2.0f * coeff : 1.0f + coeff; // Last element has a different coefficient
@@ -116,7 +117,7 @@ static __global__ void parallelThomas_x(const int numSys, const int sysSize, rea
 }
 
 static __global__ void parallelThomas_y(const int numSys, const int sysSize, real *d_rhs,
-                                        const real phi_y, const ElementProperties *d_elements)
+                                        const real phi_y, const real *d_Dyy)
 {
     // Obtain the index of the thread - each thread will handle a system
     const int sysIdx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -128,7 +129,7 @@ static __global__ void parallelThomas_y(const int numSys, const int sysSize, rea
         real d_prime[MAX_SYS_SIZE];
 
         real denom;
-        real coeff = phi_y * d_elements[sysIdx].D_yy;
+        real coeff = phi_y * d_Dyy[sysIdx];
         real lalc = -coeff;
         real lb = 1.0f + coeff; // Coefficient for the first element
 
@@ -137,7 +138,7 @@ static __global__ void parallelThomas_y(const int numSys, const int sysSize, rea
 
         for (int i = 1; i < sysSize; i++)
         {
-            coeff = phi_y * d_elements[sysIdx + numSys * i].D_yy;
+            coeff = phi_y * d_Dyy[sysIdx + numSys * i];
 
             lalc = -coeff;
             lb = (i < sysSize - 1) ? 1.0f + 2.0f * coeff : 1.0f + coeff; // Last element has a different coefficient
@@ -201,7 +202,7 @@ static __global__ void parallelThomas_y(const int numSys, const int sysSize, rea
 //     }
 // }
 
-void runSSIADI_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
+void runSSIADI_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver, real *Vm, real *sV, const real *Dxx, const real *Dyy, const real *Dxy)
 {
     // Unpack configuration parameters
     const int M = config->M;
@@ -210,6 +211,7 @@ void runSSIADI_CUDA(const SimulationConfig *config, Measurement *measurement, co
     const real delta_t = config->dt;
     const real delta_x = config->dx;
     const real delta_y = config->dy;
+    const bool is_aligned = config->is_fiber_aligned;
     const int numberOfStimuli = config->stimulus_count;
     const Stimulus *stimuli = config->stimuli;
 
@@ -241,18 +243,22 @@ void runSSIADI_CUDA(const SimulationConfig *config, Measurement *measurement, co
     // Create device variables, allocate memory on device, and copy data
     real *d_Vm, *d_sV;
     Stimulus *d_stimuli;
-    ElementProperties *d_elements;
+    real *d_Dxx, *d_Dyy, *d_Dxy;
     const int total_points = Nx * Ny;
 
     CUDA_CALL(cudaMalloc(&d_Vm, total_points * sizeof(real)));
     CUDA_CALL(cudaMalloc(&d_sV, total_points * cell_model_solver->n_state_vars * sizeof(real)));
     CUDA_CALL(cudaMalloc(&d_stimuli, numberOfStimuli * sizeof(Stimulus)));
-    CUDA_CALL(cudaMalloc(&d_elements, total_points * sizeof(ElementProperties)));
+    CUDA_CALL(cudaMalloc(&d_Dxx, total_points * sizeof(real)));
+    CUDA_CALL(cudaMalloc(&d_Dyy, total_points * sizeof(real)));
+    CUDA_CALL(cudaMalloc(&d_Dxy, total_points * sizeof(real)));
 
     CUDA_CALL(cudaMemcpy(d_Vm, Vm, total_points * sizeof(real), cudaMemcpyHostToDevice));
     CUDA_CALL(cudaMemcpy(d_sV, sV, total_points * cell_model_solver->n_state_vars * sizeof(real), cudaMemcpyHostToDevice));
     CUDA_CALL(cudaMemcpy(d_stimuli, stimuli, numberOfStimuli * sizeof(Stimulus), cudaMemcpyHostToDevice));
-    CUDA_CALL(cudaMemcpy(d_elements, elements, total_points * sizeof(ElementProperties), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(d_Dxx, Dxx, total_points * sizeof(real), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(d_Dyy, Dyy, total_points * sizeof(real), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(d_Dxy, Dxy, total_points * sizeof(real), cudaMemcpyHostToDevice));
 
     // Auxiliary variables for the operations
     real *d_reaction, *d_auxVm;
@@ -330,7 +336,7 @@ void runSSIADI_CUDA(const SimulationConfig *config, Measurement *measurement, co
 
         // Launch kernel to compute the reaction term and update state variables
         computeReactionApproxAndUpdateSV<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, delta_t, delta_x, delta_y, actualTime, numberOfStimuli, d_stimuli,
-                                                                                      d_Vm, d_sV, d_reaction, d_elements, cell_model, denom_chiCm);
+                                                                                      d_Vm, d_sV, d_reaction, d_Dxx, d_Dyy, d_Dxy, cell_model, denom_chiCm, is_aligned);
         CUDA_CALL(cudaDeviceSynchronize());
 
         elapsedTime1stPart += omp_get_wtime() - startTime;
@@ -341,12 +347,12 @@ void runSSIADI_CUDA(const SimulationConfig *config, Measurement *measurement, co
         // =======================================================
         startTime = omp_get_wtime();
 
-        prepareRHS_x<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, delta_x, delta_y, delta_t, d_Vm, d_reaction, d_auxVm, d_elements, denom_chiCm);
+        prepareRHS_x<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, delta_x, delta_y, delta_t, d_Vm, d_reaction, d_auxVm, d_Dxx, d_Dxy, denom_chiCm, is_aligned);
         CUDA_CALL(cudaDeviceSynchronize());
 
         startLSTime = omp_get_wtime();
 
-        parallelThomas_y<<<gridSize_x, THOMAS_KERNEL_BLOCK_SIZE>>>(Nx, Ny, d_auxVm, thomas_coeff_y, d_elements);
+        parallelThomas_y<<<gridSize_x, THOMAS_KERNEL_BLOCK_SIZE>>>(Nx, Ny, d_auxVm, thomas_coeff_y, d_Dyy);
         CUDA_CALL(cudaDeviceSynchronize());
 
         elapsedTime1stLS += omp_get_wtime() - startLSTime;
@@ -355,12 +361,12 @@ void runSSIADI_CUDA(const SimulationConfig *config, Measurement *measurement, co
         //  Calculate Vm at n+1 -> Result goes to d_Vm
         //  diffusion implicit in x and explicit in y
         // =====================================================
-        prepareRHS_y<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, delta_x, delta_y, delta_t, d_auxVm, d_reaction, d_Vm, d_elements, denom_chiCm);
+        prepareRHS_y<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, delta_x, delta_y, delta_t, d_auxVm, d_reaction, d_Vm, d_Dyy, d_Dxy, denom_chiCm, is_aligned);
         CUDA_CALL(cudaDeviceSynchronize());
 
         startLSTime = omp_get_wtime();
 
-        parallelThomas_x<<<gridSize_y, THOMAS_KERNEL_BLOCK_SIZE>>>(Ny, Nx, d_Vm, thomas_coeff_x, d_elements);
+        parallelThomas_x<<<gridSize_y, THOMAS_KERNEL_BLOCK_SIZE>>>(Ny, Nx, d_Vm, thomas_coeff_x, d_Dxx);
         CUDA_CALL(cudaDeviceSynchronize());
 
         elapsedTime2ndLS += omp_get_wtime() - startLSTime;
@@ -417,7 +423,9 @@ void runSSIADI_CUDA(const SimulationConfig *config, Measurement *measurement, co
     CUDA_CALL(cudaFree(d_Vm));
     CUDA_CALL(cudaFree(d_sV));
     CUDA_CALL(cudaFree(d_stimuli));
-    CUDA_CALL(cudaFree(d_elements));
+    CUDA_CALL(cudaFree(d_Dxx));
+    CUDA_CALL(cudaFree(d_Dyy));
+    CUDA_CALL(cudaFree(d_Dxy));
     CUDA_CALL(cudaFree(d_reaction));
     CUDA_CALL(cudaFree(d_auxVm));
 }

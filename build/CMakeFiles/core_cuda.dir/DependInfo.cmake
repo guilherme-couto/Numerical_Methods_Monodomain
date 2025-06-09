@@ -8,10 +8,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models/afhn/afhn.cu" "CMakeFiles/core_cuda.dir/src/cell_models/afhn/afhn.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/cell_models/afhn/afhn.cu.o.d"
-  "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models/cell_models.cu" "CMakeFiles/core_cuda.dir/src/cell_models/cell_models.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/cell_models/cell_models.cu.o.d"
-  "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models/minimal_ventricular/mv.cu" "CMakeFiles/core_cuda.dir/src/cell_models/minimal_ventricular/mv.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/cell_models/minimal_ventricular/mv.cu.o.d"
-  "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models/tt2/tt2.cu" "CMakeFiles/core_cuda.dir/src/cell_models/tt2/tt2.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/cell_models/tt2/tt2.cu.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger/logger.cu" "CMakeFiles/core_cuda.dir/src/logger/logger.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/logger/logger.cu.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/douglas/do.cu" "CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/forward_euler/fe.cu" "CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o.d"

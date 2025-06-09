@@ -8,7 +8,7 @@
 
 static __global__ void solveAndUpdateSV(const int Nx, const int Ny, const real delta_t, const real delta_x, const real delta_y,
                                         const real actualTime, const int num_active_stimuli, const Stimulus *d_active_stimuli,
-                                        const real *d_Vm, real *d_sV, real *d_RHS, const ElementProperties *d_elements, const CellModel cell_model, const real denom_chiCm)
+                                        const real *d_Vm, real *d_sV, real *d_RHS, const real *d_Dxx, const real *d_Dyy, const real *d_Dxy, const CellModel cell_model, const real denom_chiCm, const bool is_aligned)
 {
     // Obtain the thread index
     const int i = blockIdx.y * blockDim.y + threadIdx.y;
@@ -28,7 +28,7 @@ static __global__ void solveAndUpdateSV(const int Nx, const int Ny, const real d
         const real stim = get_stimulus_value(actualTime, i, j, d_active_stimuli, num_active_stimuli);
 
         // Update variables explicitly
-        const real diff_term = compute_diffusion_term_anisotropic(d_Vm, d_elements, i, j, Nx, Ny, delta_x, delta_y);
+        const real diff_term = select_compute_diffusion_term(is_aligned, d_Vm, d_Dxx, d_Dyy, d_Dxy, i, j, Nx, Ny, delta_x, delta_y);
 
         d_RHS[idx] = actualVm + delta_t * ((diff_term * denom_chiCm) + stim - select_compute_dVmdt(cell_model, actualVm, d_actualsV));
 
@@ -38,7 +38,7 @@ static __global__ void solveAndUpdateSV(const int Nx, const int Ny, const real d
 }
 
 void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array,
-                const CellModelSolver *cell_model_solver, real *Vm, real *sV, const ElementProperties *elements)
+                const CellModelSolver *cell_model_solver, real *Vm, real *sV, const real *Dxx, const real *Dyy, const real *Dxy)
 {
     // Unpack configuration parameters
     const int M = config->M;
@@ -47,6 +47,7 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
     const real delta_t = config->dt;
     const real delta_x = config->dx;
     const real delta_y = config->dy;
+    const bool is_aligned = config->is_fiber_aligned;
     const int numberOfStimuli = config->stimulus_count;
     const Stimulus *stimuli = config->stimuli;
 
@@ -78,18 +79,22 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
     // Create device variables, allocate memory on device, and copy data
     real *d_Vm, *d_sV;
     Stimulus *d_stimuli;
-    ElementProperties *d_elements;
+    real *d_Dxx, *d_Dyy, *d_Dxy;
     const int total_points = Nx * Ny;
 
     CUDA_CALL(cudaMalloc(&d_Vm, total_points * sizeof(real)));
     CUDA_CALL(cudaMalloc(&d_sV, total_points * cell_model_solver->n_state_vars * sizeof(real)));
     CUDA_CALL(cudaMalloc(&d_stimuli, numberOfStimuli * sizeof(Stimulus)));
-    CUDA_CALL(cudaMalloc(&d_elements, total_points * sizeof(ElementProperties)));
+    CUDA_CALL(cudaMalloc(&d_Dxx, total_points * sizeof(real)));
+    CUDA_CALL(cudaMalloc(&d_Dyy, total_points * sizeof(real)));
+    CUDA_CALL(cudaMalloc(&d_Dxy, total_points * sizeof(real)));
 
     CUDA_CALL(cudaMemcpy(d_Vm, Vm, total_points * sizeof(real), cudaMemcpyHostToDevice));
     CUDA_CALL(cudaMemcpy(d_sV, sV, total_points * cell_model_solver->n_state_vars * sizeof(real), cudaMemcpyHostToDevice));
     CUDA_CALL(cudaMemcpy(d_stimuli, stimuli, numberOfStimuli * sizeof(Stimulus), cudaMemcpyHostToDevice));
-    CUDA_CALL(cudaMemcpy(d_elements, elements, total_points * sizeof(ElementProperties), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(d_Dxx, Dxx, total_points * sizeof(real), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(d_Dyy, Dyy, total_points * sizeof(real), cudaMemcpyHostToDevice));
+    CUDA_CALL(cudaMemcpy(d_Dxy, Dxy, total_points * sizeof(real), cudaMemcpyHostToDevice));
 
     // Auxiliary variables for the operations
     real *d_RHS;
@@ -149,7 +154,7 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
 
         // Launch kernel to compute the reaction term and update state variables
         solveAndUpdateSV<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, delta_t, delta_x, delta_y, actualTime, numberOfStimuli, d_stimuli,
-                                                                      d_Vm, d_sV, d_RHS, d_elements, cell_model, denom_chiCm);
+                                                                      d_Vm, d_sV, d_RHS, d_Dxx, d_Dyy, d_Dxy, cell_model, denom_chiCm, is_aligned);
         CUDA_CALL(cudaDeviceSynchronize());
 
         elapsedTime1stPart += omp_get_wtime() - startTime;
@@ -209,6 +214,8 @@ void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const 
     CUDA_CALL(cudaFree(d_Vm));
     CUDA_CALL(cudaFree(d_sV));
     CUDA_CALL(cudaFree(d_stimuli));
-    CUDA_CALL(cudaFree(d_elements));
+    CUDA_CALL(cudaFree(d_Dxx));
+    CUDA_CALL(cudaFree(d_Dyy));
+    CUDA_CALL(cudaFree(d_Dxy));
     CUDA_CALL(cudaFree(d_RHS));
 }

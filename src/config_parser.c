@@ -112,7 +112,11 @@ static int config_parser_handler(void *user, const char *section, const char *na
     else if (MATCH("simulation", "sigma_t"))
         config->sigma_t = te_interp_no_comments(value, 0);
     else if (MATCH("simulation", "fiber_orientation"))
+    {
         config->fiber_orientation = te_interp_no_comments(value, 0);
+        if (config->fiber_orientation != 0.0f && config->fiber_orientation != 90.0f && config->fiber_orientation != 180.0f && config->fiber_orientation != 270.0f)
+            config->is_fiber_aligned = false;
+    }
     else if (MATCH("simulation", "total_time"))
         config->total_time = te_interp_no_comments(value, 0);
     else if (MATCH("simulation", "length_x"))
@@ -210,6 +214,7 @@ int load_simulation_config(const char *filename, SimulationConfig *config)
     config->sigma_l = -1.0f;
     config->sigma_t = -1.0f;
     config->fiber_orientation = 0.0f;
+    config->is_fiber_aligned = true;
     config->total_time = -1.0;
     config->Lx = -1.0f;
     config->Ly = -1.0f;
