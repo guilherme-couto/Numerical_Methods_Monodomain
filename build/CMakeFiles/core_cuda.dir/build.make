@@ -87,11 +87,26 @@ CMakeFiles/core_cuda.dir/src/logger/logger.cu.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CUDA source to assembly CMakeFiles/core_cuda.dir/src/logger/logger.cu.s"
 	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_ASSEMBLY_SOURCE
 
+CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o: CMakeFiles/core_cuda.dir/flags.make
+CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o: CMakeFiles/core_cuda.dir/includes_CUDA.rsp
+CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/conjugate_gradient/cg.cu
+CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o: CMakeFiles/core_cuda.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CUDA object CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o"
+	/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o -MF CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o.d -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/conjugate_gradient/cg.cu -o CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o
+
+CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CUDA source to CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.i"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_PREPROCESSED_SOURCE
+
+CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CUDA source to assembly CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.s"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_ASSEMBLY_SOURCE
+
 CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o: CMakeFiles/core_cuda.dir/flags.make
 CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o: CMakeFiles/core_cuda.dir/includes_CUDA.rsp
 CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/douglas/do.cu
 CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o: CMakeFiles/core_cuda.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CUDA object CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CUDA object CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o"
 	/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o -MF CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o.d -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/douglas/do.cu -o CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o
 
 CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.i: cmake_force
@@ -106,7 +121,7 @@ CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o: CMakeFiles
 CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o: CMakeFiles/core_cuda.dir/includes_CUDA.rsp
 CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/forward_euler/fe.cu
 CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o: CMakeFiles/core_cuda.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CUDA object CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CUDA object CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o"
 	/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o -MF CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o.d -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/forward_euler/fe.cu -o CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o
 
 CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.i: cmake_force
@@ -121,7 +136,7 @@ CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o: CMake
 CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o: CMakeFiles/core_cuda.dir/includes_CUDA.rsp
 CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/hundsdorfer-verwer/hv.cu
 CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o: CMakeFiles/core_cuda.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CUDA object CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CUDA object CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o"
 	/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o -MF CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o.d -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/hundsdorfer-verwer/hv.cu -o CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o
 
 CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.i: cmake_force
@@ -136,7 +151,7 @@ CMakeFiles/core_cuda.dir/src/numerical_methods/os-adi/osadi.cu.o: CMakeFiles/cor
 CMakeFiles/core_cuda.dir/src/numerical_methods/os-adi/osadi.cu.o: CMakeFiles/core_cuda.dir/includes_CUDA.rsp
 CMakeFiles/core_cuda.dir/src/numerical_methods/os-adi/osadi.cu.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/os-adi/osadi.cu
 CMakeFiles/core_cuda.dir/src/numerical_methods/os-adi/osadi.cu.o: CMakeFiles/core_cuda.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CUDA object CMakeFiles/core_cuda.dir/src/numerical_methods/os-adi/osadi.cu.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CUDA object CMakeFiles/core_cuda.dir/src/numerical_methods/os-adi/osadi.cu.o"
 	/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/core_cuda.dir/src/numerical_methods/os-adi/osadi.cu.o -MF CMakeFiles/core_cuda.dir/src/numerical_methods/os-adi/osadi.cu.o.d -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/os-adi/osadi.cu -o CMakeFiles/core_cuda.dir/src/numerical_methods/os-adi/osadi.cu.o
 
 CMakeFiles/core_cuda.dir/src/numerical_methods/os-adi/osadi.cu.i: cmake_force
@@ -151,7 +166,7 @@ CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.o: CMakeFiles/c
 CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.o: CMakeFiles/core_cuda.dir/includes_CUDA.rsp
 CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/ssi-adi/ssiadi.cu
 CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.o: CMakeFiles/core_cuda.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CUDA object CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CUDA object CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.o"
 	/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.o -MF CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.o.d -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/ssi-adi/ssiadi.cu -o CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.o
 
 CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.i: cmake_force
@@ -166,7 +181,7 @@ CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.o: CMakeFiles/core_cuda.dir/f
 CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.o: CMakeFiles/core_cuda.dir/includes_CUDA.rsp
 CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/solvers/monodomain.cu
 CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.o: CMakeFiles/core_cuda.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CUDA object CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CUDA object CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.o"
 	/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.o -MF CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.o.d -x cu -rdc=true -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/solvers/monodomain.cu -o CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.o
 
 CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.i: cmake_force
@@ -180,6 +195,7 @@ CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.s: cmake_force
 # Object files for target core_cuda
 core_cuda_OBJECTS = \
 "CMakeFiles/core_cuda.dir/src/logger/logger.cu.o" \
+"CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o" \
 "CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o" \
 "CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o" \
 "CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o" \
@@ -191,6 +207,7 @@ core_cuda_OBJECTS = \
 core_cuda_EXTERNAL_OBJECTS =
 
 CMakeFiles/core_cuda.dir/cmake_device_link.o: CMakeFiles/core_cuda.dir/src/logger/logger.cu.o
+CMakeFiles/core_cuda.dir/cmake_device_link.o: CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o
 CMakeFiles/core_cuda.dir/cmake_device_link.o: CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o
 CMakeFiles/core_cuda.dir/cmake_device_link.o: CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o
 CMakeFiles/core_cuda.dir/cmake_device_link.o: CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o
@@ -201,7 +218,7 @@ CMakeFiles/core_cuda.dir/cmake_device_link.o: CMakeFiles/core_cuda.dir/build.mak
 CMakeFiles/core_cuda.dir/cmake_device_link.o: CMakeFiles/core_cuda.dir/deviceLinkLibs.rsp
 CMakeFiles/core_cuda.dir/cmake_device_link.o: CMakeFiles/core_cuda.dir/deviceObjects1.rsp
 CMakeFiles/core_cuda.dir/cmake_device_link.o: CMakeFiles/core_cuda.dir/dlink.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CUDA device code CMakeFiles/core_cuda.dir/cmake_device_link.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CUDA device code CMakeFiles/core_cuda.dir/cmake_device_link.o"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/core_cuda.dir/dlink.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -211,6 +228,7 @@ CMakeFiles/core_cuda.dir/build: CMakeFiles/core_cuda.dir/cmake_device_link.o
 # Object files for target core_cuda
 core_cuda_OBJECTS = \
 "CMakeFiles/core_cuda.dir/src/logger/logger.cu.o" \
+"CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o" \
 "CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o" \
 "CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o" \
 "CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o" \
@@ -222,6 +240,7 @@ core_cuda_OBJECTS = \
 core_cuda_EXTERNAL_OBJECTS =
 
 libcore_cuda.a: CMakeFiles/core_cuda.dir/src/logger/logger.cu.o
+libcore_cuda.a: CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o
 libcore_cuda.a: CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o
 libcore_cuda.a: CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o
 libcore_cuda.a: CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o
@@ -231,7 +250,7 @@ libcore_cuda.a: CMakeFiles/core_cuda.dir/src/solvers/monodomain.cu.o
 libcore_cuda.a: CMakeFiles/core_cuda.dir/build.make
 libcore_cuda.a: CMakeFiles/core_cuda.dir/cmake_device_link.o
 libcore_cuda.a: CMakeFiles/core_cuda.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CUDA static library libcore_cuda.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CUDA static library libcore_cuda.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/core_cuda.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/core_cuda.dir/link.txt --verbose=$(VERBOSE)
 

@@ -59,7 +59,7 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
     numerical_method_t run_method = get_numerical_method_CUDA(&config->method);
     if (run_method == NULL)
     {
-        ERRORMSG("Invalid numerical method selected.");
+        ERRORMSG("Invalid CUDA numerical method selected.");
         free(time_array);
         free(Vm);
         free(sV);

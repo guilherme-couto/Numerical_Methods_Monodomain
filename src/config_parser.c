@@ -91,6 +91,8 @@ static int config_parser_handler(void *user, const char *section, const char *na
             config->method = METHOD_DO;
         else if (strstr(lower_value, "hv"))
             config->method = METHOD_HV;
+        else if (strstr(lower_value, "cg"))
+            config->method = METHOD_CG;
         else
             config->method = METHOD_INVALID;
     }

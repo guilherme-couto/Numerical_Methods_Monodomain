@@ -393,7 +393,7 @@ int saveSimulationInfos(const SimulationConfig *config, const Measurement *measu
         fprintf(fpInfos, "TIME TO SOLVE THE 2nd LINEAR SYSTEM = %.5g s\n", measurement->elapsedTime2ndLS);
     }
 
-    if (config->method == METHOD_HV)
+    else if (config->method == METHOD_HV)
     {
         fprintf(fpInfos, "TIME TO COMPUTE THE APPROXIMATION = %.5g s\n", measurement->elapsedTimeApproximation);
         fprintf(fpInfos, "TIME TO SOLVE THE 3rd LINEAR SYSTEM = %.5g s\n", measurement->elapsedTime3rdLS);

@@ -212,10 +212,24 @@ CMakeFiles/core_c.dir/src/cell_models/tt2/tt2.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/core_c.dir/src/cell_models/tt2/tt2.c.s"
 	/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/cell_models/tt2/tt2.c -o CMakeFiles/core_c.dir/src/cell_models/tt2/tt2.c.s
 
+CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.o: CMakeFiles/core_c.dir/flags.make
+CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/conjugate_gradient/cg.c
+CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.o: CMakeFiles/core_c.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.o"
+	/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.o -MF CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.o.d -o CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/conjugate_gradient/cg.c
+
+CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.i"
+	/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/conjugate_gradient/cg.c > CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.i
+
+CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.s"
+	/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/conjugate_gradient/cg.c -o CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.s
+
 CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o: CMakeFiles/core_c.dir/flags.make
 CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/douglas/do.c
 CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o: CMakeFiles/core_c.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o"
 	/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o -MF CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o.d -o CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/douglas/do.c
 
 CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.i: cmake_force
@@ -229,7 +243,7 @@ CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.s: cmake_force
 CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o: CMakeFiles/core_c.dir/flags.make
 CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/forward_euler/fe.c
 CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o: CMakeFiles/core_c.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o"
 	/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o -MF CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o.d -o CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/forward_euler/fe.c
 
 CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.i: cmake_force
@@ -243,7 +257,7 @@ CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.s: cmake_force
 CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.o: CMakeFiles/core_c.dir/flags.make
 CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/hundsdorfer-verwer/hv.c
 CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.o: CMakeFiles/core_c.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.o"
 	/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.o -MF CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.o.d -o CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/hundsdorfer-verwer/hv.c
 
 CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.i: cmake_force
@@ -257,7 +271,7 @@ CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.s: cmake_for
 CMakeFiles/core_c.dir/src/numerical_methods/numerical_methods.c.o: CMakeFiles/core_c.dir/flags.make
 CMakeFiles/core_c.dir/src/numerical_methods/numerical_methods.c.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/numerical_methods.c
 CMakeFiles/core_c.dir/src/numerical_methods/numerical_methods.c.o: CMakeFiles/core_c.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object CMakeFiles/core_c.dir/src/numerical_methods/numerical_methods.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object CMakeFiles/core_c.dir/src/numerical_methods/numerical_methods.c.o"
 	/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/core_c.dir/src/numerical_methods/numerical_methods.c.o -MF CMakeFiles/core_c.dir/src/numerical_methods/numerical_methods.c.o.d -o CMakeFiles/core_c.dir/src/numerical_methods/numerical_methods.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/numerical_methods.c
 
 CMakeFiles/core_c.dir/src/numerical_methods/numerical_methods.c.i: cmake_force
@@ -271,7 +285,7 @@ CMakeFiles/core_c.dir/src/numerical_methods/numerical_methods.c.s: cmake_force
 CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.o: CMakeFiles/core_c.dir/flags.make
 CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/os-adi/osadi.c
 CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.o: CMakeFiles/core_c.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building C object CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.o"
 	/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.o -MF CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.o.d -o CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/os-adi/osadi.c
 
 CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.i: cmake_force
@@ -285,7 +299,7 @@ CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.s: cmake_force
 CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.o: CMakeFiles/core_c.dir/flags.make
 CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/ssi-adi/ssiadi.c
 CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.o: CMakeFiles/core_c.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building C object CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building C object CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.o"
 	/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.o -MF CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.o.d -o CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/ssi-adi/ssiadi.c
 
 CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.i: cmake_force
@@ -299,7 +313,7 @@ CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.s: cmake_force
 CMakeFiles/core_c.dir/src/logger/logger.c.o: CMakeFiles/core_c.dir/flags.make
 CMakeFiles/core_c.dir/src/logger/logger.c.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger/logger.c
 CMakeFiles/core_c.dir/src/logger/logger.c.o: CMakeFiles/core_c.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building C object CMakeFiles/core_c.dir/src/logger/logger.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building C object CMakeFiles/core_c.dir/src/logger/logger.c.o"
 	/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/core_c.dir/src/logger/logger.c.o -MF CMakeFiles/core_c.dir/src/logger/logger.c.o.d -o CMakeFiles/core_c.dir/src/logger/logger.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger/logger.c
 
 CMakeFiles/core_c.dir/src/logger/logger.c.i: cmake_force
@@ -313,7 +327,7 @@ CMakeFiles/core_c.dir/src/logger/logger.c.s: cmake_force
 CMakeFiles/core_c.dir/src/solvers/monodomain.c.o: CMakeFiles/core_c.dir/flags.make
 CMakeFiles/core_c.dir/src/solvers/monodomain.c.o: /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/solvers/monodomain.c
 CMakeFiles/core_c.dir/src/solvers/monodomain.c.o: CMakeFiles/core_c.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building C object CMakeFiles/core_c.dir/src/solvers/monodomain.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building C object CMakeFiles/core_c.dir/src/solvers/monodomain.c.o"
 	/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/core_c.dir/src/solvers/monodomain.c.o -MF CMakeFiles/core_c.dir/src/solvers/monodomain.c.o.d -o CMakeFiles/core_c.dir/src/solvers/monodomain.c.o -c /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/solvers/monodomain.c
 
 CMakeFiles/core_c.dir/src/solvers/monodomain.c.i: cmake_force
@@ -336,6 +350,7 @@ core_c_OBJECTS = \
 "CMakeFiles/core_c.dir/src/cell_models/cell_models.c.o" \
 "CMakeFiles/core_c.dir/src/cell_models/minimal_ventricular/mv.c.o" \
 "CMakeFiles/core_c.dir/src/cell_models/tt2/tt2.c.o" \
+"CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.o" \
 "CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o" \
 "CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o" \
 "CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.o" \
@@ -358,6 +373,7 @@ libcore_c.a: CMakeFiles/core_c.dir/src/cell_models/afhn/afhn.c.o
 libcore_c.a: CMakeFiles/core_c.dir/src/cell_models/cell_models.c.o
 libcore_c.a: CMakeFiles/core_c.dir/src/cell_models/minimal_ventricular/mv.c.o
 libcore_c.a: CMakeFiles/core_c.dir/src/cell_models/tt2/tt2.c.o
+libcore_c.a: CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.o
 libcore_c.a: CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o
 libcore_c.a: CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o
 libcore_c.a: CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.o
@@ -368,7 +384,7 @@ libcore_c.a: CMakeFiles/core_c.dir/src/logger/logger.c.o
 libcore_c.a: CMakeFiles/core_c.dir/src/solvers/monodomain.c.o
 libcore_c.a: CMakeFiles/core_c.dir/build.make
 libcore_c.a: CMakeFiles/core_c.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Linking C static library libcore_c.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Linking C static library libcore_c.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/core_c.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/core_c.dir/link.txt --verbose=$(VERBOSE)
 

@@ -2,6 +2,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/core_cuda.dir/cmake_device_link.o"
   "CMakeFiles/core_cuda.dir/src/logger/logger.cu.o"
   "CMakeFiles/core_cuda.dir/src/logger/logger.cu.o.d"
+  "CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o"
+  "CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o.d"
   "CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o"
   "CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o.d"
   "CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o"

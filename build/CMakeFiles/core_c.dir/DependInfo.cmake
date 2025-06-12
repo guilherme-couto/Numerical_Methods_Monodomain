@@ -18,6 +18,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/config_parser.c" "CMakeFiles/core_c.dir/src/config_parser.c.o" "gcc" "CMakeFiles/core_c.dir/src/config_parser.c.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger/logger.c" "CMakeFiles/core_c.dir/src/logger/logger.c.o" "gcc" "CMakeFiles/core_c.dir/src/logger/logger.c.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/main.c" "CMakeFiles/core_c.dir/src/main.c.o" "gcc" "CMakeFiles/core_c.dir/src/main.c.o.d"
+  "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/conjugate_gradient/cg.c" "CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.o" "gcc" "CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/douglas/do.c" "CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o" "gcc" "CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/forward_euler/fe.c" "CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o" "gcc" "CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/hundsdorfer-verwer/hv.c" "CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.o" "gcc" "CMakeFiles/core_c.dir/src/numerical_methods/hundsdorfer-verwer/hv.c.o.d"

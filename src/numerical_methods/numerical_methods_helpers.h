@@ -13,6 +13,7 @@ extern "C"
 #endif
 
 #define HARMONIC_MEAN(a, b) (2.0f * (a) * (b) / ((a) + (b)))
+#define ARITHMETIC_MEAN(a, b) (((a) + (b)) * 0.5f)
 
 // Function to get the stimulus value at a given time and position
 MODIFIERS real get_stimulus_value(const real actualTime, const int i, const int j, const Stimulus *stimuli, const int numberOfStimuli)

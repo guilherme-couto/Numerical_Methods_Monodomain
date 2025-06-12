@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/logger/logger.cu" "CMakeFiles/core_cuda.dir/src/logger/logger.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/logger/logger.cu.o.d"
+  "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/conjugate_gradient/cg.cu" "CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/douglas/do.cu" "CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/forward_euler/fe.cu" "CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/numerical_methods/forward_euler/fe.cu.o.d"
   "/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/src/numerical_methods/hundsdorfer-verwer/hv.cu" "CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o" "gcc" "CMakeFiles/core_cuda.dir/src/numerical_methods/hundsdorfer-verwer/hv.cu.o.d"

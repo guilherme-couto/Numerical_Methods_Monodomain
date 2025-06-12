@@ -27,11 +27,11 @@ extern "C"
     // #define Cm 0.185f    // Membrane capacitance (uF/cm^2)
     // #define sigma 1.171f // Diffusion coefficient (cm^2/s)
 
-#define R 8314.472f      // Universal gas constant (J/(kmol*K))
-#define T 310.0f         // Temperature (K)
-#define F 96485.3415f    // Faraday's constant (C/mol)
-#define RTONF 26.713761f // R*T/F
-#define FONRT 0.037434f  // F/(R*T)
+#define R_TT2 8314.472f      // Universal gas constant (J/(kmol*K))
+#define T_TT2 310.0f         // Temperature (K)
+#define F_TT2 96485.3415f    // Faraday's constant (C/mol)
+#define RTONF 26.713761f     // R*T/F
+#define FONRT 0.037434f      // F/(R*T)
 
 // Intracellular volumes
 #define V_C 0.016404f    // Cellular volume -> (???) [16404 um^3]
@@ -80,7 +80,7 @@ extern "C"
 #define K_mCa 1.38f        // Half-saturation constant of I_NaCa for intracellular Ca++ -> mM
 #define K_mNa_i 87.5f      // Half-saturation constant of I_NaCa for intracellular Na+ -> mM
 #define k_sat 0.1f         // Saturation factor for I_NaCa -> dimensionless
-#define alpha 2.5f         // Factor enhancing outward nature of I_NaCa -> dimensionless
+#define alpha_TT2 2.5f         // Factor enhancing outward nature of I_NaCa -> dimensionless
 #define P_NaK 2.724f       // Maximal I_NaK (Na+/K+ pump current) -> pA/pF
 #define K_mK 1.0f          // Half-saturation constant of I_NaK for Ko -> mM
 #define K_mNa 40.0f        // Half-saturation constant of I_NaK for intracellular Na+ -> mM

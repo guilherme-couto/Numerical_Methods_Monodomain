@@ -19,6 +19,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/core_c.dir/src/logger/logger.c.o.d"
   "CMakeFiles/core_c.dir/src/main.c.o"
   "CMakeFiles/core_c.dir/src/main.c.o.d"
+  "CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.o"
+  "CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.o.d"
   "CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o"
   "CMakeFiles/core_c.dir/src/numerical_methods/douglas/do.c.o.d"
   "CMakeFiles/core_c.dir/src/numerical_methods/forward_euler/fe.c.o"

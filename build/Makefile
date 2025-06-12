@@ -422,6 +422,54 @@ src/main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/monodomain_simulation.dir/build.make CMakeFiles/monodomain_simulation.dir/src/main.c.s
 .PHONY : src/main.c.s
 
+src/numerical_methods/conjugate_gradient/cg.o: src/numerical_methods/conjugate_gradient/cg.c.o
+.PHONY : src/numerical_methods/conjugate_gradient/cg.o
+
+# target to build an object file
+src/numerical_methods/conjugate_gradient/cg.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.o
+.PHONY : src/numerical_methods/conjugate_gradient/cg.c.o
+
+src/numerical_methods/conjugate_gradient/cg.i: src/numerical_methods/conjugate_gradient/cg.c.i
+.PHONY : src/numerical_methods/conjugate_gradient/cg.i
+
+# target to preprocess a source file
+src/numerical_methods/conjugate_gradient/cg.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.i
+.PHONY : src/numerical_methods/conjugate_gradient/cg.c.i
+
+src/numerical_methods/conjugate_gradient/cg.s: src/numerical_methods/conjugate_gradient/cg.c.s
+.PHONY : src/numerical_methods/conjugate_gradient/cg.s
+
+# target to generate assembly for a file
+src/numerical_methods/conjugate_gradient/cg.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/conjugate_gradient/cg.c.s
+.PHONY : src/numerical_methods/conjugate_gradient/cg.c.s
+
+src/numerical_methods/conjugate_gradient/cg.o: src/numerical_methods/conjugate_gradient/cg.cu.o
+.PHONY : src/numerical_methods/conjugate_gradient/cg.o
+
+# target to build an object file
+src/numerical_methods/conjugate_gradient/cg.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.o
+.PHONY : src/numerical_methods/conjugate_gradient/cg.cu.o
+
+src/numerical_methods/conjugate_gradient/cg.i: src/numerical_methods/conjugate_gradient/cg.cu.i
+.PHONY : src/numerical_methods/conjugate_gradient/cg.i
+
+# target to preprocess a source file
+src/numerical_methods/conjugate_gradient/cg.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.i
+.PHONY : src/numerical_methods/conjugate_gradient/cg.cu.i
+
+src/numerical_methods/conjugate_gradient/cg.s: src/numerical_methods/conjugate_gradient/cg.cu.s
+.PHONY : src/numerical_methods/conjugate_gradient/cg.s
+
+# target to generate assembly for a file
+src/numerical_methods/conjugate_gradient/cg.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.s
+.PHONY : src/numerical_methods/conjugate_gradient/cg.cu.s
+
 src/numerical_methods/douglas/do.o: src/numerical_methods/douglas/do.c.o
 .PHONY : src/numerical_methods/douglas/do.o
 
@@ -802,6 +850,12 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/numerical_methods/conjugate_gradient/cg.o"
+	@echo "... src/numerical_methods/conjugate_gradient/cg.i"
+	@echo "... src/numerical_methods/conjugate_gradient/cg.s"
+	@echo "... src/numerical_methods/conjugate_gradient/cg.o"
+	@echo "... src/numerical_methods/conjugate_gradient/cg.i"
+	@echo "... src/numerical_methods/conjugate_gradient/cg.s"
 	@echo "... src/numerical_methods/douglas/do.o"
 	@echo "... src/numerical_methods/douglas/do.i"
 	@echo "... src/numerical_methods/douglas/do.s"

@@ -79,6 +79,43 @@ typedef float real;
 
 #define _PI 3.14159265358979323846f
 
+// Execution modes
+typedef enum
+{
+    EXEC_SERIAL,
+    EXEC_OPENMP,
+    EXEC_CUDA,
+    EXEC_INVALID
+} ExecutionMode;
+
+// Equation types
+typedef enum
+{
+    EQUATION_MONODOMAIN,
+    EQUATION_INVALID
+} EquationType;
+
+// Cell models
+typedef enum
+{
+    CELL_MODEL_AFHN,
+    CELL_MODEL_TT2,
+    CELL_MODEL_MV,
+    CELL_MODEL_INVALID
+} CellModel;
+
+// Numerical methods
+typedef enum
+{
+    METHOD_OSADI,
+    METHOD_SSIADI,
+    METHOD_FE,
+    METHOD_DO,
+    METHOD_HV,
+    METHOD_CG,
+    METHOD_INVALID
+} NumericalMethod;
+
 // Define measurement structure
 typedef struct
 {
