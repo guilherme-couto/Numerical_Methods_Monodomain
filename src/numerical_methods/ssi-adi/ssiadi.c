@@ -132,7 +132,7 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
 
                 // Calculate approximation for state variables and prepare part of the RHS of the following linear systems
                 update_sVtilde(sVtilde, actualVm, actualsV, 0.5f * delta_t);
-                reaction[idx] = stim - compute_dVmdt(Vmtilde, sVtilde);
+                reaction[idx] = stim - compute_dVmdt(Vmtilde, sVtilde) + (compute_diffusion_term_xy(is_aligned, Vm, Dxx, Dyy, Dxy, i, j, Nx, Ny, delta_x, delta_y) * denom_chiCm);
 
                 // Update state variables
                 update_sV(sV, actualsV, Vmtilde, sVtilde, delta_t, idx);

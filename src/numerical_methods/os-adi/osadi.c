@@ -52,7 +52,7 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
     Stimulus *active_stimuli = (Stimulus *)malloc(numberOfStimuli * sizeof(Stimulus));
     real stim, actualVm;
     real *actualsV = (real *)malloc(cell_model_solver->n_state_vars * sizeof(real));
-    real *partRHS = (real *)malloc(Nx * Ny * sizeof(real));
+    real *reaction = (real *)malloc(Nx * Ny * sizeof(real));
 
     // Calculate auxiliary coefficients for Thomas algorithm
     const real thomas_coeff_x = (delta_t * denom_chiCm) / (delta_x * delta_x);
@@ -122,7 +122,7 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
                            : (0.0f);
 
                 // Calculate part of the RHS of the following linear systems with Forward Euler
-                partRHS[idx] = delta_t * (stim - compute_dVmdt(actualVm, actualsV));
+                reaction[idx] = stim - compute_dVmdt(actualVm, actualsV) + (compute_diffusion_term_xy(is_aligned, Vm, Dxx, Dyy, Dxy, i, j, Nx, Ny, delta_x, delta_y) * denom_chiCm);
 
                 // Update state variables
                 update_sV(sV, actualsV, actualVm, actualsV, delta_t, idx);
@@ -142,7 +142,7 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
             for (i = 0; i < Ny; i++)
             {
                 idx = i * Nx + j;
-                ls_rhs[i] = Vm[idx] + 0.5f * partRHS[idx];
+                ls_rhs[i] = Vm[idx] + 0.5f * delta_t * reaction[idx];
             }
 
             // Solve the linear system
@@ -169,7 +169,7 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
             for (j = 0; j < Nx; j++)
             {
                 idx = i * Nx + j;
-                ls_rhs[j] = Vm[idx] + 0.5f * partRHS[idx];
+                ls_rhs[j] = Vm[idx] + 0.5f * delta_t * reaction[idx];
             }
 
             // Solve the linear system
@@ -227,7 +227,7 @@ void runOSADI(const SimulationConfig *config, Measurement *measurement, const re
     // Free allocated memory
     free(active_stimuli);
     free(actualsV);
-    free(partRHS);
+    free(reaction);
     free(c_prime);
     free(d_prime);
     free(ls_rhs);

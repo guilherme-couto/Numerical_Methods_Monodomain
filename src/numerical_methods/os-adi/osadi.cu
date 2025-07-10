@@ -6,8 +6,9 @@
 #include "../numerical_methods_helpers.h"
 #include "../../cell_models/cell_models.h"
 
-static __global__ void computeReactionAndUpdateSV(const int Nx, const int Ny, const real delta_t, const real actualTime, const int num_active_stimuli,
-                                                  const Stimulus *d_active_stimuli, const real *d_Vm, real *d_sV, real *d_reaction, const CellModel cell_model)
+static __global__ void computeReactionAndUpdateSV(const int Nx, const int Ny, const real delta_t, const real delta_x, const real delta_y,
+                                                  const real actualTime, const int num_active_stimuli, const Stimulus *d_active_stimuli,
+                                                  const real *d_Vm, real *d_sV, real *d_reaction, const real *d_Dxx, const real *d_Dyy, const real *d_Dxy, const CellModel cell_model, const real denom_chiCm, const bool is_aligned)
 {
     // Obtain the thread index
     const int i = blockIdx.y * blockDim.y + threadIdx.y;
@@ -27,7 +28,7 @@ static __global__ void computeReactionAndUpdateSV(const int Nx, const int Ny, co
         const real stim = get_stimulus_value(actualTime, i, j, d_active_stimuli, num_active_stimuli);
 
         // Calculate part of the RHS of the following linear systems with Forward Euler
-        d_reaction[idx] = stim - select_compute_dVmdt(cell_model, actualVm, d_actualsV);
+        d_reaction[idx] = stim - select_compute_dVmdt(cell_model, actualVm, d_actualsV) + (compute_diffusion_term_xy(is_aligned, d_Vm, d_Dxx, d_Dyy, d_Dxy, i, j, Nx, Ny,delta_x, delta_y) * denom_chiCm);
 
         // Update state variables
         select_update_sV(cell_model, d_sV, d_actualsV, actualVm, d_actualsV, delta_t, idx);
@@ -134,6 +135,7 @@ void runOSADI_CUDA(const SimulationConfig *config, Measurement *measurement, con
     const real delta_t = config->dt;
     const real delta_x = config->dx;
     const real delta_y = config->dy;
+    const bool is_aligned = config->is_fiber_aligned;
     const int numberOfStimuli = config->stimulus_count;
     const Stimulus *stimuli = config->stimuli;
 
@@ -256,7 +258,8 @@ void runOSADI_CUDA(const SimulationConfig *config, Measurement *measurement, con
         startTime = omp_get_wtime();
 
         // Launch kernel to compute the reaction term and update state variables
-        computeReactionAndUpdateSV<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, delta_t, actualTime, numberOfStimuli, d_stimuli, d_Vm, d_sV, d_reaction, cell_model);
+        computeReactionAndUpdateSV<<<fullDomainGridSize, fullDomainBlockSize>>>(Nx, Ny, delta_t, delta_x, delta_y, actualTime, numberOfStimuli, d_stimuli,
+                                                                                d_Vm, d_sV, d_reaction, d_Dxx, d_Dyy, d_Dxy, cell_model, denom_chiCm, is_aligned);
         CUDA_CALL(cudaDeviceSynchronize());
 
         elapsedTime1stPart += omp_get_wtime() - startTime;

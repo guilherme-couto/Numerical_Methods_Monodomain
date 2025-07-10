@@ -46,6 +46,9 @@ def create_gif_from_vtk_frames(output_dir, gif_name="simulation.gif", cmap='plas
         cmap (str): Colormap to use for the image.
         fps (int): Frames per second for the GIF.
     """
+    if not os.path.exists(output_dir):
+        raise FileNotFoundError(f"The path '{output_dir}' does not exist.")
+
     frames_dir = os.path.join(output_dir, "frames")
     vtk_files = sorted(glob.glob(os.path.join(frames_dir, "Vm_*.vtk")))
 
@@ -65,10 +68,12 @@ def create_gif_from_vtk_frames(output_dir, gif_name="simulation.gif", cmap='plas
         global_min = min(global_min, Vm.min())
         global_max = max(global_max, Vm.max())
 
-    for Vm in data_list:
+    total_frames = len(data_list)
+    for frame_number, Vm in enumerate(data_list):
         fig, ax = plt.subplots(figsize=(5, 5))
         im = ax.imshow(Vm, cmap=cmap, vmin=global_min, vmax=global_max, origin='lower')
         ax.axis('off')
+        ax.set_title(f"Frame {frame_number}/{total_frames}")
         fig.colorbar(im, ax=ax, orientation='vertical', fraction=0.046, pad=0.04)
         fig.tight_layout(pad=0.5)
 

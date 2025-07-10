@@ -1,12 +1,12 @@
 ================================================================
                          Machine Info
 ----------------------------------------------------------------
- Hostname              : host-10-22-10-114
+ Hostname              : host
  OS                    : Linux
  Architecture          : x86_64
  CPU Cores             : 16
  Total Memory (GB)     : 62.63
- Free Memory (GB)      : 33.30
+ Free Memory (GB)      : 27.10
 ---------------------------- OpenMP -----------------------------
  Available Threads     : 16
  Max Threads Allowed   : 16
@@ -30,14 +30,14 @@
 ================================================================
                          Simulation Log
 ----------------------------------------------------------------
- Start Time             : 2025-06-12 16:48:50
+ Start Time             : 2025-06-30 18:39:50
  Configuration File     : configs/test.ini
  Output Directory       : outputs/test
 
  Execution Mode         : CUDA
  Equation Type          : MONODOMAIN
  Cell Model             : MV
- Numerical Method       : UNKNOWN
+ Numerical Method       : SSIADI
  Real Precision         : double
 
  Save Frames            : Yes
@@ -48,30 +48,30 @@
  Frame Save Rate        : 100
  Initial State Mode     : Initial Condition
 
- Grid Size (Nx x Ny)    : 201 x 201
- Domain Size (Lx x Ly)  : 2.00 x 2.00
+ Grid Size (Nx x Ny)    : 601 x 601
+ Domain Size (Lx x Ly)  : 6.00 x 6.00
  Spatial Step (dx, dy)  : 0.01, 0.01
  Time Step (dt)         : 0.01
- Total Time             : 400.00
- Number of Steps (M)    : 40000
- Fiber Orientation      : 0.00 degrees
- Is Fiber Aligned       : Yes
+ Total Time             : 500.00
+ Number of Steps (M)    : 50000
+ Fiber Orientation      : 30.00 degrees
+ Is Fiber Aligned       : No
  Sigma Longitudinal     : 0.00065
- Sigma Transversal      : 0.00065
+ Sigma Transversal      : 6.5e-05
 
  Stimulus 1:
    Amplitude  : 1
    Duration   : 2
    Start Time : 0
    X Range    : [0, 0.2]
-   Y Range    : [0, 2]
+   Y Range    : [0, 6]
 
  Stimulus 2:
    Amplitude  : 1
    Duration   : 2
-   Start Time : 310
-   X Range    : [0, 1]
-   Y Range    : [0, 1]
+   Start Time : 340
+   X Range    : [0, 3]
+   Y Range    : [0, 3]
 ================================================================
 
 
@@ -79,9 +79,13 @@
 
 [i] For full domain kernels:
 [i] Block size: 16 x 16 threads (total 256 threads per block)
-[i] Grid size: 13 x 13 blocks (total 169 blocks, total 43264 threads)
+[i] Grid size: 38 x 38 blocks (total 1444 blocks, total 369664 threads)
 
-[i] Starting simulation with CG (CUDA)...
+[i] For Thomas kernel:
+[i] Grid size for x: 19 blocks (32 threads per block, total 608 threads)
+[i] Grid size for y: 19 blocks (32 threads per block, total 608 threads)
+
+[i] Starting simulation with SSIADI (CUDA)...
 [+] Frame at time 0.00 ms saved to outputs/test/frames/Vm_00000.vtk
 [+] Frame at time 1.00 ms saved to outputs/test/frames/Vm_00100.vtk
 [+] Frame at time 2.00 ms saved to outputs/test/frames/Vm_00200.vtk
@@ -102,7 +106,6 @@
 [+] Frame at time 17.00 ms saved to outputs/test/frames/Vm_01700.vtk
 [+] Frame at time 18.00 ms saved to outputs/test/frames/Vm_01800.vtk
 [+] Frame at time 19.00 ms saved to outputs/test/frames/Vm_01900.vtk
-[i] Stim velocity (measured from 0.67 to 1.33 cm) is 61.39 cm/s
 [+] Frame at time 20.00 ms saved to outputs/test/frames/Vm_02000.vtk
 [+] Frame at time 21.00 ms saved to outputs/test/frames/Vm_02100.vtk
 [+] Frame at time 22.00 ms saved to outputs/test/frames/Vm_02200.vtk
@@ -155,6 +158,7 @@
 [+] Frame at time 69.00 ms saved to outputs/test/frames/Vm_06900.vtk
 [+] Frame at time 70.00 ms saved to outputs/test/frames/Vm_07000.vtk
 [+] Frame at time 71.00 ms saved to outputs/test/frames/Vm_07100.vtk
+[i] Stim velocity (measured from 2.00 to 4.00 cm) is 53.82 cm/s
 [+] Frame at time 72.00 ms saved to outputs/test/frames/Vm_07200.vtk
 [+] Frame at time 73.00 ms saved to outputs/test/frames/Vm_07300.vtk
 [+] Frame at time 74.00 ms saved to outputs/test/frames/Vm_07400.vtk
@@ -483,9 +487,109 @@
 [+] Frame at time 397.00 ms saved to outputs/test/frames/Vm_39700.vtk
 [+] Frame at time 398.00 ms saved to outputs/test/frames/Vm_39800.vtk
 [+] Frame at time 399.00 ms saved to outputs/test/frames/Vm_39900.vtk
+[+] Frame at time 400.00 ms saved to outputs/test/frames/Vm_40000.vtk
+[+] Frame at time 401.00 ms saved to outputs/test/frames/Vm_40100.vtk
+[+] Frame at time 402.00 ms saved to outputs/test/frames/Vm_40200.vtk
+[+] Frame at time 403.00 ms saved to outputs/test/frames/Vm_40300.vtk
+[+] Frame at time 404.00 ms saved to outputs/test/frames/Vm_40400.vtk
+[+] Frame at time 405.00 ms saved to outputs/test/frames/Vm_40500.vtk
+[+] Frame at time 406.00 ms saved to outputs/test/frames/Vm_40600.vtk
+[+] Frame at time 407.00 ms saved to outputs/test/frames/Vm_40700.vtk
+[+] Frame at time 408.00 ms saved to outputs/test/frames/Vm_40800.vtk
+[+] Frame at time 409.00 ms saved to outputs/test/frames/Vm_40900.vtk
+[+] Frame at time 410.00 ms saved to outputs/test/frames/Vm_41000.vtk
+[+] Frame at time 411.00 ms saved to outputs/test/frames/Vm_41100.vtk
+[+] Frame at time 412.00 ms saved to outputs/test/frames/Vm_41200.vtk
+[+] Frame at time 413.00 ms saved to outputs/test/frames/Vm_41300.vtk
+[+] Frame at time 414.00 ms saved to outputs/test/frames/Vm_41400.vtk
+[+] Frame at time 415.00 ms saved to outputs/test/frames/Vm_41500.vtk
+[+] Frame at time 416.00 ms saved to outputs/test/frames/Vm_41600.vtk
+[+] Frame at time 417.00 ms saved to outputs/test/frames/Vm_41700.vtk
+[+] Frame at time 418.00 ms saved to outputs/test/frames/Vm_41800.vtk
+[+] Frame at time 419.00 ms saved to outputs/test/frames/Vm_41900.vtk
+[+] Frame at time 420.00 ms saved to outputs/test/frames/Vm_42000.vtk
+[+] Frame at time 421.00 ms saved to outputs/test/frames/Vm_42100.vtk
+[+] Frame at time 422.00 ms saved to outputs/test/frames/Vm_42200.vtk
+[+] Frame at time 423.00 ms saved to outputs/test/frames/Vm_42300.vtk
+[+] Frame at time 424.00 ms saved to outputs/test/frames/Vm_42400.vtk
+[+] Frame at time 425.00 ms saved to outputs/test/frames/Vm_42500.vtk
+[+] Frame at time 426.00 ms saved to outputs/test/frames/Vm_42600.vtk
+[+] Frame at time 427.00 ms saved to outputs/test/frames/Vm_42700.vtk
+[+] Frame at time 428.00 ms saved to outputs/test/frames/Vm_42800.vtk
+[+] Frame at time 429.00 ms saved to outputs/test/frames/Vm_42900.vtk
+[+] Frame at time 430.00 ms saved to outputs/test/frames/Vm_43000.vtk
+[+] Frame at time 431.00 ms saved to outputs/test/frames/Vm_43100.vtk
+[+] Frame at time 432.00 ms saved to outputs/test/frames/Vm_43200.vtk
+[+] Frame at time 433.00 ms saved to outputs/test/frames/Vm_43300.vtk
+[+] Frame at time 434.00 ms saved to outputs/test/frames/Vm_43400.vtk
+[+] Frame at time 435.00 ms saved to outputs/test/frames/Vm_43500.vtk
+[+] Frame at time 436.00 ms saved to outputs/test/frames/Vm_43600.vtk
+[+] Frame at time 437.00 ms saved to outputs/test/frames/Vm_43700.vtk
+[+] Frame at time 438.00 ms saved to outputs/test/frames/Vm_43800.vtk
+[+] Frame at time 439.00 ms saved to outputs/test/frames/Vm_43900.vtk
+[+] Frame at time 440.00 ms saved to outputs/test/frames/Vm_44000.vtk
+[+] Frame at time 441.00 ms saved to outputs/test/frames/Vm_44100.vtk
+[+] Frame at time 442.00 ms saved to outputs/test/frames/Vm_44200.vtk
+[+] Frame at time 443.00 ms saved to outputs/test/frames/Vm_44300.vtk
+[+] Frame at time 444.00 ms saved to outputs/test/frames/Vm_44400.vtk
+[+] Frame at time 445.00 ms saved to outputs/test/frames/Vm_44500.vtk
+[+] Frame at time 446.00 ms saved to outputs/test/frames/Vm_44600.vtk
+[+] Frame at time 447.00 ms saved to outputs/test/frames/Vm_44700.vtk
+[+] Frame at time 448.00 ms saved to outputs/test/frames/Vm_44800.vtk
+[+] Frame at time 449.00 ms saved to outputs/test/frames/Vm_44900.vtk
+[+] Frame at time 450.00 ms saved to outputs/test/frames/Vm_45000.vtk
+[+] Frame at time 451.00 ms saved to outputs/test/frames/Vm_45100.vtk
+[+] Frame at time 452.00 ms saved to outputs/test/frames/Vm_45200.vtk
+[+] Frame at time 453.00 ms saved to outputs/test/frames/Vm_45300.vtk
+[+] Frame at time 454.00 ms saved to outputs/test/frames/Vm_45400.vtk
+[+] Frame at time 455.00 ms saved to outputs/test/frames/Vm_45500.vtk
+[+] Frame at time 456.00 ms saved to outputs/test/frames/Vm_45600.vtk
+[+] Frame at time 457.00 ms saved to outputs/test/frames/Vm_45700.vtk
+[+] Frame at time 458.00 ms saved to outputs/test/frames/Vm_45800.vtk
+[+] Frame at time 459.00 ms saved to outputs/test/frames/Vm_45900.vtk
+[+] Frame at time 460.00 ms saved to outputs/test/frames/Vm_46000.vtk
+[+] Frame at time 461.00 ms saved to outputs/test/frames/Vm_46100.vtk
+[+] Frame at time 462.00 ms saved to outputs/test/frames/Vm_46200.vtk
+[+] Frame at time 463.00 ms saved to outputs/test/frames/Vm_46300.vtk
+[+] Frame at time 464.00 ms saved to outputs/test/frames/Vm_46400.vtk
+[+] Frame at time 465.00 ms saved to outputs/test/frames/Vm_46500.vtk
+[+] Frame at time 466.00 ms saved to outputs/test/frames/Vm_46600.vtk
+[+] Frame at time 467.00 ms saved to outputs/test/frames/Vm_46700.vtk
+[+] Frame at time 468.00 ms saved to outputs/test/frames/Vm_46800.vtk
+[+] Frame at time 469.00 ms saved to outputs/test/frames/Vm_46900.vtk
+[+] Frame at time 470.00 ms saved to outputs/test/frames/Vm_47000.vtk
+[+] Frame at time 471.00 ms saved to outputs/test/frames/Vm_47100.vtk
+[+] Frame at time 472.00 ms saved to outputs/test/frames/Vm_47200.vtk
+[+] Frame at time 473.00 ms saved to outputs/test/frames/Vm_47300.vtk
+[+] Frame at time 474.00 ms saved to outputs/test/frames/Vm_47400.vtk
+[+] Frame at time 475.00 ms saved to outputs/test/frames/Vm_47500.vtk
+[+] Frame at time 476.00 ms saved to outputs/test/frames/Vm_47600.vtk
+[+] Frame at time 477.00 ms saved to outputs/test/frames/Vm_47700.vtk
+[+] Frame at time 478.00 ms saved to outputs/test/frames/Vm_47800.vtk
+[+] Frame at time 479.00 ms saved to outputs/test/frames/Vm_47900.vtk
+[+] Frame at time 480.00 ms saved to outputs/test/frames/Vm_48000.vtk
+[+] Frame at time 481.00 ms saved to outputs/test/frames/Vm_48100.vtk
+[+] Frame at time 482.00 ms saved to outputs/test/frames/Vm_48200.vtk
+[+] Frame at time 483.00 ms saved to outputs/test/frames/Vm_48300.vtk
+[+] Frame at time 484.00 ms saved to outputs/test/frames/Vm_48400.vtk
+[+] Frame at time 485.00 ms saved to outputs/test/frames/Vm_48500.vtk
+[+] Frame at time 486.00 ms saved to outputs/test/frames/Vm_48600.vtk
+[+] Frame at time 487.00 ms saved to outputs/test/frames/Vm_48700.vtk
+[+] Frame at time 488.00 ms saved to outputs/test/frames/Vm_48800.vtk
+[+] Frame at time 489.00 ms saved to outputs/test/frames/Vm_48900.vtk
+[+] Frame at time 490.00 ms saved to outputs/test/frames/Vm_49000.vtk
+[+] Frame at time 491.00 ms saved to outputs/test/frames/Vm_49100.vtk
+[+] Frame at time 492.00 ms saved to outputs/test/frames/Vm_49200.vtk
+[+] Frame at time 493.00 ms saved to outputs/test/frames/Vm_49300.vtk
+[+] Frame at time 494.00 ms saved to outputs/test/frames/Vm_49400.vtk
+[+] Frame at time 495.00 ms saved to outputs/test/frames/Vm_49500.vtk
+[+] Frame at time 496.00 ms saved to outputs/test/frames/Vm_49600.vtk
+[+] Frame at time 497.00 ms saved to outputs/test/frames/Vm_49700.vtk
+[+] Frame at time 498.00 ms saved to outputs/test/frames/Vm_49800.vtk
+[+] Frame at time 499.00 ms saved to outputs/test/frames/Vm_49900.vtk
 [i] Simulation done!
 
-[+] Last frame (400.00 ms) saved to outputs/test/frames/Vm_40000.vtk
+[+] Last frame (500.00 ms) saved to outputs/test/frames/Vm_50000.vtk
 
-[i] Simulation total execution time = 13.06 s
+[i] Simulation total execution time = 123.9 s
 [+] Simulation infos saved to outputs/test/simulation_infos.txt

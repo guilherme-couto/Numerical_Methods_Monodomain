@@ -152,8 +152,8 @@ CMakeFiles/core_cuda.dir/clean:
 # Target rules for target CMakeFiles/monodomain_simulation.dir
 
 # All Build rule for target.
-CMakeFiles/monodomain_simulation.dir/all: CMakeFiles/core_cuda.dir/all
 CMakeFiles/monodomain_simulation.dir/all: CMakeFiles/core_c.dir/all
+CMakeFiles/monodomain_simulation.dir/all: CMakeFiles/core_cuda.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/monodomain_simulation.dir/build.make CMakeFiles/monodomain_simulation.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/monodomain_simulation.dir/build.make CMakeFiles/monodomain_simulation.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/guilherme-couto/Documentos/Numerical_Methods_Monodomain/build/CMakeFiles --progress-num=31,32,33 "Built target monodomain_simulation"

@@ -31,7 +31,7 @@ CMAKE_COLOR_MAKEFILE:BOOL=ON
 CMAKE_CUDA_ARCHITECTURES:UNINITIALIZED=89
 
 //CUDA compiler
-CMAKE_CUDA_COMPILER:FILEPATH=/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc
+CMAKE_CUDA_COMPILER:STRING=/home/guilherme-couto/.conda/envs/numerical-env/bin/nvcc
 
 //Flags used by the CUDA compiler during all build types.
 CMAKE_CUDA_FLAGS:STRING=
@@ -52,7 +52,7 @@ CMAKE_CUDA_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 CMAKE_CUDA_HOST_COMPILER:FILEPATH=
 
 //CXX compiler
-CMAKE_CXX_COMPILER:FILEPATH=/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-c++
+CMAKE_CXX_COMPILER:STRING=/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-c++
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -78,7 +78,7 @@ CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
 CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
 //C compiler
-CMAKE_C_COMPILER:FILEPATH=/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc
+CMAKE_C_COMPILER:STRING=/home/guilherme-couto/.conda/envs/numerical-env/bin/x86_64-conda-linux-gnu-cc
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -352,6 +352,8 @@ CMAKE_C_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_C_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_DLLTOOL
 CMAKE_DLLTOOL-ADVANCED:INTERNAL=1
+//Path to cache edit program executable.
+CMAKE_EDIT_COMMAND:INTERNAL=/usr/bin/ccmake
 //Executable file format
 CMAKE_EXECUTABLE_FORMAT:INTERNAL=ELF
 //ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS

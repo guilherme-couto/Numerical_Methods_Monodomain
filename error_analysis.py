@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 import csv
 import re
 
-BASE_DIR = 'outputs/error_analysis'
+BASE_DIR = 'outputs/error_analysis_aniso_rotation'
 METHODS = ['fe', 'osadi', 'ssiadi', 'do', 'hv', 'cg']
 METHODS_FILE = 'Vm_50000.vtk'  # Solution file for each method
 REFERENCE_PATH = os.path.join(BASE_DIR, 'reference', 'frames', 'Vm_500000.vtk')
+
 
 def read_vtk_scalar_field(filepath):
     """Read a VTK ASCII file and return dimensions, spacing, and flattened scalar field."""
@@ -21,10 +22,12 @@ def read_vtk_scalar_field(filepath):
     
     return dims, spacing, data
 
+
 def reshape_field(data, dims):
     """Reshape 1D data to 2D (assuming z = 1)."""
     nx, ny, _ = dims
     return data.reshape((ny, nx))  # VTK orders as (y, x)
+
 
 def sample_reference_to_coarse(ref_data, ref_dims, ref_spacing, coarse_dims, coarse_spacing):
     """Sample fine reference solution to match coarse grid points."""
@@ -35,6 +38,7 @@ def sample_reference_to_coarse(ref_data, ref_dims, ref_spacing, coarse_dims, coa
     assert sampled_ref.shape == expected_shape, f"Shape mismatch: {sampled_ref.shape} vs {expected_shape}"
     return sampled_ref
 
+
 def compute_l2_error(u_numeric, u_ref):
     """Compute relative L2 norm error."""
     diff = u_numeric - u_ref
@@ -42,6 +46,7 @@ def compute_l2_error(u_numeric, u_ref):
     l2_error = np.linalg.norm(diff) / np.sqrt(N)
     # l2_error = np.linalg.norm(diff) / np.linalg.norm(u_ref)
     return l2_error
+
 
 def parse_simulation_info(filepath):
     """Parse simulation_infos.txt and extract timing data."""
@@ -55,6 +60,7 @@ def parse_simulation_info(filepath):
                 value = float(match.group(2))
                 timings[key] = value
     return timings
+
 
 def plot_total_execution_times(total_times):
     """Plot total execution times for each method."""
@@ -72,6 +78,7 @@ def plot_total_execution_times(total_times):
     plt.savefig(out_path)
     plt.close()
     print(f"Saved execution time plot to {out_path}")
+
 
 def save_summary_csv(errors, all_timings):
     """Save summary table combining errors and execution timings."""
@@ -92,6 +99,7 @@ def save_summary_csv(errors, all_timings):
                 row.append(timings.get(key, ''))
             writer.writerow(row)
     print(f"Saved summary table to {summary_path}")
+
 
 def main():
     ref_dims, ref_spacing, ref_flat = read_vtk_scalar_field(REFERENCE_PATH)
@@ -149,6 +157,7 @@ def main():
     
     # Save summary CSV
     save_summary_csv(errors, all_timings)
+
 
 if __name__ == '__main__':
     main()

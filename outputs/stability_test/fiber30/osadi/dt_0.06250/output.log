@@ -1,0 +1,94 @@
+================================================================
+                         Machine Info
+----------------------------------------------------------------
+ Hostname              : host-10-22-10-114
+ OS                    : Linux
+ Architecture          : x86_64
+ CPU Cores             : 16
+ Total Memory (GB)     : 62.63
+ Free Memory (GB)      : 15.86
+---------------------------- OpenMP -----------------------------
+ Available Threads     : 16
+ Max Threads Allowed   : 16
+ Nested Parallelism    : Disabled
+================================================================
+
+================================================================
+                         Device Info
+----------------------------------------------------------------
+----------------------------- CUDA ------------------------------
+ CUDA Runtime Version  : 12.6
+ CUDA Devices Found    : 1
+  Device 0: NVIDIA GeForce RTX 4070 Ti SUPER
+    Compute Capability : 8.9
+    Global Memory (GB) : 15.69
+    Shared Memory (KB) : 48
+    Multiprocessors    : 66
+    Clock Rate (MHz)   : 2640.00
+================================================================
+
+================================================================
+                         Simulation Log
+----------------------------------------------------------------
+ Start Time             : 2025-07-03 18:44:01
+ Configuration File     : configs/stability/current_test.ini
+ Output Directory       : outputs/stability_test/osadi/dt_0.06250
+
+ Execution Mode         : CUDA
+ Equation Type          : MONODOMAIN
+ Cell Model             : MV
+ Numerical Method       : OSADI
+ Real Precision         : double
+
+ Save Frames            : No
+ Save Last Frame        : Yes
+ Save Last State        : No
+ Shift State            : No
+ Measure Velocity       : Yes
+ Initial State Mode     : Initial Condition
+
+ Grid Size (Nx x Ny)    : 601 x 601
+ Domain Size (Lx x Ly)  : 6.00 x 6.00
+ Spatial Step (dx, dy)  : 0.01, 0.01
+ Time Step (dt)         : 0.0625
+ Total Time             : 500.00
+ Number of Steps (M)    : 8000
+ Fiber Orientation      : 30.00 degrees
+ Is Fiber Aligned       : No
+ Sigma Longitudinal     : 0.00065
+ Sigma Transversal      : 6.5e-05
+
+ Stimulus 1:
+   Amplitude  : 1
+   Duration   : 2
+   Start Time : 0
+   X Range    : [0, 0.2]
+   Y Range    : [0, 6]
+
+ Stimulus 2:
+   Amplitude  : 1
+   Duration   : 2
+   Start Time : 340
+   X Range    : [0, 3]
+   Y Range    : [0, 3]
+================================================================
+
+
+[i] Device name: NVIDIA GeForce RTX 4070 Ti SUPER (66 SMs)
+
+[i] For full domain kernels:
+[i] Block size: 16 x 16 threads (total 256 threads per block)
+[i] Grid size: 38 x 38 blocks (total 1444 blocks, total 369664 threads)
+
+[i] For Thomas kernel:
+[i] Grid size for x: 19 blocks (32 threads per block, total 608 threads)
+[i] Grid size for y: 19 blocks (32 threads per block, total 608 threads)
+
+[i] Starting simulation with OSADI (CUDA)...
+[i] Stim velocity (measured from 2.00 to 4.00 cm) is 49.46 cm/s
+[i] Simulation done!
+
+[+] Last frame (500.00 ms) saved to outputs/stability_test/osadi/dt_0.06250/frames/Vm_08000.vtk
+
+[i] Simulation total execution time = 7.9333 s
+[+] Simulation infos saved to outputs/stability_test/osadi/dt_0.06250/simulation_infos.txt

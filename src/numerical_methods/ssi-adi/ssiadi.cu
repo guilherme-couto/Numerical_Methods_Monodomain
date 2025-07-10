@@ -35,7 +35,7 @@ static __global__ void computeReactionApproxAndUpdateSV(const int Nx, const int 
 
         // Calculate approximation for state variables and prepare part of the RHS of the following linear systems
         select_update_sVtilde(cell_model, d_sVtilde, actualVm_center, d_actualsV, 0.5f * delta_t);
-        d_reaction[idx] = stim - select_compute_dVmdt(cell_model, Vmtilde, d_sVtilde);
+        d_reaction[idx] = stim - select_compute_dVmdt(cell_model, Vmtilde, d_sVtilde) + (compute_diffusion_term_xy(is_aligned, d_Vm, d_Dxx, d_Dyy, d_Dxy, i, j, Nx, Ny, delta_x, delta_y) * denom_chiCm);
 
         // Update state variables
         select_update_sV(cell_model, d_sV, d_actualsV, Vmtilde, d_sVtilde, delta_t, idx);

@@ -1,0 +1,94 @@
+================================================================
+                         Machine Info
+----------------------------------------------------------------
+ Hostname              : host-10-22-10-119
+ OS                    : Linux
+ Architecture          : x86_64
+ CPU Cores             : 12
+ Total Memory (GB)     : 15.43
+ Free Memory (GB)      : 12.49
+---------------------------- OpenMP -----------------------------
+ Available Threads     : 12
+ Max Threads Allowed   : 12
+ Nested Parallelism    : Disabled
+================================================================
+
+================================================================
+                         Device Info
+----------------------------------------------------------------
+----------------------------- CUDA ------------------------------
+ CUDA Runtime Version  : 12.6
+ CUDA Devices Found    : 1
+  Device 0: NVIDIA GeForce RTX 4070
+    Compute Capability : 8.9
+    Global Memory (GB) : 11.71
+    Shared Memory (KB) : 48
+    Multiprocessors    : 46
+    Clock Rate (MHz)   : 2505.00
+================================================================
+
+================================================================
+                         Simulation Log
+----------------------------------------------------------------
+ Start Time             : 2025-07-03 17:27:00
+ Configuration File     : configs/error_analysis_aniso_rotation/reference.ini
+ Output Directory       : outputs/error_analysis_aniso_rotation/reference_HV
+
+ Execution Mode         : CUDA
+ Equation Type          : MONODOMAIN
+ Cell Model             : MV
+ Numerical Method       : UNKNOWN
+ Real Precision         : double
+
+ Save Frames            : No
+ Save Last Frame        : Yes
+ Save Last State        : No
+ Shift State            : No
+ Measure Velocity       : Yes
+ Initial State Mode     : Initial Condition
+
+ Grid Size (Nx x Ny)    : 6001 x 6001
+ Domain Size (Lx x Ly)  : 6.00 x 6.00
+ Spatial Step (dx, dy)  : 0.001, 0.001
+ Time Step (dt)         : 0.001
+ Total Time             : 500.00
+ Number of Steps (M)    : 500000
+ Fiber Orientation      : 30.00 degrees
+ Is Fiber Aligned       : No
+ Sigma Longitudinal     : 0.00065
+ Sigma Transversal      : 6.5e-05
+
+ Stimulus 1:
+   Amplitude  : 1
+   Duration   : 2
+   Start Time : 0
+   X Range    : [0, 0.2]
+   Y Range    : [0, 6]
+
+ Stimulus 2:
+   Amplitude  : 1
+   Duration   : 2
+   Start Time : 340
+   X Range    : [0, 3]
+   Y Range    : [0, 3]
+================================================================
+
+
+[i] Device name: NVIDIA GeForce RTX 4070 (46 SMs)
+
+[i] For full domain kernels:
+[i] Block size: 16 x 16 threads (total 256 threads per block)
+[i] Grid size: 376 x 376 blocks (total 141376 blocks, total 36192256 threads)
+
+[i] For Thomas kernel:
+[i] Grid size for x: 188 blocks (32 threads per block, total 6016 threads)
+[i] Grid size for y: 188 blocks (32 threads per block, total 6016 threads)
+
+[i] Starting simulation with HV (CUDA)...
+[i] Stim velocity (measured from 2.00 to 4.00 cm) is 56.09 cm/s
+[i] Simulation done!
+
+[+] Last frame (500.00 ms) saved to outputs/error_analysis_aniso_rotation/reference_HV/frames/Vm_500000.vtk
+
+[i] Simulation total execution time = 1.0802e+05 s
+[+] Simulation infos saved to outputs/error_analysis_aniso_rotation/reference_HV/simulation_infos.txt
