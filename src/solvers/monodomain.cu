@@ -39,7 +39,10 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
     int total_points = config->Nx * config->Ny;
     real *Vm = (real *)malloc(total_points * sizeof(real));
     real *sV = (real *)malloc(total_points * cell_model_solver->n_state_vars * sizeof(real));
-    cell_model_solver->initialize(Vm, sV, config->Nx, config->Ny);
+    if (config->restore_state)
+        restore_simulation_state(config->restore_path, Vm, sV, config->Nx, config->Ny, cell_model_solver->n_state_vars);
+    else
+        cell_model_solver->initialize(Vm, sV, config->Nx, config->Ny);
 
     // Allocate and initialize diffusion coefficients arrays
     real *Dxx = (real *)malloc(total_points * sizeof(real));
@@ -56,7 +59,7 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
     initializeProperties(config, Dxx, Dyy, Dxy);
     
     // Run the simulation based on the selected method
-    numerical_method_t run_method = get_numerical_method_CUDA(&config->method);
+    numerical_method_t run_method = get_numerical_method(&config->exec_mode, &config->method);
     if (run_method == NULL)
     {
         ERRORMSG("Invalid CUDA numerical method selected.");
@@ -76,27 +79,22 @@ int runMonodomainSimulationCUDA(const SimulationConfig *config)
     if (config->save_last_frame)
     {
         real startTime = omp_get_wtime();
-
         static char file_path[MAX_STRING_SIZE];
         snprintf(file_path, MAX_STRING_SIZE, "%s/frames/Vm_%05d.%s", config->output_dir, config->M, config->file_extension);
         config->save_function(file_path, Vm, config->Nx, config->Ny, config->dx, config->dy);
-        
         measurement.elapsedSaveFramesTime += omp_get_wtime() - startTime;
         SUCCESSMSG("Last frame (%.2f ms) saved to %s\n", config->M * config->dt, file_path);
-
         snprintf(file_path, MAX_STRING_SIZE, "%s/frames/lastframe.%s", config->output_dir, config->file_extension);
         config->save_function(file_path, Vm, config->Nx, config->Ny, config->dx, config->dy);
     }
 
     // Save last state
-    if (config->save_last_state)
+    if (config->save_state)
     {
         real startTime = omp_get_wtime();
-
-        // TODO: save as binary
         static char file_path[MAX_STRING_SIZE];
-        snprintf(file_path, MAX_STRING_SIZE, "%s/state_%05d.dat", config->output_dir, config->M);
-        
+        snprintf(file_path, MAX_STRING_SIZE, "%s/simulation.dat", config->output_dir);
+        save_simulation_state(file_path, Vm, sV, config->Nx, config->Ny, cell_model_solver->n_state_vars);
         measurement.elapsedSaveStateTime += omp_get_wtime() - startTime;
         SUCCESSMSG("Last state (%.2f ms) saved to %s\n", config->M * config->dt, file_path);
     }

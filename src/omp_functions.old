@@ -21,12 +21,12 @@ void runSimulationOpenMP(const SimulationConfig *config)
     const int frameSaveRate = config->frame_save_rate;
     const int numberOfThreads = config->number_of_threads;
     const char *pathToSaveData = config->output_dir;
-    const char *pathToRestoreStateFiles = config->path_to_restore_state_files;
+    const char *pathToRestoreStateFiles = config->restore_path;
     const char *saveFunctionName = config->save_function_name;
     const bool shiftState = config->shift_state;
     const bool saveFrames = config->save_frames;
     const bool saveLastFrame = config->save_last_frame;
-    const bool saveLastState = config->save_last_state;
+    const bool saveLastState = config->save_state;
     const bool measureVelocity = config->measure_velocity;
 
     // Number of steps

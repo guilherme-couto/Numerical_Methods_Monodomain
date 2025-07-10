@@ -77,11 +77,11 @@ int main(int argc, char *argv[])
 
     // Check the execution mode and the equation type to determine the simulation type
     int simulation_result = -1;
-    if (config.exec_mode == EXEC_SERIAL)
+    if (config.exec_mode == EXEC_SERIAL || config.exec_mode == EXEC_OPENMP)
     {
         if (config.equation_type == EQUATION_MONODOMAIN)
         {
-            simulation_result = runMonodomainSimulationSerial(&config);
+            simulation_result = runMonodomainSimulationCPU(&config);
         }
         else
         {
@@ -90,8 +90,6 @@ int main(int argc, char *argv[])
             return -1;
         }
     }
-
-#ifdef USE_CUDA
 
     else if (config.exec_mode == EXEC_CUDA)
     {
@@ -106,8 +104,6 @@ int main(int argc, char *argv[])
             return -1;
         }
     }
-
-#endif // USE_CUDA
 
     // Check if the simulation was successful
     if (simulation_result != 0)

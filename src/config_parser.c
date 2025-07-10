@@ -129,10 +129,11 @@ static int config_parser_handler(void *user, const char *section, const char *na
         strncpy(config->output_dir, value, sizeof(config->output_dir));
     else if (MATCH("simulation", "remove_old_files"))
         config->remove_old_files = (strstr(lower_value, "true") != NULL);
-    else if (MATCH("simulation", "path_to_restore_state_files"))
+    else if (MATCH("simulation", "restore_path"))
     {
-        strncpy(config->path_to_restore_state_files, value, sizeof(config->path_to_restore_state_files));
+        strncpy(config->restore_path, value, sizeof(config->restore_path));
         strncpy(config->init_mode, "Restore State", sizeof(config->init_mode));
+        config->restore_state = true;
     }
     else if (MATCH("simulation", "shift_state"))
         config->shift_state = (strstr(lower_value, "true") != NULL);
@@ -140,8 +141,8 @@ static int config_parser_handler(void *user, const char *section, const char *na
         config->save_frames = (strstr(lower_value, "true") != NULL);
     else if (MATCH("simulation", "save_last_frame"))
         config->save_last_frame = (strstr(lower_value, "true") != NULL);
-    else if (MATCH("simulation", "save_last_state"))
-        config->save_last_state = (strstr(lower_value, "true") != NULL);
+    else if (MATCH("simulation", "save_state"))
+        config->save_state = (strstr(lower_value, "true") != NULL);
     else if (MATCH("simulation", "measure_velocity"))
         config->measure_velocity = (strstr(lower_value, "true") != NULL);
 
@@ -216,11 +217,12 @@ int load_simulation_config(const char *filename, SimulationConfig *config)
     config->Lx = -1.0f;
     config->Ly = -1.0f;
     config->frame_save_rate = -1;
-    config->number_of_threads = -1;
+    config->number_of_threads = 1;
     config->shift_state = false;
     config->save_frames = true;
     config->save_last_frame = true;
-    config->save_last_state = false;
+    config->save_state = false;
+    config->restore_state = false;
     config->measure_velocity = true;
     config->stimuli = NULL;
     config->stimulus_count = -1;
@@ -229,7 +231,7 @@ int load_simulation_config(const char *filename, SimulationConfig *config)
     config->file_extension[0] = '\0';
     config->output_dir[0] = '\0';
     config->remove_old_files = true;
-    config->path_to_restore_state_files[0] = '\0';
+    config->restore_path[0] = '\0';
     strncpy(config->init_mode, "Initial Condition", sizeof(config->init_mode));
 
     int result = ini_parse(filename, config_parser_handler, config);
@@ -262,6 +264,13 @@ int load_simulation_config(const char *filename, SimulationConfig *config)
         config->is_fiber_aligned = true;
     else
         config->is_fiber_aligned = false;
+
+    // Number of threads
+    if (config->number_of_threads > omp_get_max_threads())
+    {
+        printf("Number of threads (%d) is greater than the maximum available (%d). %d will be considered\n", config->number_of_threads, omp_get_max_threads(), omp_get_max_threads());
+        config->number_of_threads = omp_get_max_threads();
+    }
 
     printf("Configuration loaded successfully\n");
 
@@ -327,11 +336,12 @@ bool validate_simulation_config(const SimulationConfig *config)
         printf("Save function must be specified for saving frames\n");
         valid = false;
     }
-    if (config->number_of_threads <= 0 && config->exec_mode == EXEC_OPENMP)
+    if (config->number_of_threads <= 0)
     {
-        printf("Number of threads must be positive for OpenMP execution\n");
+        printf("Number of threads must be positive\n");
         valid = false;
     }
+    
     if (config->frame_save_rate <= 0 && config->save_frames)
     {
         printf("Frame save rate must be positive for saving frames\n");
@@ -340,6 +350,11 @@ bool validate_simulation_config(const SimulationConfig *config)
     if (config->output_dir[0] == '\0')
     {
         printf("Output directory must be specified\n");
+        valid = false;
+    }
+    if (config->restore_state && config->restore_path[0] == '\0')
+    {
+        printf("Path to restore file must be specified\n");
         valid = false;
     }
     for (int i = 0; i < config->stimulus_count; i++)

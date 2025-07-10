@@ -181,7 +181,7 @@ inline void save_as_txt(const char *file_path, const real *data, const int Nx, c
 //   prefix       → filename prefix used in .vtu files (e.g., "frame_")
 // Output:
 //   Creates a .pvd file that references frame_0000.vtu, frame_0001.vtu, ..., with correct timesteps
-inline void write_pvd_file(const char *file_path, int num_frames, double dt, const char *prefix)
+inline void write_pvd_file(const char *file_path, int num_frames, real dt, const char *prefix)
 {
     FILE *file = fopen(file_path, "w");
     if (file == NULL)
@@ -205,6 +205,82 @@ inline void write_pvd_file(const char *file_path, int num_frames, double dt, con
     fprintf(file,
             "  </Collection>\n"
             "</VTKFile>\n");
+
+    fclose(file);
+}
+
+inline void save_simulation_state(const char *file_path, const real *Vm, const real *sV, const int Nx, const int Ny, const int n_sv)
+{
+    FILE *file = fopen(file_path, "wb");
+    if (file == NULL)
+    {
+        printf("Error opening save state file for writing: %s\n", file_path);
+        exit(1);
+    }
+
+    // Write metadata
+    fwrite(&Nx, sizeof(int), 1, file);
+    fwrite(&Ny, sizeof(int), 1, file);
+    fwrite(&n_sv, sizeof(int), 1, file);
+
+    size_t total_points = Nx * Ny;
+
+    // Write Vm data
+    if (fwrite(Vm, sizeof(real), total_points, file) != total_points)
+    {
+        printf("Error writing Vm data.\n");
+        exit(1);
+    }
+
+    // Write state variables data
+    if (fwrite(sV, sizeof(real), total_points * n_sv, file) != total_points * n_sv)
+    {
+        printf("Error writing sV data.\n");
+        exit(1);
+    }
+
+    fclose(file);
+}
+
+
+inline void restore_simulation_state(const char *file_path, real *Vm, real *sV, const int Nx, const int Ny, const int n_sv)
+{
+    FILE *file = fopen(file_path, "rb");
+    if (file == NULL)
+    {
+        printf("Error opening restore file for reading: %s\n", file_path);
+        exit(1);
+    }
+
+    // Read and validate metadata
+    int file_Nx, file_Ny, file_n_sv;
+    fread(&file_Nx, sizeof(int), 1, file);
+    fread(&file_Ny, sizeof(int), 1, file);
+    fread(&file_n_sv, sizeof(int), 1, file);
+
+    if (file_Nx != Nx || file_Ny != Ny || file_n_sv != n_sv)
+    {
+        printf("Error: grid or state size mismatch in restored file.\n");
+        exit(1);
+    }
+
+    size_t total_points = Nx * Ny;
+
+    printf("Restoring simulation state from: %s\n", file_path);
+
+    // Read Vm
+    if (fread(Vm, sizeof(real), total_points, file) != total_points)
+    {
+        printf("Error reading Vm data.\n");
+        exit(1);
+    }
+
+    // Read state variables
+    if (fread(sV, sizeof(real), total_points * n_sv, file) != total_points * n_sv)
+    {
+        printf("Error reading sV data.\n");
+        exit(1);
+    }
 
     fclose(file);
 }

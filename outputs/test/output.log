@@ -1,12 +1,12 @@
 ================================================================
                          Machine Info
 ----------------------------------------------------------------
- Hostname              : host
+ Hostname              : host-10-22-10-114
  OS                    : Linux
  Architecture          : x86_64
  CPU Cores             : 16
  Total Memory (GB)     : 62.63
- Free Memory (GB)      : 27.10
+ Free Memory (GB)      : 7.12
 ---------------------------- OpenMP -----------------------------
  Available Threads     : 16
  Max Threads Allowed   : 16
@@ -30,11 +30,11 @@
 ================================================================
                          Simulation Log
 ----------------------------------------------------------------
- Start Time             : 2025-06-30 18:39:50
+ Start Time             : 2025-07-10 17:03:13
  Configuration File     : configs/test.ini
  Output Directory       : outputs/test
 
- Execution Mode         : CUDA
+ Execution Mode         : OPENMP
  Equation Type          : MONODOMAIN
  Cell Model             : MV
  Numerical Method       : SSIADI
@@ -46,10 +46,11 @@
  Shift State            : No
  Measure Velocity       : Yes
  Frame Save Rate        : 100
+ Number of Threads      : 6
  Initial State Mode     : Initial Condition
 
- Grid Size (Nx x Ny)    : 601 x 601
- Domain Size (Lx x Ly)  : 6.00 x 6.00
+ Grid Size (Nx x Ny)    : 201 x 201
+ Domain Size (Lx x Ly)  : 2.00 x 2.00
  Spatial Step (dx, dy)  : 0.01, 0.01
  Time Step (dt)         : 0.01
  Total Time             : 500.00
@@ -64,28 +65,18 @@
    Duration   : 2
    Start Time : 0
    X Range    : [0, 0.2]
-   Y Range    : [0, 6]
+   Y Range    : [0, 2]
 
  Stimulus 2:
    Amplitude  : 1
    Duration   : 2
    Start Time : 340
-   X Range    : [0, 3]
-   Y Range    : [0, 3]
+   X Range    : [0, 1]
+   Y Range    : [0, 1]
 ================================================================
 
 
-[i] Device name: NVIDIA GeForce RTX 4070 Ti SUPER (66 SMs)
-
-[i] For full domain kernels:
-[i] Block size: 16 x 16 threads (total 256 threads per block)
-[i] Grid size: 38 x 38 blocks (total 1444 blocks, total 369664 threads)
-
-[i] For Thomas kernel:
-[i] Grid size for x: 19 blocks (32 threads per block, total 608 threads)
-[i] Grid size for y: 19 blocks (32 threads per block, total 608 threads)
-
-[i] Starting simulation with SSIADI (CUDA)...
+[i] Starting simulation with SSIADI (OpenMP with 6 threads)...
 [+] Frame at time 0.00 ms saved to outputs/test/frames/Vm_00000.vtk
 [+] Frame at time 1.00 ms saved to outputs/test/frames/Vm_00100.vtk
 [+] Frame at time 2.00 ms saved to outputs/test/frames/Vm_00200.vtk
@@ -108,6 +99,7 @@
 [+] Frame at time 19.00 ms saved to outputs/test/frames/Vm_01900.vtk
 [+] Frame at time 20.00 ms saved to outputs/test/frames/Vm_02000.vtk
 [+] Frame at time 21.00 ms saved to outputs/test/frames/Vm_02100.vtk
+[i] Stim velocity (measured from 0.67 to 1.33 cm) is 54.38 cm/s
 [+] Frame at time 22.00 ms saved to outputs/test/frames/Vm_02200.vtk
 [+] Frame at time 23.00 ms saved to outputs/test/frames/Vm_02300.vtk
 [+] Frame at time 24.00 ms saved to outputs/test/frames/Vm_02400.vtk
@@ -158,7 +150,6 @@
 [+] Frame at time 69.00 ms saved to outputs/test/frames/Vm_06900.vtk
 [+] Frame at time 70.00 ms saved to outputs/test/frames/Vm_07000.vtk
 [+] Frame at time 71.00 ms saved to outputs/test/frames/Vm_07100.vtk
-[i] Stim velocity (measured from 2.00 to 4.00 cm) is 53.82 cm/s
 [+] Frame at time 72.00 ms saved to outputs/test/frames/Vm_07200.vtk
 [+] Frame at time 73.00 ms saved to outputs/test/frames/Vm_07300.vtk
 [+] Frame at time 74.00 ms saved to outputs/test/frames/Vm_07400.vtk
@@ -591,5 +582,5 @@
 
 [+] Last frame (500.00 ms) saved to outputs/test/frames/Vm_50000.vtk
 
-[i] Simulation total execution time = 123.9 s
+[i] Simulation total execution time = 248.22 s
 [+] Simulation infos saved to outputs/test/simulation_infos.txt

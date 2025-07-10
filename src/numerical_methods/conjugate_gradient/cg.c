@@ -74,11 +74,9 @@ void runCG(const SimulationConfig *config, Measurement *measurement, const real 
     // Auxiliary variables for the loops
     int timeStepCounter = 0;
     real actualTime = 0.0f;
-    int i, j, num_active_stimuli;
-    int idx, idx_left, idx_right, idx_top, idx_bottom;
+    int i, j, idx;
 
     // Auxiliary variables for the operations
-    Stimulus *active_stimuli = (Stimulus *)malloc(numberOfStimuli * sizeof(Stimulus));
     real diff_term, stim, actualVm;
     const int max_iterations = 1000;
     const real tolerance = 1e-6;
@@ -109,9 +107,6 @@ void runCG(const SimulationConfig *config, Measurement *measurement, const real 
         // Get time step
         actualTime = time_array[timeStepCounter];
 
-        // Update the active stimuli
-        num_active_stimuli = update_and_get_num_active_stimuli(actualTime, stimuli, numberOfStimuli, active_stimuli);
-
         // =================================================
         //  Calculate Approxs. and Update ODEs
         // =================================================
@@ -129,9 +124,7 @@ void runCG(const SimulationConfig *config, Measurement *measurement, const real 
                 get_actual_sV(actualsV, sV, idx);
 
                 // Stimulation
-                stim = (num_active_stimuli > 0)
-                           ? (get_stimulus_value(actualTime, i, j, active_stimuli, num_active_stimuli))
-                           : (0.0f);
+                stim = get_stimulus_value(actualTime, i, j, stimuli, numberOfStimuli);
 
                 // Prepare the RHS of the following linear system
                 RHS[idx] = actualVm + delta_t * (stim - compute_dVmdt(actualVm, actualsV));
@@ -212,7 +205,6 @@ void runCG(const SimulationConfig *config, Measurement *measurement, const real 
     measurement->stimVelocity = stim_velocity;
 
     // Free allocated memory
-    free(active_stimuli);
     free(actualsV);
     free(RHS);
     free(r);

@@ -73,15 +73,15 @@ void log_simulation_header(const SimulationConfig *config, const char *config_fi
 
     fprintf(log_file, " Save Frames            : %s\n", config->save_frames ? "Yes" : "No");
     fprintf(log_file, " Save Last Frame        : %s\n", config->save_last_frame ? "Yes" : "No");
-    fprintf(log_file, " Save Last State        : %s\n", config->save_last_state ? "Yes" : "No");
+    fprintf(log_file, " Save Last State        : %s\n", config->save_state ? "Yes" : "No");
     fprintf(log_file, " Shift State            : %s\n", config->shift_state ? "Yes" : "No");
     fprintf(log_file, " Measure Velocity       : %s\n", config->measure_velocity ? "Yes" : "No");
     if (config->save_frames)
         fprintf(log_file, " Frame Save Rate        : %d\n", config->frame_save_rate);
     if (config->exec_mode == EXEC_OPENMP)
         fprintf(log_file, " Number of Threads      : %d\n", config->number_of_threads);
-    if (config->path_to_restore_state_files[0] != '\0')
-        fprintf(log_file, " Restore State Path     : %s\n", config->path_to_restore_state_files);
+    if (config->restore_path[0] != '\0')
+        fprintf(log_file, " Restore State Path     : %s\n", config->restore_path);
     fprintf(log_file, " Initial State Mode     : %s\n", config->init_mode);
     fprintf(log_file, "\n");
 

@@ -33,6 +33,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/core_c.dir/src/numerical_methods/os-adi/osadi.c.o.d"
   "CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.o"
   "CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi.c.o.d"
+  "CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi_omp.c.o"
+  "CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi_omp.c.o.d"
   "CMakeFiles/core_c.dir/src/save_functions.c.o"
   "CMakeFiles/core_c.dir/src/save_functions.c.o.d"
   "CMakeFiles/core_c.dir/src/solvers/monodomain.c.o"

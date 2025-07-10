@@ -67,8 +67,8 @@ CMAKE_BINARY_DIR = /home/guilherme-couto/Documentos/Numerical_Methods_Monodomain
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
+	/home/guilherme-couto/.conda/envs/numerical-env/lib/python3.13/site-packages/cmake/data/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -734,6 +734,30 @@ src/numerical_methods/ssi-adi/ssiadi.cu.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/ssi-adi/ssiadi.cu.s
 .PHONY : src/numerical_methods/ssi-adi/ssiadi.cu.s
 
+src/numerical_methods/ssi-adi/ssiadi_omp.o: src/numerical_methods/ssi-adi/ssiadi_omp.c.o
+.PHONY : src/numerical_methods/ssi-adi/ssiadi_omp.o
+
+# target to build an object file
+src/numerical_methods/ssi-adi/ssiadi_omp.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi_omp.c.o
+.PHONY : src/numerical_methods/ssi-adi/ssiadi_omp.c.o
+
+src/numerical_methods/ssi-adi/ssiadi_omp.i: src/numerical_methods/ssi-adi/ssiadi_omp.c.i
+.PHONY : src/numerical_methods/ssi-adi/ssiadi_omp.i
+
+# target to preprocess a source file
+src/numerical_methods/ssi-adi/ssiadi_omp.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi_omp.c.i
+.PHONY : src/numerical_methods/ssi-adi/ssiadi_omp.c.i
+
+src/numerical_methods/ssi-adi/ssiadi_omp.s: src/numerical_methods/ssi-adi/ssiadi_omp.c.s
+.PHONY : src/numerical_methods/ssi-adi/ssiadi_omp.s
+
+# target to generate assembly for a file
+src/numerical_methods/ssi-adi/ssiadi_omp.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_c.dir/build.make CMakeFiles/core_c.dir/src/numerical_methods/ssi-adi/ssiadi_omp.c.s
+.PHONY : src/numerical_methods/ssi-adi/ssiadi_omp.c.s
+
 src/save_functions.o: src/save_functions.c.o
 .PHONY : src/save_functions.o
 
@@ -889,6 +913,9 @@ help:
 	@echo "... src/numerical_methods/ssi-adi/ssiadi.o"
 	@echo "... src/numerical_methods/ssi-adi/ssiadi.i"
 	@echo "... src/numerical_methods/ssi-adi/ssiadi.s"
+	@echo "... src/numerical_methods/ssi-adi/ssiadi_omp.o"
+	@echo "... src/numerical_methods/ssi-adi/ssiadi_omp.i"
+	@echo "... src/numerical_methods/ssi-adi/ssiadi_omp.s"
 	@echo "... src/save_functions.o"
 	@echo "... src/save_functions.i"
 	@echo "... src/save_functions.s"

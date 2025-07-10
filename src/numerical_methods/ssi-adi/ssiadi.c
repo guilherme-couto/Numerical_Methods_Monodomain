@@ -46,13 +46,10 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
     // Auxiliary variables for the loops
     int timeStepCounter = 0;
     real actualTime = 0.0f;
-    int i, j, num_active_stimuli;
-    int idx, idx_left, idx_right, idx_top, idx_bottom;
+    int i, j, idx;
 
     // Auxiliary variables for the operations
-    Stimulus *active_stimuli = (Stimulus *)malloc(numberOfStimuli * sizeof(Stimulus));
-    real diff_term, stim, actualVm;
-    real Vmtilde;
+    real diff_term, stim, actualVm, Vmtilde;
     real *actualsV = (real *)malloc(cell_model_solver->n_state_vars * sizeof(real));
     real *sVtilde = (real *)malloc(cell_model_solver->n_state_vars * sizeof(real));
     real *reaction = (real *)malloc(Nx * Ny * sizeof(real));
@@ -102,9 +99,6 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
         // Get time step
         actualTime = time_array[timeStepCounter];
 
-        // Update the active stimuli
-        num_active_stimuli = update_and_get_num_active_stimuli(actualTime, stimuli, numberOfStimuli, active_stimuli);
-
         // =================================================
         //  Calculate Approxs. and Update ODEs
         // =================================================
@@ -122,9 +116,7 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
                 get_actual_sV(actualsV, sV, idx);
 
                 // Stimulation
-                stim = (num_active_stimuli > 0)
-                           ? (get_stimulus_value(actualTime, i, j, active_stimuli, num_active_stimuli))
-                           : (0.0f);
+                stim = get_stimulus_value(actualTime, i, j, stimuli, numberOfStimuli);
 
                 // Calculate aproximation with RK2 -> Vmn+1/2 = Vmn + 0.5*dt*(diffusion + R(Vmn, sV))
                 diff_term = select_compute_diffusion_term(is_aligned, Vm, Dxx, Dyy, Dxy, i, j, Nx, Ny, delta_x, delta_y);
@@ -241,7 +233,6 @@ void runSSIADI(const SimulationConfig *config, Measurement *measurement, const r
     measurement->stimVelocity = stim_velocity;
 
     // Free allocated memory
-    free(active_stimuli);
     free(actualsV);
     free(sVtilde);
     free(reaction);

@@ -11,8 +11,7 @@
 extern "C" {
 #endif
 
-int runMonodomainSimulationSerial(const SimulationConfig *config);
-int runMonodomainSimulationOpenMP(const SimulationConfig *config);
+int runMonodomainSimulationCPU(const SimulationConfig *config);
 int runMonodomainSimulationCUDA(const SimulationConfig *config);
 
 #ifdef __cplusplus

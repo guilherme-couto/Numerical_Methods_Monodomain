@@ -40,11 +40,12 @@ typedef struct
     int stimulus_count;
 
     int frame_save_rate;
-    int number_of_threads;
+    int number_of_threads; // For OpenMP simulations
 
     char output_dir[MAX_STRING_SIZE];
     bool remove_old_files;
-    char path_to_restore_state_files[MAX_STRING_SIZE];
+    bool restore_state;
+    char restore_path[MAX_STRING_SIZE];
 
     char save_function_name[MAX_STRING_SIZE];
     save_function_t save_function;
@@ -54,7 +55,7 @@ typedef struct
     bool shift_state;
     bool save_frames;
     bool save_last_frame;
-    bool save_last_state;
+    bool save_state;
     bool measure_velocity;
 
     // String parameters

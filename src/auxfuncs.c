@@ -406,7 +406,7 @@ int saveSimulationInfos(const SimulationConfig *config, const Measurement *measu
     if (config->save_frames)
         fprintf(fpInfos, "TIME TO SAVE FRAMES = %.5g s\n", measurement->elapsedSaveFramesTime);
 
-    if (config->save_last_state)
+    if (config->save_state)
         fprintf(fpInfos, "TIME TO SAVE LAST STATE = %.5g s\n", measurement->elapsedSaveStateTime);
 
     fprintf(fpInfos, "\n");

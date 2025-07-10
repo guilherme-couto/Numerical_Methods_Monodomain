@@ -1,6 +1,6 @@
 #include "monodomain.h"
 
-int runMonodomainSimulationSerial(const SimulationConfig *config)
+int runMonodomainSimulationCPU(const SimulationConfig *config)
 {
     // Allocate and populate time array
     real *time_array = (real *)malloc(config->M * sizeof(real));
@@ -23,7 +23,10 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
     int total_points = config->Nx * config->Ny;
     real *Vm = (real *)malloc(total_points * sizeof(real));
     real *sV = (real *)malloc(total_points * cell_model_solver->n_state_vars * sizeof(real));
-    cell_model_solver->initialize(Vm, sV, config->Nx, config->Ny);
+    if (config->restore_state)
+        restore_simulation_state(config->restore_path, Vm, sV, config->Nx, config->Ny, cell_model_solver->n_state_vars);
+    else
+        cell_model_solver->initialize(Vm, sV, config->Nx, config->Ny);
 
     // Allocate and initialize diffusion coefficients arrays
     real *Dxx = (real *)malloc(total_points * sizeof(real));
@@ -40,7 +43,7 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
     initializeProperties(config, Dxx, Dyy, Dxy);
 
     // Run the simulation based on the selected method
-    numerical_method_t run_method = get_numerical_method(&config->method);
+    numerical_method_t run_method = get_numerical_method(&config->exec_mode, &config->method);
     if (run_method == NULL)
     {
         ERRORMSG("Invalid numerical method selected.");
@@ -68,12 +71,12 @@ int runMonodomainSimulationSerial(const SimulationConfig *config)
     }
 
     // Save last state
-    if (config->save_last_state)
+    if (config->save_state)
     {
         real startTime = omp_get_wtime();
-        // TODO: save as binary
         static char file_path[MAX_STRING_SIZE];
-        snprintf(file_path, MAX_STRING_SIZE, "%s/state_%05d.dat", config->output_dir, config->M);
+        snprintf(file_path, MAX_STRING_SIZE, "%s/simulation.dat", config->output_dir);
+        save_simulation_state(file_path, Vm, sV, config->Nx, config->Ny, cell_model_solver->n_state_vars);
         measurement.elapsedSaveStateTime += (omp_get_wtime() - startTime);
         SUCCESSMSG("Last state (%.2f ms) saved to %s\n", config->M * config->dt, file_path);
     }
