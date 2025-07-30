@@ -5,7 +5,7 @@ import csv
 import re
 
 BASE_DIR = 'outputs/error_analysis_aniso_rotation'
-METHODS = ['fe', 'osadi', 'ssiadi', 'do', 'hv', 'cg']
+METHODS = ['fe', 'osadi', 'ssiadi', 'do', 'cs', 'hv', 'cg']
 METHODS_FILE = 'Vm_50000.vtk'  # Solution file for each method
 REFERENCE_PATH = os.path.join(BASE_DIR, 'reference', 'frames', 'Vm_500000.vtk')
 

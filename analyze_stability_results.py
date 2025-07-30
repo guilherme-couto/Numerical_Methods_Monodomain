@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import csv
 
 # === CONFIGURATION ===
-OUTPUT_BASE_DIR = 'outputs/stability_test/fiber60'
-REFERENCE_FILE = 'outputs/error_analysis_aniso_rotation/reference_60/frames/Vm_500000.vtk'
+OUTPUT_BASE_DIR = 'outputs/stability_test/fiber45'
+REFERENCE_FILE = 'outputs/error_analysis_aniso_rotation/reference_45/frames/Vm_500000.vtk'
 CHECK_FRAME = 'lastframe.vtk'
 
 ERROR_CSV = os.path.join(OUTPUT_BASE_DIR, 'stability_errors.csv')

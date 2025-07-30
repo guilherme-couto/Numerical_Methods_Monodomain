@@ -1,15 +1,15 @@
 ================================================================
                          Machine Info
 ----------------------------------------------------------------
- Hostname              : host-10-22-10-119
+ Hostname              : host-10-22-10-113
  OS                    : Linux
  Architecture          : x86_64
- CPU Cores             : 12
- Total Memory (GB)     : 15.43
- Free Memory (GB)      : 7.73
+ CPU Cores             : 16
+ Total Memory (GB)     : 62.63
+ Free Memory (GB)      : 34.20
 ---------------------------- OpenMP -----------------------------
- Available Threads     : 12
- Max Threads Allowed   : 12
+ Available Threads     : 16
+ Max Threads Allowed   : 16
  Nested Parallelism    : Disabled
 ================================================================
 
@@ -19,18 +19,18 @@
 ----------------------------- CUDA ------------------------------
  CUDA Runtime Version  : 12.6
  CUDA Devices Found    : 1
-  Device 0: NVIDIA GeForce RTX 4070
+  Device 0: NVIDIA GeForce RTX 4070 Ti SUPER
     Compute Capability : 8.9
-    Global Memory (GB) : 11.71
+    Global Memory (GB) : 15.69
     Shared Memory (KB) : 48
-    Multiprocessors    : 46
-    Clock Rate (MHz)   : 2505.00
+    Multiprocessors    : 66
+    Clock Rate (MHz)   : 2640.00
 ================================================================
 
 ================================================================
                          Simulation Log
 ----------------------------------------------------------------
- Start Time             : 2025-07-08 11:56:39
+ Start Time             : 2025-07-22 15:54:29
  Configuration File     : configs/stability/current_test.ini
  Output Directory       : outputs/stability_test/fiber45/cg/dt_0.05000
 
@@ -74,7 +74,7 @@
 ================================================================
 
 
-[i] Device name: NVIDIA GeForce RTX 4070 (46 SMs)
+[i] Device name: NVIDIA GeForce RTX 4070 Ti SUPER (66 SMs)
 
 [i] For full domain kernels:
 [i] Block size: 16 x 16 threads (total 256 threads per block)
@@ -86,5 +86,5 @@
 
 [+] Last frame (500.00 ms) saved to outputs/stability_test/fiber45/cg/dt_0.05000/frames/Vm_10000.vtk
 
-[i] Simulation total execution time = 26.582 s
+[i] Simulation total execution time = 19.507 s
 [+] Simulation infos saved to outputs/stability_test/fiber45/cg/dt_0.05000/simulation_infos.txt

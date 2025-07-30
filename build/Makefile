@@ -470,6 +470,54 @@ src/numerical_methods/conjugate_gradient/cg.cu.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/conjugate_gradient/cg.cu.s
 .PHONY : src/numerical_methods/conjugate_gradient/cg.cu.s
 
+src/numerical_methods/craig-sneyd/cs.o: src/numerical_methods/craig-sneyd/cs.cu.o
+.PHONY : src/numerical_methods/craig-sneyd/cs.o
+
+# target to build an object file
+src/numerical_methods/craig-sneyd/cs.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/craig-sneyd/cs.cu.o
+.PHONY : src/numerical_methods/craig-sneyd/cs.cu.o
+
+src/numerical_methods/craig-sneyd/cs.i: src/numerical_methods/craig-sneyd/cs.cu.i
+.PHONY : src/numerical_methods/craig-sneyd/cs.i
+
+# target to preprocess a source file
+src/numerical_methods/craig-sneyd/cs.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/craig-sneyd/cs.cu.i
+.PHONY : src/numerical_methods/craig-sneyd/cs.cu.i
+
+src/numerical_methods/craig-sneyd/cs.s: src/numerical_methods/craig-sneyd/cs.cu.s
+.PHONY : src/numerical_methods/craig-sneyd/cs.s
+
+# target to generate assembly for a file
+src/numerical_methods/craig-sneyd/cs.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/craig-sneyd/cs.cu.s
+.PHONY : src/numerical_methods/craig-sneyd/cs.cu.s
+
+src/numerical_methods/douglas-gunn/dg.o: src/numerical_methods/douglas-gunn/dg.cu.o
+.PHONY : src/numerical_methods/douglas-gunn/dg.o
+
+# target to build an object file
+src/numerical_methods/douglas-gunn/dg.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/douglas-gunn/dg.cu.o
+.PHONY : src/numerical_methods/douglas-gunn/dg.cu.o
+
+src/numerical_methods/douglas-gunn/dg.i: src/numerical_methods/douglas-gunn/dg.cu.i
+.PHONY : src/numerical_methods/douglas-gunn/dg.i
+
+# target to preprocess a source file
+src/numerical_methods/douglas-gunn/dg.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/douglas-gunn/dg.cu.i
+.PHONY : src/numerical_methods/douglas-gunn/dg.cu.i
+
+src/numerical_methods/douglas-gunn/dg.s: src/numerical_methods/douglas-gunn/dg.cu.s
+.PHONY : src/numerical_methods/douglas-gunn/dg.s
+
+# target to generate assembly for a file
+src/numerical_methods/douglas-gunn/dg.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/douglas-gunn/dg.cu.s
+.PHONY : src/numerical_methods/douglas-gunn/dg.cu.s
+
 src/numerical_methods/douglas/do.o: src/numerical_methods/douglas/do.c.o
 .PHONY : src/numerical_methods/douglas/do.o
 
@@ -517,6 +565,30 @@ src/numerical_methods/douglas/do.s: src/numerical_methods/douglas/do.cu.s
 src/numerical_methods/douglas/do.cu.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/douglas/do.cu.s
 .PHONY : src/numerical_methods/douglas/do.cu.s
+
+src/numerical_methods/dyakonov/dy.o: src/numerical_methods/dyakonov/dy.cu.o
+.PHONY : src/numerical_methods/dyakonov/dy.o
+
+# target to build an object file
+src/numerical_methods/dyakonov/dy.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/dyakonov/dy.cu.o
+.PHONY : src/numerical_methods/dyakonov/dy.cu.o
+
+src/numerical_methods/dyakonov/dy.i: src/numerical_methods/dyakonov/dy.cu.i
+.PHONY : src/numerical_methods/dyakonov/dy.i
+
+# target to preprocess a source file
+src/numerical_methods/dyakonov/dy.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/dyakonov/dy.cu.i
+.PHONY : src/numerical_methods/dyakonov/dy.cu.i
+
+src/numerical_methods/dyakonov/dy.s: src/numerical_methods/dyakonov/dy.cu.s
+.PHONY : src/numerical_methods/dyakonov/dy.s
+
+# target to generate assembly for a file
+src/numerical_methods/dyakonov/dy.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core_cuda.dir/build.make CMakeFiles/core_cuda.dir/src/numerical_methods/dyakonov/dy.cu.s
+.PHONY : src/numerical_methods/dyakonov/dy.cu.s
 
 src/numerical_methods/forward_euler/fe.o: src/numerical_methods/forward_euler/fe.c.o
 .PHONY : src/numerical_methods/forward_euler/fe.o
@@ -880,12 +952,21 @@ help:
 	@echo "... src/numerical_methods/conjugate_gradient/cg.o"
 	@echo "... src/numerical_methods/conjugate_gradient/cg.i"
 	@echo "... src/numerical_methods/conjugate_gradient/cg.s"
+	@echo "... src/numerical_methods/craig-sneyd/cs.o"
+	@echo "... src/numerical_methods/craig-sneyd/cs.i"
+	@echo "... src/numerical_methods/craig-sneyd/cs.s"
+	@echo "... src/numerical_methods/douglas-gunn/dg.o"
+	@echo "... src/numerical_methods/douglas-gunn/dg.i"
+	@echo "... src/numerical_methods/douglas-gunn/dg.s"
 	@echo "... src/numerical_methods/douglas/do.o"
 	@echo "... src/numerical_methods/douglas/do.i"
 	@echo "... src/numerical_methods/douglas/do.s"
 	@echo "... src/numerical_methods/douglas/do.o"
 	@echo "... src/numerical_methods/douglas/do.i"
 	@echo "... src/numerical_methods/douglas/do.s"
+	@echo "... src/numerical_methods/dyakonov/dy.o"
+	@echo "... src/numerical_methods/dyakonov/dy.i"
+	@echo "... src/numerical_methods/dyakonov/dy.s"
 	@echo "... src/numerical_methods/forward_euler/fe.o"
 	@echo "... src/numerical_methods/forward_euler/fe.i"
 	@echo "... src/numerical_methods/forward_euler/fe.s"

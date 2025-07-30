@@ -6,7 +6,7 @@
  Architecture          : x86_64
  CPU Cores             : 16
  Total Memory (GB)     : 62.63
- Free Memory (GB)      : 7.12
+ Free Memory (GB)      : 2.18
 ---------------------------- OpenMP -----------------------------
  Available Threads     : 16
  Max Threads Allowed   : 16
@@ -30,14 +30,14 @@
 ================================================================
                          Simulation Log
 ----------------------------------------------------------------
- Start Time             : 2025-07-10 17:03:13
+ Start Time             : 2025-07-18 17:53:39
  Configuration File     : configs/test.ini
  Output Directory       : outputs/test
 
- Execution Mode         : OPENMP
+ Execution Mode         : CUDA
  Equation Type          : MONODOMAIN
  Cell Model             : MV
- Numerical Method       : SSIADI
+ Numerical Method       : UNKNOWN
  Real Precision         : double
 
  Save Frames            : Yes
@@ -46,7 +46,6 @@
  Shift State            : No
  Measure Velocity       : Yes
  Frame Save Rate        : 100
- Number of Threads      : 6
  Initial State Mode     : Initial Condition
 
  Grid Size (Nx x Ny)    : 201 x 201
@@ -76,7 +75,17 @@
 ================================================================
 
 
-[i] Starting simulation with SSIADI (OpenMP with 6 threads)...
+[i] Device name: NVIDIA GeForce RTX 4070 Ti SUPER (66 SMs)
+
+[i] For full domain kernels:
+[i] Block size: 16 x 16 threads (total 256 threads per block)
+[i] Grid size: 13 x 13 blocks (total 169 blocks, total 43264 threads)
+
+[i] For Thomas kernel:
+[i] Grid size for x: 7 blocks (32 threads per block, total 224 threads)
+[i] Grid size for y: 7 blocks (32 threads per block, total 224 threads)
+
+[i] Starting simulation with D'Yakonov (CUDA)...
 [+] Frame at time 0.00 ms saved to outputs/test/frames/Vm_00000.vtk
 [+] Frame at time 1.00 ms saved to outputs/test/frames/Vm_00100.vtk
 [+] Frame at time 2.00 ms saved to outputs/test/frames/Vm_00200.vtk
@@ -582,5 +591,5 @@
 
 [+] Last frame (500.00 ms) saved to outputs/test/frames/Vm_50000.vtk
 
-[i] Simulation total execution time = 248.22 s
+[i] Simulation total execution time = 21.262 s
 [+] Simulation infos saved to outputs/test/simulation_infos.txt

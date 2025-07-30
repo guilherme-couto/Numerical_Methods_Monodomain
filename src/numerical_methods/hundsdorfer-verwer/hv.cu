@@ -7,7 +7,7 @@
 #include "../../cell_models/cell_models.h"
 
 #ifndef HV_THETA
-#define HV_THETA 0.25f
+#define HV_THETA 0.8f
 #endif // HV_THETA
 
 static __global__ void computeY0AndUpdateSV(const int Nx, const int Ny, const real delta_t, const real delta_x, const real delta_y,
@@ -71,7 +71,6 @@ static __global__ void computeY0tilde(const int Nx, const int Ny, const real del
         // Stimulation
         const real stim = get_stimulus_value(actualTime, i, j, d_active_stimuli, num_active_stimuli);
 
-        // Calculate the explicit part of the RHS, including the diffusion term in both directions
         const real diff_term = select_compute_diffusion_term(is_aligned, d_Y, d_Dxx, d_Dyy, d_Dxy, i, j, Nx, Ny, delta_x, delta_y);
         const real dVmdt = select_compute_dVmdt(cell_model, Y_tn_center, d_actualsV_tn);
         const real compute_F_tn = (diff_term * denom_chiCm) + stim - dVmdt;

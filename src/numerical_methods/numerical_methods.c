@@ -12,7 +12,10 @@ static const struct
     {METHOD_OSADI, runOSADI, NULL, runOSADI_CUDA},
     {METHOD_FE, runFE, NULL, runFE_CUDA},
     {METHOD_DO, runDO, NULL, runDO_CUDA},
+    {METHOD_DG, NULL, NULL, runDG_CUDA},
+    {METHOD_DY, NULL, NULL, runDY_CUDA},
     {METHOD_HV, NULL, NULL, runHV_CUDA},
+    {METHOD_CS, NULL, NULL, runCS_CUDA},
     {METHOD_CG, runCG, NULL, runCG_CUDA},
     {METHOD_INVALID, NULL, NULL, NULL}};
 

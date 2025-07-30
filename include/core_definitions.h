@@ -111,7 +111,10 @@ typedef enum
     METHOD_SSIADI,
     METHOD_FE,
     METHOD_DO,
+    METHOD_DG,
+    METHOD_DY,
     METHOD_HV,
+    METHOD_CS,
     METHOD_CG,
     METHOD_INVALID
 } NumericalMethod;

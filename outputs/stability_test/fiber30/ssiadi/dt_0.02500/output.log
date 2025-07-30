@@ -6,7 +6,7 @@
  Architecture          : x86_64
  CPU Cores             : 16
  Total Memory (GB)     : 62.63
- Free Memory (GB)      : 15.72
+ Free Memory (GB)      : 0.97
 ---------------------------- OpenMP -----------------------------
  Available Threads     : 16
  Max Threads Allowed   : 16
@@ -30,9 +30,9 @@
 ================================================================
                          Simulation Log
 ----------------------------------------------------------------
- Start Time             : 2025-07-03 18:48:34
+ Start Time             : 2025-07-18 18:06:16
  Configuration File     : configs/stability/current_test.ini
- Output Directory       : outputs/stability_test/ssiadi/dt_0.02500
+ Output Directory       : outputs/stability_test/fiber30/ssiadi/dt_0.02500
 
  Execution Mode         : CUDA
  Equation Type          : MONODOMAIN
@@ -88,7 +88,7 @@
 [i] Stim velocity (measured from 2.00 to 4.00 cm) is 53.69 cm/s
 [i] Simulation done!
 
-[+] Last frame (500.00 ms) saved to outputs/stability_test/ssiadi/dt_0.02500/frames/Vm_20000.vtk
+[+] Last frame (500.00 ms) saved to outputs/stability_test/fiber30/ssiadi/dt_0.02500/frames/Vm_20000.vtk
 
-[i] Simulation total execution time = 31.79 s
-[+] Simulation infos saved to outputs/stability_test/ssiadi/dt_0.02500/simulation_infos.txt
+[i] Simulation total execution time = 31.77 s
+[+] Simulation infos saved to outputs/stability_test/fiber30/ssiadi/dt_0.02500/simulation_infos.txt

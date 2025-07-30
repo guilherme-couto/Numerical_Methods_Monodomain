@@ -34,7 +34,10 @@ void runSSIADI_CUDA(const SimulationConfig *config, Measurement *measurement, co
 void runOSADI_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver_CUDA, real *Vm, real *sV, const real *Dxx, const real *Dyy, const real *Dxy);
 void runFE_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver_CUDA, real *Vm, real *sV, const real *Dxx, const real *Dyy, const real *Dxy);
 void runDO_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver_CUDA, real *Vm, real *sV, const real *Dxx, const real *Dyy, const real *Dxy);
+void runDG_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver_CUDA, real *Vm, real *sV, const real *Dxx, const real *Dyy, const real *Dxy);
+void runDY_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver_CUDA, real *Vm, real *sV, const real *Dxx, const real *Dyy, const real *Dxy);
 void runHV_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver_CUDA, real *Vm, real *sV, const real *Dxx, const real *Dyy, const real *Dxy);
+void runCS_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver_CUDA, real *Vm, real *sV, const real *Dxx, const real *Dyy, const real *Dxy);
 void runCG_CUDA(const SimulationConfig *config, Measurement *measurement, const real *time_array, const CellModelSolver *cell_model_solver_CUDA, real *Vm, real *sV, const real *Dxx, const real *Dyy, const real *Dxy);
 
 // Function to get the appropriate numerical method

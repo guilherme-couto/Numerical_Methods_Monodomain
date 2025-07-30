@@ -12,7 +12,7 @@ extern "C"
 {
 #endif
 
-#define HARMONIC_MEAN(a, b) (2.0f * (a) * (b) / ((a) + (b)))
+#define HARMONIC_MEAN(a, b) (2.0f * (a) * (b) / ((a) + (b) + 1e-12f))
 #define ARITHMETIC_MEAN(a, b) (((a) + (b)) * 0.5f)
 
 // Function to get the stimulus value at a given time and position
@@ -98,8 +98,8 @@ MODIFIERS real compute_diffusion_term_x_no_rotation(const real *Vm, const real *
     const bool right = (j < Nx - 1);
 
     // Neighbor indices with mirroring
-    const int idx_l = left   ? i * Nx + (j - 1) : idx;
-    const int idx_r = right  ? i * Nx + (j + 1) : idx;
+    const int idx_l = left   ? idx - 1 : idx;
+    const int idx_r = right  ? idx + 1 : idx;
 
     // Vm values
     const real Vm_c = Vm[idx];
@@ -136,31 +136,31 @@ MODIFIERS real compute_diffusion_term_x_with_rotation(const real *Vm, const real
     const bool bottom = (i > 0);
 
     // Neighbor indices with mirroring
-    const int idx_l = left   ? i * Nx + (j - 1) : idx;
-    const int idx_r = right  ? i * Nx + (j + 1) : idx;
-    const int idx_t = top    ? (i + 1) * Nx + j : idx;
-    const int idx_b = bottom ? (i - 1) * Nx + j : idx;
+    const int idx_l = left   ? idx - 1 : idx;
+    const int idx_r = right  ? idx + 1 : idx;
+    const int idx_t = top    ? idx + Nx : idx;
+    const int idx_b = bottom ? idx - Nx : idx;
 
     // Diagonal neighbors with mirroring
-    const int idx_ne = (top && right) ? (i + 1) * Nx + (j + 1) : 
-                      (top && !right) ? (i + 1) * Nx + j :
-                      (!top && right) ? i * Nx + (j + 1) :
-                      (i - 1) * Nx + (j - 1);
+    const int idx_ne = (top && right) ? idx + Nx + 1 : 
+                      (top && !right) ? idx + Nx :
+                      (!top && right) ? idx + 1 :
+                      idx - Nx - 1;
     
-    const int idx_nw = (top && left) ? (i + 1) * Nx + (j - 1) :
-                      (top && !left) ? (i + 1) * Nx + j :
-                      (!top && left) ? i * Nx + (j - 1) :
-                      (i - 1) * Nx + (j + 1);
+    const int idx_nw = (top && left) ? idx + Nx - 1 :
+                      (top && !left) ? idx + Nx :
+                      (!top && left) ? idx - 1 :
+                      idx - Nx + 1;
     
-    const int idx_se = (bottom && right) ? (i - 1) * Nx + (j + 1) :
-                      (bottom && !right) ? (i - 1) * Nx + j :
-                      (!bottom && right) ? i * Nx + (j + 1) :
-                      (i + 1) * Nx + (j - 1);
+    const int idx_se = (bottom && right) ? idx - Nx + 1 :
+                      (bottom && !right) ? idx - Nx :
+                      (!bottom && right) ? idx + 1 :
+                      idx + Nx - 1;
     
-    const int idx_sw = (bottom && left) ? (i - 1) * Nx + (j - 1) :
-                      (bottom && !left) ? (i - 1) * Nx + j :
-                      (!bottom && left) ? i * Nx + (j - 1) :
-                      (i + 1) * Nx + (j + 1);
+    const int idx_sw = (bottom && left) ? idx - Nx - 1 :
+                      (bottom && !left) ? idx - Nx :
+                      (!bottom && left) ? idx - 1 :
+                      idx + Nx + 1;
 
     // Vm values
     const real Vm_c = Vm[idx];
@@ -207,8 +207,8 @@ MODIFIERS real compute_diffusion_term_y_no_rotation(const real *Vm, const real *
     const bool bottom = (i > 0);
 
     // Neighbor indices with mirroring
-    const int idx_t = top    ? (i + 1) * Nx + j : idx;
-    const int idx_b = bottom ? (i - 1) * Nx + j : idx;
+    const int idx_t = top    ? idx + Nx : idx;
+    const int idx_b = bottom ? idx - Nx : idx;
 
     // Vm values
     const real Vm_c = Vm[idx];
@@ -245,31 +245,31 @@ MODIFIERS real compute_diffusion_term_y_with_rotation(const real *Vm, const real
     const bool bottom = (i > 0);
 
     // Neighbor indices with mirroring
-    const int idx_l = left   ? i * Nx + (j - 1) : idx;
-    const int idx_r = right  ? i * Nx + (j + 1) : idx;
-    const int idx_t = top    ? (i + 1) * Nx + j : idx;
-    const int idx_b = bottom ? (i - 1) * Nx + j : idx;
+    const int idx_l = left   ? idx - 1 : idx;
+    const int idx_r = right  ? idx + 1 : idx;
+    const int idx_t = top    ? idx + Nx : idx;
+    const int idx_b = bottom ? idx - Nx : idx;
 
     // Diagonal neighbors with mirroring
-    const int idx_ne = (top && right) ? (i + 1) * Nx + (j + 1) : 
-                      (top && !right) ? (i + 1) * Nx + j :
-                      (!top && right) ? i * Nx + (j + 1) :
-                      (i - 1) * Nx + (j - 1);
+    const int idx_ne = (top && right) ? idx + Nx + 1 : 
+                      (top && !right) ? idx + Nx :
+                      (!top && right) ? idx + 1 :
+                      idx - Nx - 1;
     
-    const int idx_nw = (top && left) ? (i + 1) * Nx + (j - 1) :
-                      (top && !left) ? (i + 1) * Nx + j :
-                      (!top && left) ? i * Nx + (j - 1) :
-                      (i - 1) * Nx + (j + 1);
+    const int idx_nw = (top && left) ? idx + Nx - 1 :
+                      (top && !left) ? idx + Nx :
+                      (!top && left) ? idx - 1 :
+                      idx - Nx + 1;
     
-    const int idx_se = (bottom && right) ? (i - 1) * Nx + (j + 1) :
-                      (bottom && !right) ? (i - 1) * Nx + j :
-                      (!bottom && right) ? i * Nx + (j + 1) :
-                      (i + 1) * Nx + (j - 1);
+    const int idx_se = (bottom && right) ? idx - Nx + 1 :
+                      (bottom && !right) ? idx - Nx :
+                      (!bottom && right) ? idx + 1 :
+                      idx + Nx - 1;
     
-    const int idx_sw = (bottom && left) ? (i - 1) * Nx + (j - 1) :
-                      (bottom && !left) ? (i - 1) * Nx + j :
-                      (!bottom && left) ? i * Nx + (j - 1) :
-                      (i + 1) * Nx + (j + 1);
+    const int idx_sw = (bottom && left) ? idx - Nx - 1 :
+                      (bottom && !left) ? idx - Nx :
+                      (!bottom && left) ? idx - 1 :
+                      idx + Nx + 1;
 
     // Vm values
     const real Vm_c = Vm[idx];
@@ -321,31 +321,31 @@ MODIFIERS real compute_diffusion_term_xy(const bool is_aligned,
     const bool bottom = (i > 0);
 
     // Neighbor indices with mirroring
-    const int idx_l = left   ? i * Nx + (j - 1) : idx;
-    const int idx_r = right  ? i * Nx + (j + 1) : idx;
-    const int idx_t = top    ? (i + 1) * Nx + j : idx;
-    const int idx_b = bottom ? (i - 1) * Nx + j : idx;
+    const int idx_l = left   ? idx - 1 : idx;
+    const int idx_r = right  ? idx + 1 : idx;
+    const int idx_t = top    ? idx + Nx : idx;
+    const int idx_b = bottom ? idx - Nx : idx;
 
     // Diagonal neighbors with mirroring
-    const int idx_ne = (top && right) ? (i + 1) * Nx + (j + 1) : 
-                      (top && !right) ? (i + 1) * Nx + j :
-                      (!top && right) ? i * Nx + (j + 1) :
-                      (i - 1) * Nx + (j - 1);
+    const int idx_ne = (top && right) ? idx + Nx + 1 : 
+                      (top && !right) ? idx + Nx :
+                      (!top && right) ? idx + 1 :
+                      idx - Nx - 1;
     
-    const int idx_nw = (top && left) ? (i + 1) * Nx + (j - 1) :
-                      (top && !left) ? (i + 1) * Nx + j :
-                      (!top && left) ? i * Nx + (j - 1) :
-                      (i - 1) * Nx + (j + 1);
+    const int idx_nw = (top && left) ? idx + Nx - 1 :
+                      (top && !left) ? idx + Nx :
+                      (!top && left) ? idx - 1 :
+                      idx - Nx + 1;
     
-    const int idx_se = (bottom && right) ? (i - 1) * Nx + (j + 1) :
-                      (bottom && !right) ? (i - 1) * Nx + j :
-                      (!bottom && right) ? i * Nx + (j + 1) :
-                      (i + 1) * Nx + (j - 1);
+    const int idx_se = (bottom && right) ? idx - Nx + 1 :
+                      (bottom && !right) ? idx - Nx :
+                      (!bottom && right) ? idx + 1 :
+                      idx + Nx - 1;
     
-    const int idx_sw = (bottom && left) ? (i - 1) * Nx + (j - 1) :
-                      (bottom && !left) ? (i - 1) * Nx + j :
-                      (!bottom && left) ? i * Nx + (j - 1) :
-                      (i + 1) * Nx + (j + 1);
+    const int idx_sw = (bottom && left) ? idx - Nx - 1 :
+                      (bottom && !left) ? idx - Nx :
+                      (!bottom && left) ? idx - 1 :
+                      idx + Nx + 1;
 
     // Vm values
     const real Vm_l = Vm[idx_l];
@@ -397,10 +397,10 @@ MODIFIERS real compute_diffusion_term_no_rotation(const real *Vm, const real *Dx
     const bool bottom = (i > 0);
 
     // Neighbor indices with mirroring
-    const int idx_l = left   ? i * Nx + (j - 1) : idx;
-    const int idx_r = right  ? i * Nx + (j + 1) : idx;
-    const int idx_t = top    ? (i + 1) * Nx + j : idx;
-    const int idx_b = bottom ? (i - 1) * Nx + j : idx;
+    const int idx_l = left   ? idx - 1 : idx;
+    const int idx_r = right  ? idx + 1 : idx;
+    const int idx_t = top    ? idx + Nx : idx;
+    const int idx_b = bottom ? idx - Nx : idx;
 
     // Vm values
     const real Vm_c = Vm[idx];
@@ -445,52 +445,52 @@ MODIFIERS real compute_diffusion_term_with_rotation(const real *Vm, const real *
     const bool bottom = (i > 0);
 
     // Neighbor indices with mirroring
-    const int idx_l = left   ? i * Nx + (j - 1) : idx;
-    const int idx_r = right  ? i * Nx + (j + 1) : idx;
-    const int idx_t = top    ? (i + 1) * Nx + j : idx;
-    const int idx_b = bottom ? (i - 1) * Nx + j : idx;
+    const int idx_l = left   ? idx - 1 : idx;
+    const int idx_r = right  ? idx + 1 : idx;
+    const int idx_t = top    ? idx + Nx : idx;
+    const int idx_b = bottom ? idx - Nx : idx;
 
     // Diagonal neighbors with mirroring
-    const int idx_ne = (top && right) ? (i + 1) * Nx + (j + 1) : 
-                      (top && !right) ? (i + 1) * Nx + j :
-                      (!top && right) ? i * Nx + (j + 1) :
-                      (i - 1) * Nx + (j - 1);
+    const int idx_ne = (top && right) ? idx + Nx + 1 : 
+                      (top && !right) ? idx + Nx :
+                      (!top && right) ? idx + 1 :
+                      idx - Nx - 1;
     
-    const int idx_nw = (top && left) ? (i + 1) * Nx + (j - 1) :
-                      (top && !left) ? (i + 1) * Nx + j :
-                      (!top && left) ? i * Nx + (j - 1) :
-                      (i - 1) * Nx + (j + 1);
+    const int idx_nw = (top && left) ? idx + Nx - 1 :
+                      (top && !left) ? idx + Nx :
+                      (!top && left) ? idx - 1 :
+                      idx - Nx + 1;
     
-    const int idx_se = (bottom && right) ? (i - 1) * Nx + (j + 1) :
-                      (bottom && !right) ? (i - 1) * Nx + j :
-                      (!bottom && right) ? i * Nx + (j + 1) :
-                      (i + 1) * Nx + (j - 1);
+    const int idx_se = (bottom && right) ? idx - Nx + 1 :
+                      (bottom && !right) ? idx - Nx :
+                      (!bottom && right) ? idx + 1 :
+                      idx + Nx - 1;
     
-    const int idx_sw = (bottom && left) ? (i - 1) * Nx + (j - 1) :
-                      (bottom && !left) ? (i - 1) * Nx + j :
-                      (!bottom && left) ? i * Nx + (j - 1) :
-                      (i + 1) * Nx + (j + 1);
+    const int idx_sw = (bottom && left) ? idx - Nx - 1 :
+                      (bottom && !left) ? idx - Nx :
+                      (!bottom && left) ? idx - 1 :
+                      idx + Nx + 1;
 
     // Diagonal neighbors with mirroring
-    // const int idx_ne = (top && right) ? (i + 1) * Nx + (j + 1) : 
-    //                   (top && !right) ? (i + 1) * Nx + (j - 1) :
-    //                   (!top && right) ? (i - 1) * Nx + (j + 1) :
-    //                   (i - 1) * Nx + (j - 1);
+    // const int idx_ne = (top && right) ? idx + Nx + 1 : 
+    //                   (top && !right) ? idx + Nx - 1 :
+    //                   (!top && right) ? idx - Nx + 1 :
+    //                   idx - Nx - 1;
     
-    // const int idx_nw = (top && left) ? (i + 1) * Nx + (j - 1) :
-    //                   (top && !left) ? (i + 1) * Nx + (j + 1) :
-    //                   (!top && left) ? (i - 1) * Nx + (j - 1) :
-    //                   (i - 1) * Nx + (j + 1);
+    // const int idx_nw = (top && left) ? idx + Nx - 1 :
+    //                   (top && !left) ? idx + Nx + 1 :
+    //                   (!top && left) ? idx - Nx - 1 :
+    //                   idx - Nx + 1;
     
-    // const int idx_se = (bottom && right) ? (i - 1) * Nx + (j + 1) :
-    //                   (bottom && !right) ? (i - 1) * Nx + (j - 1) :
-    //                   (!bottom && right) ? (i + 1) * Nx + (j + 1) :
-    //                   (i + 1) * Nx + (j - 1);
+    // const int idx_se = (bottom && right) ? idx - Nx + 1 :
+    //                   (bottom && !right) ? idx - Nx - 1 :
+    //                   (!bottom && right) ? idx + Nx + 1 :
+    //                   idx + Nx - 1;
     
-    // const int idx_sw = (bottom && left) ? (i - 1) * Nx + (j - 1) :
-    //                   (bottom && !left) ? (i - 1) * Nx + (j + 1) :
-    //                   (!bottom && left) ? (i + 1) * Nx + (j - 1) :
-    //                   (i + 1) * Nx + (j + 1);
+    // const int idx_sw = (bottom && left) ? idx - Nx - 1 :
+    //                   (bottom && !left) ? idx - Nx + 1 :
+    //                   (!bottom && left) ? idx + Nx - 1 :
+    //                   idx + Nx + 1;
 
     // Vm values
     const real Vm_c = Vm[idx];
@@ -537,6 +537,191 @@ MODIFIERS real compute_diffusion_term_with_rotation(const real *Vm, const real *
     // Divergence of flux -> nabla dot J
     return ((J_r - J_l) * denom_delta_x) + ((J_t - J_b) * denom_delta_y);
 }
+
+MODIFIERS real compute_diffusion_term_with_rotation_3D(const real *Vm,
+                                             const real *Dxx, const real *Dyy, const real *Dzz,
+                                             const real *Dxy, const real *Dxz, const real *Dyz,
+                                             const int i, const int j, const int k,
+                                             const int Nx, const int Ny, const int Nz,
+                                             const real dx, const real dy, const real dz)
+{
+    const int idx = (k * Ny + i) * Nx + j;
+
+    // Neighbor validation
+    const bool left   = (j > 0);
+    const bool right  = (j < Nx - 1);
+    const bool top    = (i < Ny - 1);
+    const bool bottom = (i > 0);
+    const bool up     = (k < Nz - 1);
+    const bool down   = (k > 0);
+
+    // Main neighbors with mirroring
+    const int idx_l = left   ? idx - 1         : idx;
+    const int idx_r = right  ? idx + 1         : idx;
+    const int idx_t = top    ? idx + Nx        : idx;
+    const int idx_b = bottom ? idx - Nx        : idx;
+    const int idx_u = up     ? idx + Nx*Ny     : idx;
+    const int idx_d = down   ? idx - Nx*Ny     : idx;
+
+    // Diagonals in XY plane
+    const int idx_tr = (top && right)  ? idx + Nx + 1 :
+                       (top && !right) ? idx + Nx     :
+                       (!top && right) ? idx + 1      :
+                       idx - Nx - 1;
+
+    const int idx_tl = (top && left)   ? idx + Nx - 1 :
+                       (top && !left)  ? idx + Nx     :
+                       (!top && left)  ? idx - 1      :
+                       idx - Nx + 1;
+
+    const int idx_br = (bottom && right)  ? idx - Nx + 1 :
+                       (bottom && !right) ? idx - Nx     :
+                       (!bottom && right) ? idx + 1      :
+                       idx + Nx - 1;
+
+    const int idx_bl = (bottom && left)   ? idx - Nx - 1 :
+                       (bottom && !left)  ? idx - Nx     :
+                       (!bottom && left)  ? idx - 1      :
+                       idx + Nx + 1;
+
+    // Diagonals in XZ plane
+    const int idx_ur = (up && right)    ? idx + Nx*Ny + 1 :
+                       (up && !right)   ? idx + Nx*Ny     :
+                       (!up && right)   ? idx + 1         :
+                       idx - Nx*Ny - 1;
+
+    const int idx_ul = (up && left)     ? idx + Nx*Ny - 1 :
+                       (up && !left)    ? idx + Nx*Ny     :
+                       (!up && left)    ? idx - 1         :
+                       idx - Nx*Ny + 1;
+
+    const int idx_dr = (down && right)  ? idx - Nx*Ny + 1 :
+                       (down && !right) ? idx - Nx*Ny     :
+                       (!down && right) ? idx + 1         :
+                       idx + Nx*Ny - 1;
+
+    const int idx_dl = (down && left)   ? idx - Nx*Ny - 1 :
+                       (down && !left)  ? idx - Nx*Ny     :
+                       (!down && left)  ? idx - 1         :
+                       idx + Nx*Ny + 1;
+
+    // Diagonals in YZ plane
+    const int idx_ut = (up && top)     ? idx + Nx*Ny + Nx :
+                       (up && !top)    ? idx + Nx*Ny      :
+                       (!up && top)    ? idx + Nx         :
+                       idx - Nx*Ny - Nx;
+
+    const int idx_ub = (up && bottom)  ? idx + Nx*Ny - Nx :
+                       (up && !bottom) ? idx + Nx*Ny      :
+                       (!up && bottom) ? idx - Nx         :
+                       idx - Nx*Ny + Nx;
+
+    const int idx_dt = (down && top)   ? idx - Nx*Ny + Nx :
+                       (down && !top)  ? idx - Nx*Ny      :
+                       (!down && top)  ? idx + Nx         :
+                       idx + Nx*Ny - Nx;
+
+    const int idx_db = (down && bottom) ? idx - Nx*Ny - Nx :
+                        (down && !bottom)? idx - Nx*Ny     :
+                        (!down && bottom)? idx - Nx        :
+                        idx + Nx*Ny + Nx;
+
+    // Vm values
+    const real Vm_c  = Vm[idx];
+    const real Vm_l  = Vm[idx_l];
+    const real Vm_r  = Vm[idx_r];
+    const real Vm_b  = Vm[idx_b];
+    const real Vm_t  = Vm[idx_t];
+    const real Vm_d  = Vm[idx_d];
+    const real Vm_u  = Vm[idx_u];
+
+    const real Vm_tr = Vm[idx_tr];
+    const real Vm_tl = Vm[idx_tl];
+    const real Vm_br = Vm[idx_br];
+    const real Vm_bl = Vm[idx_bl];
+
+    const real Vm_ur = Vm[idx_ur];
+    const real Vm_ul = Vm[idx_ul];
+    const real Vm_dr = Vm[idx_dr];
+    const real Vm_dl = Vm[idx_dl];
+
+    const real Vm_ut = Vm[idx_ut];
+    const real Vm_ub = Vm[idx_ub];
+    const real Vm_dt = Vm[idx_dt];
+    const real Vm_db = Vm[idx_db];
+
+    // Diffusion coefficients at center
+    const real Dxx_c = Dxx[idx], Dyy_c = Dyy[idx], Dzz_c = Dzz[idx];
+    const real Dxy_c = Dxy[idx], Dxz_c = Dxz[idx], Dyz_c = Dyz[idx];
+
+    // Interpolated coefficients using harmonic mean
+    const real Dxx_r = right ? HARMONIC_MEAN(Dxx_c, Dxx[idx_r]) : Dxx_c;
+    const real Dxx_l = left ? HARMONIC_MEAN(Dxx_c, Dxx[idx_l]) : Dxx_c;
+
+    const real Dyy_t = top ? HARMONIC_MEAN(Dyy_c, Dyy[idx_t]) : Dyy_c;
+    const real Dyy_b = bottom ? HARMONIC_MEAN(Dyy_c, Dyy[idx_b]) : Dyy_c;
+
+    const real Dzz_u = up ? HARMONIC_MEAN(Dzz_c, Dzz[idx_u]) : Dzz_c;
+    const real Dzz_d = down ? HARMONIC_MEAN(Dzz_c, Dzz[idx_d]) : Dzz_c;
+
+    const real Dxy_r = right ? HARMONIC_MEAN(Dxy_c, Dxy[idx_r]) : Dxy_c;
+    const real Dxy_l = left ? HARMONIC_MEAN(Dxy_c, Dxy[idx_l]) : Dxy_c;
+    const real Dxy_t = top ? HARMONIC_MEAN(Dxy_c, Dxy[idx_t]) : Dxy_c;
+    const real Dxy_b = bottom ? HARMONIC_MEAN(Dxy_c, Dxy[idx_b]) : Dxy_c;
+
+    const real Dxz_r = right ? HARMONIC_MEAN(Dxz_c, Dxz[idx_r]) : Dxz_c;
+    const real Dxz_l = left ? HARMONIC_MEAN(Dxz_c, Dxz[idx_l]) : Dxz_c;
+    const real Dxz_u = up ? HARMONIC_MEAN(Dxz_c, Dxz[idx_u]) : Dxz_c;
+    const real Dxz_d = down ? HARMONIC_MEAN(Dxz_c, Dxz[idx_d]) : Dxz_c;
+
+    const real Dyz_t = top ? HARMONIC_MEAN(Dyz_c, Dyz[idx_t]) : Dyz_c;
+    const real Dyz_b = bottom ? HARMONIC_MEAN(Dyz_c, Dyz[idx_b]) : Dyz_c;
+    const real Dyz_u = up ? HARMONIC_MEAN(Dyz_c, Dyz[idx_u]) : Dyz_c;
+    const real Dyz_d = down ? HARMONIC_MEAN(Dyz_c, Dyz[idx_d]) : Dyz_c;
+
+    // Precomputed finite difference terms
+    const real denom_dx = 1.0f / dx;
+    const real denom_dy = 1.0f / dy;
+    const real denom_dz = 1.0f / dz;
+    const real denom_4dx = 0.25f * dx;
+    const real denom_4dy = 0.25f * dy;
+    const real denom_4dz = 0.25f * dz;
+
+    const real Vm_t_minus_b = Vm_t - Vm_b;
+    const real Vm_r_minus_l = Vm_r - Vm_l;
+    const real Vm_u_minus_d = Vm_u - Vm_d;
+
+    // Fluxes
+    const real J_r = right ? ((Dxx_r * denom_dx) * (Vm_r - Vm_c)
+                              + (Dxy_r * denom_4dy) * ((Vm_tr - Vm_br) + Vm_t_minus_b)
+                              + (Dxz_r * denom_4dz) * ((Vm_ur - Vm_dr) + Vm_u_minus_d)) : 0.0f;
+
+    const real J_l = left ? ((Dxx_l * denom_dx) * (Vm_c - Vm_l)
+                              + (Dxy_l * denom_4dy) * (Vm_t_minus_b + (Vm_tl - Vm_bl))
+                              + (Dxz_l * denom_4dz) * (Vm_u_minus_d + (Vm_ul - Vm_dl))) : 0.0f;
+
+    const real J_t = top ? ((Dyy_t * denom_dy) * (Vm_t - Vm_c)
+                              + (Dxy_t * denom_4dx) * ((Vm_tr - Vm_tl) + Vm_r_minus_l)
+                              + (Dyz_t * denom_4dz) * ((Vm_ut - Vm_dt) + Vm_u_minus_d)) : 0.0f;
+
+    const real J_b = bottom ? ((Dyy_b * denom_dy) * (Vm_c - Vm_b)
+                              + (Dxy_b * denom_4dx) * (Vm_r_minus_l + (Vm_br - Vm_bl))
+                              + (Dyz_b * denom_4dz) * (Vm_u_minus_d + (Vm_ub - Vm_db))) : 0.0f;
+
+    const real J_u = up ? ((Dzz_u * denom_dz) * (Vm_u - Vm_c)
+                              + (Dxz_u * denom_4dx) * ((Vm_ur - Vm_ul) + Vm_r_minus_l)
+                              + (Dyz_u * denom_4dy) * ((Vm_ut - Vm_ub) + Vm_t_minus_b)) : 0.0f;
+
+    const real J_d = down ? ((Dzz_d * denom_dz) * (Vm_c - Vm_d)
+                              + (Dxz_d * denom_4dx) * (Vm_r_minus_l + (Vm_dr - Vm_dl))
+                              + (Dyz_d * denom_4dy) * (Vm_t_minus_b + (Vm_dt - Vm_db))) : 0.0f;
+
+    // Divergence of flux: ∇·J
+    return ((J_r - J_l) * denom_dx) +
+           ((J_t - J_b) * denom_dy) +
+           ((J_u - J_d) * denom_dz);
+}
+
 
 MODIFIERS real select_compute_diffusion_term_x(const bool is_aligned,
                                                const real *Vm, const real *Dxx, const real *Dxy,
